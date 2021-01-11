@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.GwsjtbDao">
+	<sql id="commonWhere">
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ and tjrq=#{enddate}]]>
+		</if>
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND a.yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	 
+	 <sql id="commonWhere2">
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND ID  =#{yljgdm}]]>
+		</if>
+	</sql>  
+	     
+     <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.GwsjtbModel" >
+     
+      <![CDATA[
+	    select yljgdm,b.mc as yljgmc,rksl,tjrq as  tbrq,tbrxm from (${pz}) a inner join tb_volap_yljg b
+	   on  a.yljgdm=b.id 
+        ]]>
+            <include refid="commonWhere"></include>
+  
+   </select> 
+   
+    <select id="gePz" resultType="com.wondersgroup.wszygl.model.TbjdpzModel" >
+     
+      <![CDATA[
+	     select mc from TB_XQ_GWSJPZ t where tjbm=#{pz}
+        ]]>
+             
+      
+	   
+         
+   </select> 
+   
+	
+  
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.wszygl.model.YljgModel">
+    <![CDATA[
+      select id as jgdm,mc as jgmc  from tb_volap_yljg where  yyjb is not null
+    ]]>
+		<include refid="commonWhere2"></include> 
+	</select> 
+   
+	
+   <select id="getAllpz"
+		resultType="com.wondersgroup.wszygl.model.TbjdpzModel">
+    <![CDATA[
+      select tjbm,mc from TB_XQ_GWSJPZ t
+    ]]>
+		 
+	</select>
+  <select id="getCkrksl" resultType="int" >
+	    <![CDATA[
+     select count(1) from (${pz}) where 1=1 and yljgdm=#{yljgdm} and  TJRQ = #{enddate} 
+     ]]>
+	</select>
+	
+ 
+	<update id="updateRksl"
+		parameterType="com.wondersgroup.wszygl.model.zzModel">
+		<![CDATA[  
+		update ${pz} set rksl=#{rksl},tbrxm=#{xm}
+		where 1=1 and yljgdm= #{yljgdm}  and   tjrq=#{enddate}]]>
+	</update>
+	 	
+	<insert id="saveHt" parameterType="com.wondersgroup.wszygl.model.GwtnbglbbModel">
+		<![CDATA[ INSERT INTO  ${pz} (
+			YLJGDM, 
+			RKSL, 
+			TJRQ ,
+			tbrxm
+		) VALUES (
+			#{yljgdm},   
+			#{rksl}, 
+			#{enddate},
+			#{xm}
+			 
+		)]]>
+	</insert> 
+      
+	
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.SsywjcMzKsDao">
+   <sql id="commonWhere">
+    <if test="rq != null and rq !='' ">
+      <![CDATA[ AND to_char(JZKSRQ,'yyyy-mm-dd') =trim(#{rq})]]>
+    </if>
+    <if test="yljgdm != null and yljgdm !='' ">
+      <![CDATA[ AND  a.yljgdm =trim(#{yljgdm})]]>
+    </if>
+
+  </sql>
+ 
+   
+   <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.SsywjcModel">
+    <![CDATA[
+      select b.mc as yljgmc, hzxm as xm,jzksbm,jzksmc,jzksrq,zzysxm,zzysgh,jzzdsm from TB_YL_MZ_Medical_Record a
+inner join tb_volap_yljg b
+on a.yljgdm=b.id where 1=1 and  JZLX not in ('200', '600', '601')
+    ]]>
+    <include refid="commonWhere"></include>
+  </select>
+  
+  <select id="getSywjcMzKs" resultType="com.wondersgroup.wszygl.model.SsywjcModel">
+  <![CDATA[
+      select count(1) as rs,jzksmc,b.mc as yljgmc from TB_YL_MZ_Medical_Record a
+inner join tb_volap_yljg b
+on a.yljgdm=b.id 
+where 1=1 and  JZLX not in ('200', '600', '601')
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[ group by JZKSMC,b.mc ]]>
+   </select>
+  
+   
+
+
+</mapper>

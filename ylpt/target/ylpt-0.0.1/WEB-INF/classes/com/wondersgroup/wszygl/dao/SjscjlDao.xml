@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.SjscjlDao">
+	<select id="getAllYljg" resultType="map">
+		<![CDATA[ 
+		select j.jgdm,j.jgmc  from  cen_core_v20.sys_jgdm_list j where length(jgdm)=10
+		]]>
+	</select>
+	<select id="gatAllTable" resultType="map">
+		<![CDATA[ 
+		select *
+		from CEN_CORE_V20.SJSC_TABLE t
+		]]>
+	</select>
+	<select id="getData" resultType="com.wondersgroup.wszygl.model.SjscInfo">
+		<![CDATA[ 
+		select max(t.rowid) id,jg.jgdm jgdm,max(jg.jc) jgmc,max(tab.chinaname) tabname,sum(t.purpose) scl,to_char(max(t.exdate),'yyyy-mm-dd') dataTime
+		from 
+		]]>
+		<choose>
+		<when test="who=='shi'">
+		<![CDATA[ CEN_CORE_V20.LOGSUPPORT t]]>
+		</when>
+		<otherwise>
+		<![CDATA[ CEN_CORE_V20.LOGSUPPORT_SHENG t]]>
+		</otherwise>
+		</choose>
+		<![CDATA[ 
+		join CEN_ETL_V20.SYS_JGDM_LIST jg on t.jgmc=jg.jgdm
+		join CEN_CORE_V20.SJSC_TABLE tab on tab.tablename=t.tabname
+		where trunc(t.exdate,'dd') between to_date(#{startDate},'yyyy-mm-dd') and to_date(#{endDate},'yyyy-mm-dd')
+		]]>
+		<if test="jgdm!=''">
+		<![CDATA[ and t.jgmc=#{jgdm}]]>
+		</if>
+		<if test="tabname!=''">
+		<![CDATA[ and t.tabname=#{tabname}]]>
+		</if>
+		<![CDATA[ 
+		group by jg.jgdm,t.tabname,trunc(t.exdate,'dd')
+		order by dataTime desc
+		]]>
+	</select>
+	
+	
+	
+	
+</mapper>

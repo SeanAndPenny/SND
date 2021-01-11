@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.SsjbDao">
+	  
+<select id="getSsjb" resultType="com.wondersgroup.wszygl.model.SslistModel">
+	<![CDATA[
+	   select count(1) as rs ,case 
+       when ssjb=1 then '一级手术'
+       when ssjb=2 then '二级手术'
+       when ssjb=3 then '三级手术'
+       when ssjb=4 then '四级手术' 
+       end ssjbmc,SSJB 
+       from TB_OPERATION_DETAIL 
+       where to_char(sskssj,'yyyy-mm-dd')>=to_char(sysdate-30,'yyyy-mm-dd')
+group by ssjb
+order by SSJB
+		]]>
+	 </select>
+	
+	 <select id="getSstjList" resultType="com.wondersgroup.wszygl.model.SslistModel">
+	<![CDATA[
+	     select count(1) as rs from TB_OPERATION_DETAIL 
+       where to_char(sskssj,'yyyy-mm-dd')>=to_char(sysdate-30,'yyyy-mm-dd')
+		]]>
+	 </select>
+
+
+</mapper>

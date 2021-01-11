@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.ggwsgl.dao.LnrGwTxDao">
+	<sql id="commonWhere">
+		<if test="xm != null and xm !=''">
+			<![CDATA[  and  xm = #{xm}]]>
+		</if>
+		<if test="zjhm != null and zjhm !=''">
+			<![CDATA[  and  zjhm = #{zjhm}]]>
+		</if>
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  yljgdm = #{yljgdm}]]>
+		</if>
+
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.LnrGwTxModel">
+		<![CDATA[
+			select f_dy_yljgmc(yljgdm) as yljgmc, yljgdm, xm, decode(xb, '1', '男', '2', '女') xb,
+       substr(zjhm, 7, 8) as csrq, zjhm,
+    ((to_char(sysdate,'yyyy')-substr(zjhm,7,4)) || '岁') as nl, lxdh, xxdz as dz,
+       to_char(sjcjsj, 'yyyy-mm-dd') as jlgxsj,
+decode(ylyl1, '1', '已提醒', '未提醒') as num
+  from (select *  from (select t.*,
+     row_number() over(partition by zjhm order by t.tjrq desc) rn
+     from cen_core_v20.tb_ndtj_bak_xin t) c
+    where rn <= 1)
+ where 1=1 and (xzbpgjl = '1' or nczpljl = '1')
+		]]>
+		<include refid="commonWhere"></include>
+	</select>
+	 
+ 
+	 
+
+
+
+
+
+	 
+</mapper>

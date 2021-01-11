@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.HtglDao">
+
+
+	<sql id="commonWhere">
+		<if test="zjhm != null and zjhm !='' ">
+			<![CDATA[ AND zjhm =trim(#{zjhm})]]>
+		</if>
+		<if test="xm != null and xm !=''">
+			<![CDATA[ AND xm  LIKE  '%'||#{xm}||'%']]>
+		</if>
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  LIKE  '%'||#{yljgdm}||'%']]>
+		</if>
+		<if test="startdate != null and startdate !=''">
+			<![CDATA[ AND to_char(to_date(dqrq,'yyyy-mm-dd'),'yyyy-mm-dd') >=#{startdate}]]>
+		</if>
+		<if test="enddate != null and enddate !=''">
+			<![CDATA[ AND to_char(to_date(dqrq,'yyyy-mm-dd'),'yyyy-mm-dd') <=#{enddate}]]>
+		</if>
+	</sql>
+
+
+
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.TbDxRshtx">
+	  <![CDATA[
+			select yljgmc,xm,sjhm,dqrq,zjhm  from CEN_CORE_V20.TB_DX_RSHTX   
+			 WHERE yl1='1' 
+			 ]]>
+
+		<include refid="commonWhere"></include>
+
+	</select>
+	<!-- <insert id="saveHt" parameterType="com.wondersgroup.wszygl.model.MedicalPersonHtModel"> 
+		<![CDATA[ INSERT INTO cen_core_v20.T_JSQY_HT ( ID, YLJGDM, YLJGMC, PERSONID, 
+		STARTTIME, ENDTIME, CREATETIME, REMOVED, CREATEID, REMOVEDID, UPDATETIME 
+		) VALUES ( sys_guid(), #{yljgdm,jdbcType=VARCHAR}, '', #{personid,jdbcType=VARCHAR}, 
+		#{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, to_char(SYSDATE,'YYYY-MM-DD'), 
+		'0', #{createid,jdbcType=VARCHAR}, '', '' )]]> </insert> -->
+
+
+	<update id="getScht"
+		parameterType="com.wondersgroup.wszygl.model.TbDxRshtx">
+		update CEN_CORE_V20.TB_DX_RSHTX set yl1='0' where zjhm=#{zjhm} and
+		dqrq=#{dqrq}
+	</update>
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.wszygl.model.YljgModel">
+		<![CDATA[
+			select j.jgdm,j.jgmc  from  cen_core_v20.sys_jgdm_list j where length(jgdm)=10 
+		]]>
+
+	</select>
+
+
+
+
+	<insert id="insertExcel"
+		parameterType="com.wondersgroup.wszygl.model.TbDxRshtx">
+	<![CDATA[
+		insert into cen_core_v20.TB_DX_RSHTX(
+			yljgmc,
+			xm,
+			sjhm,
+			dqrq,
+			zjhm 
+		) values(
+		    #{yljgmc,jdbcType=VARCHAR},
+		    #{xm,jdbcType=VARCHAR},
+			#{sjhm,jdbcType=VARCHAR},
+			#{dqrq,jdbcType=VARCHAR},
+			#{zjhm,jdbcType=VARCHAR}
+		) 
+	]]>
+
+	</insert>
+</mapper>

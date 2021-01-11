@@ -1,0 +1,229 @@
+html,body{
+  background: #DCE2E6;
+  min-width: 1280px;
+}
+.main .botCon{
+  padding: 0 20px;
+}
+.main .detail{
+  margin-left: -7px;
+  margin-right: -7px;
+}
+.mode{
+  float: left;
+  margin-bottom: 14px;
+  width: 50%;
+}
+.mode .modeBg{
+  margin-left: 7px;
+  margin-right: 7px;
+  background: white;
+  height: 281px;
+  box-shadow: 0 0 10px #DCE2E6;
+  border-radius: 2px;
+  position: relative;
+}
+
+.mode .modeTop{
+  padding: 15px 16px 0 16px;
+}
+.mode .modeTop .title i{
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  background: #0088CC;
+  margin-right: 3px;
+  vertical-align: -1px;
+}
+.mode .modeTop .title label{
+  font-size: 15px;
+  color: #0088CC;
+}
+.mode .modeCon .chartBox{
+  height: 245px;
+}
+
+.mode01 .modeCon .same{
+  float: left;
+}
+.mode01,.mode02,.mode03{
+  width:33.3333%;
+}
+.mode .chart{
+  height: 240px;
+}
+.mode .legend-list{
+  position: absolute;
+  right: 20px;
+  top: 140px;
+  font-size:15px;
+}
+.mode .legend-list3{
+  top: 90px;
+}
+.mode .legend-list li {
+  margin-top: 10px;
+}
+.mode .legend-list3 li {
+  margin-top: 2px;
+}
+
+.mode .legend-list li .icon{
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius:2px;
+  margin-right: 2px;
+  vertical-align: -1px;
+}
+.mode .legend-list li .icon01{
+  background:#88CA6D
+}
+.mode .legend-list li .icon02{
+  background:#0DAEF1
+}
+.mode .legend-list li .icon03{
+  background:#1572D5
+}
+.mode .legend-list li .icon04{
+  background:#768BF1
+}
+.mode .legend-list li .icon05{
+  background:#4D9EF9
+}
+.mode .legend-list li .icon06{
+  background:#744EBC
+}
+.mode .legend-list li .icon07{
+  background:#88CA6D
+}
+.mode .legend-list li .icon08{
+  background:#3AA873
+}
+.mode .legend-list li .icon09{
+  background:#008B72
+}
+.mode .legend-list li .icon10{
+  background:#2DC6F2
+}
+.mode .legend-list li .icon11{
+  background:#0DAEF1
+}
+.mode .legend-list li .icon12{
+  background:#1572D5
+}
+.mode .legend-list li .icon13{
+  background:#3140B1
+}
+.mode .legend-list .li01 .num{
+  color:#88CA6D;
+}
+.mode .legend-list .li01 .unit{
+  color:#88CA6D;
+}
+.mode .legend-list .li02 .num{
+  color:#0DAEF1;
+}
+.mode .legend-list .li02 .unit{
+  color:#0DAEF1;
+}
+.mode .legend-list .li03 .num{
+  color:#1572D5;
+}
+.mode .legend-list .li03 .unit{
+  color:#1572D5;
+}
+.mode .legend-list .li04 .num{
+  color:#768BF1;
+}
+.mode .legend-list .li04 .unit{
+  color:#768BF1;
+}
+.mode .legend-list .li05 .num{
+  color:#4D9EF9;
+}
+.mode .legend-list .li05 .unit{
+  color:#4D9EF9;
+}
+.mode .legend-list .li06 .num{
+  color:#744EBC;
+}
+.mode .legend-list .li06 .unit{
+  color:#744EBC;
+}
+.mode .legend-list .li07 .num{
+  color:#88CA6D;
+}
+.mode .legend-list .li07 .unit{
+  color:#88CA6D;
+}
+.mode .legend-list .li08 .num{
+  color:#3AA873;
+}
+.mode .legend-list .li08 .unit{
+  color:#3AA873;
+}
+.mode .legend-list .li09 .num{
+  color:#008B72;
+}
+.mode .legend-list .li09 .unit{
+  color:#008B72;
+}
+.mode .legend-list .li10 .num{
+  color:#2DC6F2;
+}
+.mode .legend-list .li10 .unit{
+  color:#2DC6F2;
+}
+.mode .legend-list .li11 .num{
+  color:#0DAEF1;
+}
+.mode .legend-list .li11 .unit{
+  color:#0DAEF1;
+}
+.mode .legend-list .li12 .num{
+  color:#1572D5;
+}
+.mode .legend-list .li12 .unit{
+  color:#1572D5;
+}
+.mode .legend-list .li13 .num{
+  color:#3140B1;
+}
+.mode .legend-list .li13 .unit{
+  color:#3140B1;
+}
+
+.mode .modeTop{
+  padding-right: 30px;
+}
+.mode .modeTop .title .tabTop{
+  float: right;
+}
+.mode .modeTop .title .tabTop span{
+  display: inline-block;
+  height: 24px;
+  line-height: 24px;
+  padding: 0 7px;
+  color: #666666;
+  background:rgba(210,210,210,.5);
+  margin-left: 10px;
+  border-radius: 1px;
+  cursor: pointer;
+}
+.mode .modeTop .title .tabTop span.active{
+  background: rgba(45,198,242,.3);
+  color: #0088CC;
+}
+.mode05 .swiper-pagination{
+  
+}
+.mode .part-content{
+  display: none;
+}
+.mode .part-content1{
+  display:block;
+}
+
+
+

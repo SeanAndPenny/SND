@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.GwgxyglbbDao">
+	
+
+	<sql id="commonWhere">
+		<if test="enddate2 != null and enddate2 !='' ">
+			<![CDATA[ and to_char(sfrq,'yyyy')=substr(#{enddate2},0,4)]]>
+			<![CDATA[ and to_char(SFRQ,'mm')<=substr(#{enddate2},5,2)*3 ]]>
+		</if>
+		 <if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+
+    <sql id="commonWhere3">
+		<if test="enddate2 != null and enddate2 !='' ">
+			<![CDATA[ and to_char(sfrq,'yyyy')=substr(#{enddate2},0,4)]]>
+			<![CDATA[ and to_char(sfrq,'mm')>=substr(#{enddate2},5,2)*3-2]]>
+			<![CDATA[ and to_char(sfrq,'mm')<=substr(#{enddate2},5,2)*3]]>
+		</if>
+			<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	<sql id="commonWhere4">
+		<if test="enddate2 != null and enddate2 !='' ">
+			<![CDATA[  and  to_char(jksj,'yyyy-mm')<=  to_char(to_date((substr(#{enddate2},0,4)||'-'|| substr(#{enddate2},5,2)*3),'yyyy-mm'),'yyyy-mm')
+			]]> 
+		</if>
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	
+	
+	
+	
+	
+	
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.GwgxyglbbModel" >
+	  <![CDATA[
+	    select * from ( select e.mc as yljgmc  ,a.glrs1,b.glrs2,round(b.glrs2/a.glrs1,5)*100||'%' as bl1,
+ c.glrs3,round( c.glrs3/a.glrs1,5)*100||'%' as bl2,glrs4,
+ round( d.glrs4/a.glrs1,5)*100||'%' as bl3
+ from   (select count(1)as glrs1 ,yljgdm from
+(select  yljgdm,cid from TB_GXY_HZSFK a
+where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     group by yljgdm,cid) group by yljgdm) a
+left join 
+ ( select count(1)  glrs2,yljgdm from 
+  ( select  count(1), yljgdm,cid  from TB_GXY_HZSFK a
+  where 1=1
+    ]]>
+      <include refid="commonWhere"></include>
+      <![CDATA[
+     
+   group by  a.yljgdm,cid
+having count(1)>=substr(#{enddate2},6,1)
+ )group by yljgdm)b
+ on a.yljgdm=b.yljgdm
+left join 
+ (select count(1)glrs3,yljgdm
+  from (select t.*,               
+               row_number() over(partition by t.yljgdm,t.cid order by t.sfrq desc) rn
+        from tb_gxy_hzsfk t   
+        where 1=1 
+       ]]>
+         
+     <include refid="commonWhere3"></include>    
+      <![CDATA[    
+          ) c where rn = 1 and ssy<140 and szy<90  group by yljgdm )c
+            on a.yljgdm=c.yljgdm
+            left join 
+( select count(1) as glrs4,yljgdm  from TB_GXY_HZglk a
+ inner join Tb_JTYS_PATIENT_SIGN b
+ on '[ "'||a.zjhm||'"]'=b.QYRSFZHM
+ where  1=1     
+       ]]>  
+ <include refid="commonWhere4"></include>        
+   <![CDATA[       
+          group by yljgdm)d
+            
+    on a.yljgdm=d.yljgdm  
+    left join tb_volap_yljg e
+    on a.yljgdm=e.id
+     ]]>  
+     <![CDATA[  
+     union   
+     ]]>       
+       <![CDATA[
+	     select '合计' as yljgmc  ,sum(a.glrs1) glrs1 , sum(b.glrs2) glrs2,round(sum(b.glrs2)/sum(a.glrs1),5)*100||'%' as bl1,
+ sum(c.glrs3) as glrs3 ,round( sum(c.glrs3)/sum(a.glrs1),5)*100||'%' as bl2,sum(glrs4) as glrs4 ,
+ round( sum(d.glrs4)/sum(a.glrs1),5)*100||'%' as bl3
+ from   (select count(1)as glrs1 ,yljgdm from
+(select  yljgdm,cid from TB_GXY_HZSFK a
+where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     group by yljgdm,cid) group by yljgdm) a
+left join 
+ ( select count(1)  glrs2,yljgdm from 
+  ( select  count(1), yljgdm,cid  from TB_GXY_HZSFK a
+  where 1=1
+    ]]>
+      <include refid="commonWhere"></include>
+      <![CDATA[
+     
+   group by  a.yljgdm,cid
+having count(1)>=substr(#{enddate2},6,1)
+ )group by yljgdm)b
+ on a.yljgdm=b.yljgdm
+left join 
+ (select count(1)glrs3,yljgdm
+  from (select t.*,               
+               row_number() over(partition by t.yljgdm,t.cid order by t.sfrq desc) rn
+        from tb_gxy_hzsfk t   
+        where 1=1 
+       ]]>
+         
+     <include refid="commonWhere3"></include>    
+      <![CDATA[    
+          ) c where rn = 1 and ssy<140 and szy<90  group by yljgdm )c
+            on a.yljgdm=c.yljgdm
+            left join 
+( select count(1) as glrs4,yljgdm  from TB_GXY_HZglk a
+ inner join Tb_JTYS_PATIENT_SIGN b
+ on '[ "'||a.zjhm||'"]'=b.QYRSFZHM
+ where  1=1     
+       ]]>  
+ <include refid="commonWhere4"></include>        
+   <![CDATA[       
+          group by yljgdm)d
+            
+    on a.yljgdm=d.yljgdm) order by  yljgmc desc   
+     
+     ]]>  
+     </select>
+	
+	
+	
+	
+	<select id="findAll" resultType="com.wondersgroup.wszygl.model.GwgxyglbbModel" >
+	  <![CDATA[
+	    select * from ( select e.mc as yljgmc  ,a.glrs1,b.glrs2,round(b.glrs2/a.glrs1,5)*100||'%' as bl1,
+ c.glrs3,round( c.glrs3/a.glrs1,5)*100||'%' as bl2,glrs4,
+ round( d.glrs4/a.glrs1,5)*100||'%' as bl3
+ from   (select count(1)as glrs1 ,yljgdm from
+(select  yljgdm,cid from TB_GXY_HZSFK a
+where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     group by yljgdm,cid) group by yljgdm) a
+left join 
+ ( select count(1)  glrs2,yljgdm from 
+  ( select  count(1), yljgdm,cid  from TB_GXY_HZSFK a
+  where 1=1
+    ]]>
+      <include refid="commonWhere"></include>
+      <![CDATA[
+     
+   group by  a.yljgdm,cid
+having count(1)>=substr(#{enddate2},6,1)
+ )group by yljgdm)b
+ on a.yljgdm=b.yljgdm
+left join 
+ (select count(1)glrs3,yljgdm
+  from (select t.*,               
+               row_number() over(partition by t.yljgdm,t.cid order by t.sfrq desc) rn
+        from tb_gxy_hzsfk t   
+        where 1=1 
+       ]]>
+         
+     <include refid="commonWhere3"></include>    
+      <![CDATA[    
+          ) c where rn = 1 and ssy<140 and szy<90  group by yljgdm )c
+            on a.yljgdm=c.yljgdm
+            left join 
+( select count(1) as glrs4,yljgdm  from TB_GXY_HZglk a
+ inner join Tb_JTYS_PATIENT_SIGN b
+ on '[ "'||a.zjhm||'"]'=b.QYRSFZHM
+ where  1=1     
+       ]]>  
+ <include refid="commonWhere4"></include>        
+   <![CDATA[       
+          group by yljgdm)d
+            
+    on a.yljgdm=d.yljgdm  
+    left join tb_volap_yljg e
+    on a.yljgdm=e.id
+     ]]>  
+     <![CDATA[  
+     union   
+     ]]>       
+       <![CDATA[
+	     select '合计' as yljgmc  ,sum(a.glrs1) glrs1 , sum(b.glrs2) glrs2,round(sum(b.glrs2)/sum(a.glrs1),5)*100||'%' as bl1,
+ sum(c.glrs3) as glrs3 ,round( sum(c.glrs3)/sum(a.glrs1),5)*100||'%' as bl2,sum(glrs4) as glrs4 ,
+ round( sum(d.glrs4)/sum(a.glrs1),5)*100||'%' as bl3
+ from   (select count(1)as glrs1 ,yljgdm from
+(select  yljgdm,cid from TB_GXY_HZSFK a
+where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     group by yljgdm,cid) group by yljgdm) a
+left join 
+ ( select count(1)  glrs2,yljgdm from 
+  ( select  count(1), yljgdm,cid  from TB_GXY_HZSFK a
+  where 1=1
+    ]]>
+      <include refid="commonWhere"></include>
+      <![CDATA[
+     
+   group by  a.yljgdm,cid
+having count(1)>=substr(#{enddate2},6,1)
+ )group by yljgdm)b
+ on a.yljgdm=b.yljgdm
+left join 
+ (select count(1)glrs3,yljgdm
+  from (select t.*,               
+               row_number() over(partition by t.yljgdm,t.cid order by t.sfrq desc) rn
+        from tb_gxy_hzsfk t   
+        where 1=1 
+       ]]>
+         
+     <include refid="commonWhere3"></include>    
+      <![CDATA[    
+          ) c where rn = 1 and ssy<140 and szy<90  group by yljgdm )c
+            on a.yljgdm=c.yljgdm
+            left join 
+( select count(1) as glrs4,yljgdm  from TB_GXY_HZglk a
+ inner join Tb_JTYS_PATIENT_SIGN b
+ on '[ "'||a.zjhm||'"]'=b.QYRSFZHM
+ where  1=1     
+       ]]>  
+ <include refid="commonWhere4"></include>        
+   <![CDATA[       
+          group by yljgdm)d
+            
+    on a.yljgdm=d.yljgdm) order by  yljgmc desc   
+     
+     ]]>  
+     </select>
+	
+	
+	
+	
+	
+	
+	
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.wszygl.model.YljgModel">
+    <![CDATA[
+      select id as jgdm,mc as jgmc  from tb_volap_yljg where 1=1  and yyjb is not null
+    ]]>
+		<include refid="commonWhere30"></include>
+	</select> 
+  <sql id="commonWhere30">
+		 <if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND id  =#{yljgdm}]]>
+		</if>
+	</sql>
+	
+  <select id="getAllJd"
+		resultType="com.wondersgroup.wszygl.model.TbjdpzModel">
+    <![CDATA[
+      select id,mc from TB_JDPZ t
+    ]]>
+		 
+	</select>
+  
+	 
+	   
+	
+	<select id="getCkrksl" resultType="int" >
+	  <![CDATA[
+  select count(1) from  tb_xq_gxyhzsl
+  where yljgdm=#{yljgdm}    and to_char(tjrq,'yyyy')=substr(#{enddate},0,4)
+ ]]>  
+     </select>
+     
+     <update id="updateRksl"
+		parameterType="com.wondersgroup.wszygl.model.GwgxyglbbModel">
+		<![CDATA[  
+		update tb_xq_gxyhzsl set rksl=#{rksl}
+		where 1=1 and yljgdm= #{yljgdm}  and  to_char(tjrq,'yyyy')=substr(#{enddate},0,4)]]>
+	</update>
+	
+	 <insert id="saveHt" parameterType="com.wondersgroup.wszygl.model.GwgxyglbbModel">
+		<![CDATA[ INSERT INTO  tb_xq_gxyhzsl (
+			YLJGDM, 
+			RKSL, 
+			TJRQ 
+		) VALUES (
+			#{yljgdm},   
+			#{rksl}, 
+			to_date(#{enddate},'YYYY-MM-DD')
+			 
+		)]]>
+	</insert> 
+     
+</mapper>

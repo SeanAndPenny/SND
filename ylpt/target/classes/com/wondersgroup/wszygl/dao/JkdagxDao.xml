@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.wszygl.dao.JkdagxDao">
+  <sql id="commonWhere"> 
+  <if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and   yljgdm = #{yljgdm}]]>
+		</if>
+  <if test="startdate != null and startdate !=''">
+      <![CDATA[  and  dtrq >=  #{startdate}  ]]>
+    </if>
+    <if test="enddate != null and enddate !=''">
+      <![CDATA[  and   dtrq <= #{enddate}]]>
+    </if>
+     
+  </sql>
+  
+  <sql id="commonWhere2">
+	<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and   yljgdm = #{yljgdm}]]>
+	</if> 
+	<if test="enddate != null and enddate !=''">
+      <![CDATA[  and   to_char(jdrq,'yyyy-mm-dd') <= #{enddate}]]>
+	</if>
+
+</sql>
+  <sql id="commonWhere3"> 
+       <if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and   id = #{yljgdm}]]>
+        </if>
+  </sql>
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JkdagxModel">
+    <![CDATA[
+       select sum(dtdas)as dtdas,sum(b.jdzs) as jdzs,a.yljgdm ,c.mc as yljgmc,
+round(sum(dtdas)/sum(b.jdzs),5)*100||'%' as bl  ,
+#{startdate} as kssj, #{enddate} as jssj
+
+
+ from 
+(select count(1) dtdas,yljgdm from 
+( select DTJKDAID,yljgdm from TB_JKDADTSYL where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+    group by DTJKDAID,yljgdm )
+group by yljgdm )a
+left join 
+
+(select count(1) as jdzs,yljgdm from 
+(select  GRDAID,yljgdm from Tb_Chss_Grjkda where 1=1 and dazt='1'
+    ]]>
+    <include refid="commonWhere2"></include>
+    <![CDATA[
+    group by GRDAID,yljgdm)
+group by yljgdm)b
+on a.yljgdm=b.yljgdm
+
+left join tb_volap_yljg c
+on a.yljgdm=c.id
+
+group by a.yljgdm ,c.mc
+    ]]>
+  </select>
+  <select id="getAllYljg" resultType="com.wondersgroup.wszygl.model.YljgModel">
+    <![CDATA[
+      select id as jgdm,mc as jgmc  from tb_volap_yljg where 1=1 and yyjb is not null
+    ]]>
+ <include refid="commonWhere3"></include>
+  </select>
+  
+  <select id="getJkdagxxx" resultType="com.wondersgroup.wszygl.model.JkdagxModel">
+    <![CDATA[
+       select sum(dtdas)as dtdas,sum(b.jdzs) as jdzs ,a.GLTDID,a.GLTDMC as tdmc,
+round(sum(dtdas)/sum(b.jdzs),5)*100||'%' as bl   from 
+(select count(1) dtdas,yljgdm,GLTDID,GLTDMC from 
+( select count(1)  ,DTJKDAID,yljgdm,GLTDID,GLTDMC from TB_JKDADTSYL where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+       group by DTJKDAID,yljgdm,GLTDID,GLTDMC )
+group by yljgdm ,GLTDID,GLTDMC)a
+left join 
+
+(select count(1) as jdzs,yljgdm,GLTDID,GLTDMC from 
+(select count(1),GRDAID,yljgdm ,GLTDID,GLTDMC from Tb_Chss_Grjkda where 1=1 and dazt='1'
+    ]]>
+     <include refid="commonWhere2"></include>
+     <![CDATA[
+       group by GRDAID,yljgdm,GLTDID,GLTDMC)
+group by yljgdm,GLTDID,GLTDMC)b
+on a.yljgdm=b.yljgdm  and a.GLTDID=b.GLTDID
+
+left join tb_volap_yljg c
+on a.yljgdm=c.id
+
+group by a.GLTDID,a.GLTDMC
+      ]]>
+  </select>
+  
+  
+</mapper>

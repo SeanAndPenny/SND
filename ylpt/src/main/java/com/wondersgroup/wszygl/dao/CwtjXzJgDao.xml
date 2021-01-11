@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.CwtjXzJgDao">
+   <sql id="commonWhere">
+    <if test="id != null and id !='' ">
+      <![CDATA[ AND  e.id =trim(#{id})]]>
+    </if>
+     
+  </sql>
+ 
+   
+   <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.CwtjModel">
+    <![CDATA[
+       select d.mc as yljgmc,
+       d.id as yljgdm,
+       e.id,
+       sum(a.hdcws) as hdcws,
+       sum(b.kfcws) as kfcws,
+       sum(c.dqsycws) as dqsycws,
+       (sum(b.kfcws) - sum(c.dqsycws)) as sycws,
+       (sum(c.dqsycws) / sum(b.kfcws)) * 100 || '%' cwsyl
+  from (select org_code, count(1) as hdcws
+          from TB_BED_INFO
+         group by org_code) a
+ inner join (select org_code, count(1) as kfcws
+               from TB_BED_INFO
+              where stop_flag = 1
+              group by org_code) b
+    on a.org_code = b.org_code
+ inner join (select org_code, count(1) as dqsycws
+               from TB_BED_INFO a
+              where stop_flag = 1
+              and zyh is not null 
+              group by org_code
+              ) c
+    on a.org_code = c.org_code
+ inner join tb_volap_yljg d
+    on a.org_code = d.id
+ inner join tb_volap_yylb e
+    on d.yylb = e.id
+ where 1=1  
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+    group by d.mc, e.id,d.id
+     ]]>
+  </select>
+  
+  <select id="getCwtjXzJg" resultType="com.wondersgroup.wszygl.model.CwtjModel">
+  <![CDATA[
+   	  select d.mc as yljgmc,
+       d.id as yljgdm,
+       e.id,
+       nvl(sum(a.hdcws),0) as hdcws,
+       nvl(sum(b.kfcws),0) as kfcws,
+       nvl(sum(c.dqsycws),0) as dqsycws,
+       (nvl(sum(b.kfcws),0) - nvl(sum(c.dqsycws),0)) as sycws,
+       case when sum(b.kfcws) is null then '0' || '%' 
+      else  (nvl(sum(c.dqsycws),0) / nvl(sum(b.kfcws),0)) * 100 || '%' end  cwsyl
+  from (select org_code, count(1) as hdcws
+          from TB_BED_INFO
+         group by org_code) a
+ left join (select org_code, count(1) as kfcws
+               from TB_BED_INFO
+              where stop_flag = 1
+              group by org_code) b
+    on a.org_code = b.org_code
+ left join (select org_code, count(1) as dqsycws
+               from TB_BED_INFO a
+              where stop_flag = 1
+              and zyh is not null 
+              group by org_code
+              ) c
+    on a.org_code = c.org_code
+ inner join tb_volap_yljg d
+    on a.org_code = d.id
+ inner join tb_volap_yylb e
+    on d.yylb = e.id
+ where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+    group by d.mc, e.id,d.id
+     ]]>
+   </select>
+  
+   
+
+
+</mapper>

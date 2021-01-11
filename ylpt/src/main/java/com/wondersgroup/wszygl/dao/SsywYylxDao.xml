@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.SsywYylxDao">
+	 <sql id="commonWhere">
+		<if test="ids != null and ids !='' ">
+			<![CDATA[ and b.ids =trim(#{ids})]]>
+		</if>
+		<if test="ywsj != null and ywsj !='' ">
+			<![CDATA[ and a.sj =trim(#{ywsj})]]>
+		</if> 
+
+	</sql>
+ 
+	 
+	 <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.SsywjcModel">
+		<![CDATA[
+	  	 select yljgdm,  yljgmc,
+ids,mzrs,jzrs,zyrs,ryrs,cyrs, round( mzfy/10000,3) as mzfy, round(zyfy/10000,3) zyfy 
+      from 
+    (select a.yljgdm  ,b.mcs as yljgmc,  b.ids,
+       nvl(sum(a.mzrs), 0) as mzrs,
+       nvl(sum(a.jzrs) ,0)as jzrs,
+       nvl(sum(a.zyrs),0) as zyrs,
+       nvl(sum(a.ryrs),0)ryrs,
+       nvl(sum(a.cyrs),0)as cyrs,
+       nvl(sum(a.mzfy),0)as mzfy,
+       nvl(sum(a.zyfy),0) as zyfy ,
+       sj 
+       
+
+ from 
+(select   
+      a.yljgdm, a.mzrs,b.jzrs,c.zyrs,d.ryrs,e.cyrs,f.mzfy,g.zyfy,a.sj
+  from ((SELECT COUNT(1) as mzrs, YLJGDM,TO_CHAR(JZKSRQ, 'YYYY-MM-DD') as sj
+           FROM TB_YL_MZ_Medical_Record
+          where JZLX not in ('200', '600', '601')
+            
+          group by YLJGDM,TO_CHAR(JZKSRQ, 'YYYY-MM-DD')) a left join
+        (SELECT COUNT(1) as jzrs, YLJGDM,TO_CHAR(JZKSRQ, 'YYYY-MM-DD')  as sj
+           FROM TB_YL_MZ_Medical_Record
+          where JZLX in ('200')
+            group by YLJGDM,TO_CHAR(JZKSRQ, 'YYYY-MM-DD')) b on a.yljgdm = b.yljgdm and a.sj=b.sj left join
+        (SELECT COUNT(1) as zyrs, ORG_CODE,TO_CHAR(CREATETIME, 'YYYY-MM-DD') as  sj
+           FROM TB_BED_INFO
+          where  1=1and STOP_FLAG='1' and ZYH is not null
+          group by ORG_CODE,TO_CHAR(CREATETIME, 'YYYY-MM-DD')) c on a.yljgdm = c.ORG_CODE and a.sj=c.sj left join
+       
+        (SELECT COUNT(1) as ryrs, YLJGDM, TO_CHAR(RYSJ, 'YYYY-MM-DD') as sj
+           FROM TB_HIS_ZY_Adm_Reg
+          where 1=1
+          group by YLJGDM,TO_CHAR(RYSJ, 'YYYY-MM-DD')) d on a.yljgdm = d.yljgdm  and a.sj=d.sj left join
+        (select count(1) as cyrs,yljgdm, to_char(CYSJ,'yyyy-mm-dd') as sj from TB_YL_ZY_Medical_Record
+           where 1=1 
+           group by yljgdm, to_char(CYSJ,'yyyy-mm-dd')) e on a.yljgdm = e.yljgdm  and a.sj=e.sj left join
+        (SELECT sum(MXXMJE) as mzfy, YLJGDM,TO_CHAR(STFSJ, 'YYYY-MM-DD') as sj
+           FROM TB_HIS_MZ_Fee_Detail
+          where TFBZ = '1' 
+          group by YLJGDM,TO_CHAR(STFSJ, 'YYYY-MM-DD')  ) f on a.yljgdm = f.yljgdm  and a.sj=f.sj left join
+        (SELECT sum(MXXMJE) as zyfy, YLJGDM,TO_CHAR(STFSJ, 'YYYY-MM-DD') as sj
+           FROM TB_HIS_ZY_Fee_Detail
+          where TFBZ = '1' 
+          group by YLJGDM,TO_CHAR(STFSJ, 'YYYY-MM-DD')) g on a.yljgdm = g.yljgdm and a.sj=g.sj)
+        ) a
+           left join 
+(select a.id, b.mc, b.id as ids, a.mc as mcs
+               from TB_VOLAP_YLJG a
+              inner join TB_VOLAP_YYLB b
+                 on a.yylb = b.id) b
+on a.yljgdm=b.id
+where 1=1  
+		]]>
+		<include refid="commonWhere"></include>
+	<![CDATA[	  group by  a.yljgdm,b.ids,sj,b.mcs) ]]>
+	</select>
+	
+	<select id="getYylx" resultType="com.wondersgroup.wszygl.model.SsywjcModel">
+	<![CDATA[
+	  	 select yljgdm,  yljgmc,
+ids,mzrs,jzrs,zyrs,ryrs,cyrs, round( mzfy/10000,3) as mzfy, round(zyfy/10000,3) zyfy ,sj
+      from 
+    (select a.yljgdm  ,b.mcs as yljgmc,  b.ids,
+       nvl(sum(a.mzrs), 0) as mzrs,
+       nvl(sum(a.jzrs) ,0)as jzrs,
+       nvl(sum(a.zyrs),0) as zyrs,
+       nvl(sum(a.ryrs),0)ryrs,
+       nvl(sum(a.cyrs),0)as cyrs,
+       nvl(sum(a.mzfy),0)as mzfy,
+       nvl(sum(a.zyfy),0) as zyfy ,
+       sj 
+       
+
+ from 
+(select   
+      a.yljgdm, a.mzrs,b.jzrs,c.zyrs,d.ryrs,e.cyrs,f.mzfy,g.zyfy,a.sj
+  from ((SELECT COUNT(1) as mzrs, YLJGDM,TO_CHAR(JZKSRQ, 'YYYY-MM-DD') as sj
+           FROM TB_YL_MZ_Medical_Record
+          where JZLX not in ('200', '600', '601')
+            
+          group by YLJGDM,TO_CHAR(JZKSRQ, 'YYYY-MM-DD')) a left join
+        (SELECT COUNT(1) as jzrs, YLJGDM,TO_CHAR(JZKSRQ, 'YYYY-MM-DD')  as sj
+           FROM TB_YL_MZ_Medical_Record
+          where JZLX in ('200')
+            group by YLJGDM,TO_CHAR(JZKSRQ, 'YYYY-MM-DD')) b on a.yljgdm = b.yljgdm and a.sj=b.sj left join
+        (SELECT COUNT(1) as zyrs, ORG_CODE,TO_CHAR(CREATETIME, 'YYYY-MM-DD') as  sj
+           FROM TB_BED_INFO
+          where  1=1and STOP_FLAG='1' and ZYH is not null
+          group by ORG_CODE,TO_CHAR(CREATETIME, 'YYYY-MM-DD')) c on a.yljgdm = c.ORG_CODE and a.sj=c.sj left join
+       
+        (SELECT COUNT(1) as ryrs, YLJGDM, TO_CHAR(RYSJ, 'YYYY-MM-DD') as sj
+           FROM TB_HIS_ZY_Adm_Reg
+          where 1=1
+          group by YLJGDM,TO_CHAR(RYSJ, 'YYYY-MM-DD')) d on a.yljgdm = d.yljgdm  and a.sj=d.sj left join
+        (select count(1) as cyrs,yljgdm, to_char(CYSJ,'yyyy-mm-dd') as sj from TB_YL_ZY_Medical_Record
+           where 1=1 
+           group by yljgdm, to_char(CYSJ,'yyyy-mm-dd')) e on a.yljgdm = e.yljgdm  and a.sj=e.sj left join
+        (SELECT sum(MXXMJE) as mzfy, YLJGDM,TO_CHAR(STFSJ, 'YYYY-MM-DD') as sj
+           FROM TB_HIS_MZ_Fee_Detail
+          where TFBZ = '1' 
+          group by YLJGDM,TO_CHAR(STFSJ, 'YYYY-MM-DD')  ) f on a.yljgdm = f.yljgdm  and a.sj=f.sj left join
+        (SELECT sum(MXXMJE) as zyfy, YLJGDM,TO_CHAR(STFSJ, 'YYYY-MM-DD') as sj
+           FROM TB_HIS_ZY_Fee_Detail
+          where TFBZ = '1' 
+          group by YLJGDM,TO_CHAR(STFSJ, 'YYYY-MM-DD')) g on a.yljgdm = g.yljgdm and a.sj=g.sj)
+        ) a
+           left join 
+(select a.id, b.mc, b.id as ids, a.mc as mcs
+               from TB_VOLAP_YLJG a
+              inner join TB_VOLAP_YYLB b
+                 on a.yylb = b.id) b
+on a.yljgdm=b.id
+where 1=1  
+		]]>
+		<include refid="commonWhere"></include>
+	<![CDATA[	  group by  a.yljgdm,b.ids,sj,b.mcs) ]]>
+	 </select>
+	
+	 
+
+
+</mapper>

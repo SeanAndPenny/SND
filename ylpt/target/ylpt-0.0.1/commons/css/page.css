@@ -1,0 +1,637 @@
+html,
+body {
+  background: #ededed;
+  min-width: 1300px;
+}
+.floatleft {
+  float: left;
+}
+.floatright {
+  float: right;
+}
+.clearfix:after {
+  content: ".";
+  clear: both;
+  display: block;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+}
+.page-shouye .top {
+  position: relative;
+  height: 157px;
+  background: rgb(166, 223, 113);
+  background: -moz-linear-gradient(
+    left,
+    rgba(166, 223, 113, 1) 0%,
+    rgba(32, 132, 214, 1) 25%,
+    rgba(15, 47, 160, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    left,
+    rgba(166, 223, 113, 1) 0%,
+    rgba(32, 132, 214, 1) 25%,
+    rgba(15, 47, 160, 1) 100%
+  );
+  background: linear-gradient(
+    to right,
+    rgba(166, 223, 113, 1) 0%,
+    rgba(32, 132, 214, 1) 25%,
+    rgba(15, 47, 160, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6df71', endColorstr='#0f2fa0',GradientType=1 );
+}
+.page-shouye .top .title{
+  font-size:24px;
+  color:#fff;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+.page-shouye .top .title img{
+  width: 53px;
+  height: 53px;
+  vertical-align: -16px;
+  margin-left: 42px;
+  margin-right: 12px;
+}
+.page-shouye .top .title span{
+  display: inline-block;
+  height: 120px;
+  line-height: 120px;
+  text-shadow:0px 2px 2px #004590;
+}
+.page-shouye .top .head-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 675px;
+  height: 136px;
+}
+.page-shouye .top .bot-box {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#2669de+0,0f31a1+100 */
+  background: #2669de; /* Old browsers */
+  background: -moz-linear-gradient(
+    left,
+    #2669de 0%,
+    #0f31a1 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    left,
+    #2669de 0%,
+    #0f31a1 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to right,
+    #2669de 0%,
+    #0f31a1 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2669de', endColorstr='#0f31a1',GradientType=1 ); /* IE6-9 */
+}
+.page-shouye .top .bot-box ul {
+  padding-left: 93px;
+}
+.page-shouye .top .bot-box .user{
+  position: absolute;
+  top: 0;
+  right: 30px;
+  height: 40px;
+}
+.page-shouye .top .bot-box .user span{
+  display: inline-block;
+  height: 40px;
+  line-height:40px;
+  color:#fff;
+  font-size:14px;
+  color:#fff;
+}
+.page-shouye .top .bot-box .user img{
+  width: 10px;
+  height: 6px;
+  vertical-align: 2px;
+  margin-left: 4px;
+}
+.page-shouye .top .bot-box li {
+  float: left;
+  width: 130px;
+  font-size: 16px;
+  color: #fff;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+.page-shouye .top .bot-box .active {
+  background: #043b99;
+}
+.page-shouye .main {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 23px;
+}
+.page-shouye .wd-g {
+  margin-left: -8px;
+  margin-right: -8px;
+}
+.page-shouye .wd-g .mode {
+  float: left;
+}
+.page-shouye .wd-g li .itembg {
+  margin-left: 8px;
+  margin-right: 8px;
+  background: #fff;
+  padding-left: 15px;
+  padding-right: 15px;
+  position: relative;
+  margin-top: 13px;
+}
+.page-shouye .wd-g li .itembg .mode-title {
+  color: #3a4c64;
+  font-size: 15px;
+  padding-top: 15px;
+}
+.page-shouye .wd-g li .itembg .mode-main {
+  width: 100%;
+}
+.page-shouye .wd-g li .itembg .mode-title .icon {
+  display: inline-block;
+  width: 4px;
+  height: 14px;
+  background: #066fd8;
+  vertical-align: -2px;
+  margin-right: 8px;
+}
+.page-shouye .wd-g .mode01 .itembg {
+  height: 403px;
+}
+.page-shouye .wd-g .mode01 .mode-top {
+  height: 45px;
+  color: #455c7b;
+  font-size: 15px;
+  border-bottom: 1px solid #7d9dc9;
+}
+.page-shouye .wd-g .mode01 .mode-top ul li {
+  float: left;
+  height: 38px;
+  line-height: 38px;
+  margin-right: 27px;
+  margin-top: 5px;
+  margin-left: 15px;
+  border: none;
+  cursor: pointer;
+}
+.page-shouye .wd-g .mode01 .mode-top ul .active {
+  border-bottom: 3px solid #7d9dc9;
+  font-weight: 600;
+  color: #3a4c64;
+}
+.page-shouye .wd-g .mode01 .time-choose,
+.page-shouye .wd-g .mode08 .time-choose {
+  position: absolute;
+  top: 12px;
+  right: 0px;
+}
+.page-shouye .wd-g .time-choose {
+  color: #333;
+  font-size: 13px;
+}
+.page-shouye .wd-g .time-choose li {
+  float: left;
+}
+.page-shouye .wd-g .time-choose .input-box{
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 22px;
+  margin-right: 14px;
+  padding-left: 10px;
+  background: #e3e6eb;
+  border-radius: 6px;
+  overflow: hidden;
+  vertical-align: -7px;
+  margin-left: 7px;
+}
+.page-shouye .wd-g .time-choose .input-box img{
+  position: absolute;
+  top: 4px;
+  right: 6px;
+}
+.page-shouye .wd-g .time-choose input {
+  width: 90px;
+  height: 22px;
+  border: none;
+  background: #e3e6eb;
+  cursor: pointer;
+}
+.page-shouye .wd-g .time-choose button {
+  width: 64px;
+  height: 22px;
+  border: none;
+  border-radius: 6px;
+  background: #066fd8;
+  color: #fff;
+  font-size: 13px;
+  margin-left: 7px;
+  margin-right: 14px;
+  cursor: pointer;
+}
+.page-shouye .wd-g .subtitle {
+  margin-top: 18px;
+}
+.page-shouye .wd-g .subtitle .num1 {
+  font-size: 22px;
+  vertical-align: -2px;
+}
+.page-shouye .wd-g .subtitle .num2 {
+  font-size: 22px;
+  vertical-align: -2px;
+}
+.page-shouye .wd-g .subtitle img {
+  width: 26px;
+  height: 22px;
+  vertical-align: -6px;
+  margin-left: 16px;
+  margin-right: 2px;
+}
+.page-shouye .wd-g .echarts-box {
+  text-align: center;
+}
+.page-shouye .wd-g .planer-name {
+  display: inline-block;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+  color: #fff;
+  font-size: 13px;
+  height: 22px;
+  background: #7d9dc9;
+  border-radius: 11px;
+}
+.page-shouye .wd-g .itembg .planer-name .name {
+  display: inline-block;
+  height: 22px;
+  line-height: 22px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+.page-shouye .wd-g .planer-name .icon {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius:50%;
+  background: #98bae8;
+  vertical-align: 2px;
+}
+.page-shouye .wd-g .itembg .select-box select {
+  width: 92px;
+  height: 22px;
+  border-radius: 6px;
+  background: #e3e6eb;
+  border: none;
+  padding-left: 8px;
+  outline: none;
+}
+.page-shouye .wd-g .itembg .view {
+  position: relative;
+  border: 1px solid #d7dcea;
+}
+.page-shouye .wd-g .mode03 .view {
+  position: relative;
+  height: 180px;
+  border: 1px solid #d7dcea;
+}
+.page-shouye .wd-g .view .fixed-header-table {
+  position: absolute;
+  left: 0;
+  height: 34px;
+  line-height: 34px;
+  color: #fff;
+  font-size: 13px;
+  width: 100%;
+  background: #7d9dc9;
+  text-align: center;
+}
+.page-shouye .wd-g .view thead {
+  height: 34px;
+  line-height: 34px;
+  color: #fff;
+  font-size: 13px;
+  width: 100%;
+  background: #7d9dc9;
+  text-align: center;
+}
+.page-shouye .wd-g table {
+  width: 100%;
+  text-align: center;
+}
+.page-shouye .wd-g .view table td {
+  height: 40px;
+  font-size: 14px;
+  color: #333;
+}
+.page-shouye .wd-g .view thead th {
+  height: 34px;
+  text-align: center;
+}
+.page-shouye .wd-g .view tbody .col td {
+  background: #edf3fc;
+  height: 33px;
+}
+.page-shouye .wd-g .mode01 ul li {
+  float: left;
+}
+.page-shouye .wd-g .mode01 .planer-name {
+  margin-top: 20px;
+}
+.page-shouye .wd-g .mode01 ul .left-part {
+  width: 55%;
+}
+.page-shouye .wd-g .mode01 ul .right-part {
+  width: 45%;
+}
+.page-shouye .wd-g .mode01 ul li .chart01 {
+  width: 100%;
+  height: 270px;
+}
+.page-shouye .wd-g .mode01 ul li .chart02 {
+  width: 100%;
+  height: 240px;
+}
+.page-shouye .wd-g .mode01 .select-box {
+  text-align: right;
+}
+.page-shouye .wd-g .mode01 .select-box select {
+  margin-right: 37px;
+}
+.page-shouye .wd-g .mode02 .itembg {
+  height: 403px;
+}
+.page-shouye .wd-g .mode02 .select-box {
+  position: absolute;
+  top: 14px;
+  right: 15px;
+  text-align: right;
+}
+.page-shouye .wd-g .mode02 .select-box select {
+  width: 107px;
+}
+.page-shouye .wd-g .mode02 .chart03 {
+  width: 100%;
+  height: 290px;
+}
+.page-shouye .wd-g .mode03 .itembg {
+  height: 302px;
+}
+.page-shouye .wd-g .mode03 .table-box {
+  padding-left: 36px;
+  padding-right: 32px;
+  margin-top: 16px;
+}
+.page-shouye .wd-g .mode03 .view {
+  position: relative;
+  height: 180px;
+  border: 1px solid #d7dcea;
+}
+
+.page-shouye .wd-g .mode04 .itembg {
+  height: 302px;
+}
+.page-shouye .wd-g .mode04 .subtitle {
+  font-size: 14px;
+  color: #333;
+}
+.page-shouye .wd-g .mode04 .subtitle .icon {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #7d9dc9;
+  margin-left: 5px;
+  margin-right: 6px;
+}
+.page-shouye .wd-g .mode04 .left-part {
+  float: left;
+  width: 68%;
+}
+.page-shouye .wd-g .mode04 .table-box {
+  padding-left: 22px;
+  padding-right: 10px;
+  margin-top: 24px;
+}
+.page-shouye .wd-g .mode04 .echarts-box {
+  float: left;
+  width: 32%;
+}
+.page-shouye .wd-g .mode04 .chart04 {
+  width: 100%;
+  height: 220px;
+}
+.page-shouye .wd-g .mode04 .top-list {
+  font-size: 14px;
+  color: #333;
+  padding-left: 26px;
+  margin-top: 30px;
+}
+.page-shouye .wd-g .mode04 .top-list li {
+  float: left;
+  width: 50%;
+  position: relative;
+}
+.page-shouye .wd-g .mode04 .top-list .bar {
+  height: 6px;
+  width: 90%;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 11px;
+}
+.page-shouye .wd-g .mode04 .top-list .bar-box {
+  position: relative;
+  background: #dcdcdc;
+  height: 6px;
+}
+.page-shouye .wd-g .mode04 .top-list .bar-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #9884f3;
+  height: 6px;
+}
+.page-shouye .wd-g .mode04 .top-list .number {
+  position: absolute;
+  top: 0px;
+  right: 30px;
+}
+.page-shouye .wd-g .mode04 .top-list .rate {
+  font-size: 14px;
+  color: #666;
+  margin-right: 3px;
+}
+.page-shouye .wd-g .mode05 .itembg {
+  height: 303px;
+}
+.page-shouye .wd-g .mode05 .planer-name {
+  margin-top: 15px;
+}
+.page-shouye .wd-g .mode05 .chart05 {
+  width: 100%;
+  height: 190px;
+}
+.page-shouye .wd-g .mode05 .select-box {
+  position: absolute;
+  top: 14px;
+  right: 15px;
+  text-align: right;
+}
+.page-shouye .wd-g .mode05 .select-box select {
+  width: 107px;
+}
+.page-shouye .wd-g .mode06 .itembg {
+  height: 303px;
+}
+.page-shouye .wd-g .mode06 .echarts-box {
+  position: relative;
+}
+.page-shouye .wd-g .mode06 .echarts-box .center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -20px;
+  margin-top: -20px;
+}
+.page-shouye .wd-g .mode06 .chart06 {
+  width: 100%;
+  height: 260px;
+}
+.page-shouye .wd-g .mode07 .itembg {
+  height: 303px;
+}
+.page-shouye .wd-g .mode07 .echarts-box {
+  position: relative;
+}
+.page-shouye .wd-g .mode07 .echarts-box .center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -20px;
+  margin-top: -20px;
+}
+.page-shouye .wd-g .mode07 .chart07 {
+  width: 100%;
+  height: 260px;
+}
+.page-shouye .wd-g .mode08 .itembg {
+  height: 375px;
+}
+.page-shouye .wd-g .mode08 .chart08 {
+  width: 100%;
+  height: 300px;
+}
+.page-shouye .wd-g .mode08 .table-box {
+  float: left;
+  width: 50%;
+}
+.page-shouye .wd-g .mode08 .table-box .view {
+  height: 250px;
+  margin-top: 20px;
+}
+.page-shouye .wd-g .mode08 .planer-name {
+  margin-top: 20px;
+}
+.page-shouye .wd-g .mode08 .echarts-box {
+  float: left;
+  width: 50%;
+  height: 300px;
+}
+.page-shouye .wd-g .mode08 .time-choose .input-box{
+  display: inline-block;
+  width: 105px;
+}
+.page-shouye .wd-g .mode08 .time-choose input{
+  width: 105px;
+}
+.page-shouye .wd-g .mode09 .itembg {
+  height: 525px;
+}
+.page-shouye .wd-g .mode09 .chart11{
+  width: 100%;
+  height: 370px;
+}
+.page-shouye .wd-g .mode09 .time-choose,
+.page-shouye .wd-g .mode10 .time-choose {
+  margin-top: 10px;
+}
+.page-shouye .wd-g .mode09 .time-choose .input-box,.page-shouye .wd-g .mode10 .time-choose .input-box{
+  display: inline-block;
+  margin-left: 0;
+  margin-top: 5px;
+  width: 105px;
+  padding-left: 5px;
+}
+.page-shouye .wd-g .mode09 .time-choose input,
+.page-shouye .wd-g .mode10 .time-choose input {
+  margin-left: 0;
+  margin-right: 15px;
+}
+.page-shouye .wd-g .mode09 .time-choose select,
+.page-shouye .wd-g .mode10 .time-choose select {
+  width: 96px;
+  height: 22px;
+  border: none;
+  border-radius: 6px;
+  background: #e3e6eb;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+.page-shouye .wd-g .mode09 .time-choose button,
+.page-shouye .wd-g .mode10 .time-choose button {
+  margin-top: 21px;
+}
+.page-shouye .wd-g .mode09 .mode-main {
+  text-align: center;
+  margin-top: 20px;
+  padding-left: 10px;
+}
+.page-shouye .wd-g .mode10 .itembg {
+  height: 525px;
+}
+.page-shouye .wd-g .mode10 .chart12{
+  width: 100%;
+  height: 370px;
+}
+.page-shouye .wd-g .mode10 .mode-main {
+  text-align: center;
+  margin-top: 20px;
+  padding-left: 10px;
+}
+.page-shouye .wd-g .mode11 .itembg {
+  height: 253px;
+}
+.page-shouye .wd-g .mode11 .chart09 {
+  height: 170px;
+}
+.page-shouye .wd-g .mode11 .chart10 {
+  height: 170px;
+}
+.page-shouye .wd-g .mode11 .subtitle {
+  margin-top: 13px;
+}
+.page-shouye .wd-g .mode11 .itembg-bot {
+  margin-top: 13px;
+  height: 258px;
+}
+.page-shouye .wd-g .mode11 .select-box {
+  position: absolute;
+  top: 14px;
+  right: 15px;
+  text-align: right;
+}
+.page-shouye .wd-g .mode11 .select-box select {
+  width: 95px;
+}

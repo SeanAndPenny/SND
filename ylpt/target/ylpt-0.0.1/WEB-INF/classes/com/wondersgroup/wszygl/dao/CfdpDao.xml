@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.CfdpDao">
+	<!-- <resultMap type="com.wondersgroup.wszygl.model.AreaModel" id="AreaResult">
+		<result column="name" property="name" />
+		<result column="code" property="code" />
+		<result column="lelevel" property="lelevel" />
+		<result column="pid" property="pid" />
+	</resultMap> -->
+
+	<sql id="commonWhere">
+		<if test="yljgdm != null and yljgdm!='' ">
+			<![CDATA[ AND yljgdm=#{yljgdm}]]>
+		</if>
+		<if test="startdate != null and startdate !=''">
+			<![CDATA[ and cfklrq >= to_date(#{startdate},'yyyy-mm-dd') ]]>
+		</if>
+		<if test="enddate != null and enddate !=''">
+			<![CDATA[ and cfklrq <= to_date(#{enddate},'yyyy-mm-dd') ]]>
+		</if>
+		<if test="ksmc != null and ksmc != '' ">
+			<![CDATA[ AND cfklksmc like '%'||#{ksmc}||'%']]>
+		</if>
+		<if test="cfklysqm != null and cfklysqm != '' ">
+			<![CDATA[ AND cfklysqm like '%'||#{cfklysqm}||'%']]>
+		</if>
+		<if test="jzzdmc != null and jzzdmc != '' ">
+			<![CDATA[ AND jzzdmc like '%'||#{jzzdmc}||'%']]>
+		</if>
+		<if test="je != null and je != '' ">
+			<![CDATA[ AND je >=#{je} ]]>
+		</if>
+		<if test="rownum != null and rownum != '' ">
+			<![CDATA[ AND rownum <=#{rownum} ]]>
+		</if>
+	</sql>
+
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.CfdpModel" >
+		<![CDATA[
+ 				select yljgdm,
+				       cfbh,
+				       jzlsh,
+				       to_char(cfklrq,'yyyy-mm-dd') as cfklrq,
+				       kh,
+				       klx,
+				       zjhm,
+				       nls,
+				       cfklksmc,
+				       jzzdmc,
+				       sl,
+				       zssl,
+				       ksssl,
+				       cfklysqm,
+				       cfdpyjsqm,
+				       cffyyjsqm,
+				       je,
+				       dpjg,
+				       yyfx,
+				       decode(yl,'0','已点评','1','已点评','未点评') as sfdp,
+				       type
+				  from cen_core_v20.tb_emr_cfdp_temp
+				 where 1 = 1
+			 ]]>
+		<include refid="commonWhere"></include>
+	</select>
+	<select id="findXx" resultType="com.wondersgroup.wszygl.model.HzxxModel">
+		<![CDATA[
+			select yljgdm,jzlsh,
+       		hzxm,
+       		xb,
+       		nls,
+       		kh,
+	       	cfklrq,
+	       	cfbh,
+	       	cfypje,
+	       	cfklksmc,
+	       	cfdpyjsqm,
+	       	cffyyjsqm,
+	       	cfklysqm,
+	       	jzzdmc,jzksrq,zzysxm
+			from cen_core_v20.tb_emr_cfdp_hzxx  where yljgdm=#{yljgdm} and cfbh=#{cfbh}
+		]]>
+	</select>
+	<select id="findCf" resultType="com.wondersgroup.wszygl.model.CfModel">
+			<![CDATA[
+				select ywbmyn,ywmc,ywgg,ywdj,ywsyzjl||ywsyzjldw as ywsl,ywje,j.fdmz,
+				t.ywsyzjl||t.ywsyzjldw as zl from cen_core_v20.tb_emr_zycf_details t left join dic_cv06_00_228 j on t.ywsypcdm=j.dmxmc
+				where yljgdm=#{yljgdm} and cfbh=#{cfbh}
+				union all
+				select ywbmyn,ywmc,ywgg,ywdj,ywsyzjl||ywsyzjldw as ywsl,ywje,j.fdmz,
+				t.ywsyzjl||t.ywsyzjldw as zl from cen_core_v20.tb_emr_xycf_details t left join dic_cv06_00_228 j on t.ywsypcdm=j.dmxmc
+				where yljgdm=#{yljgdm} and cfbh=#{cfbh}
+			]]>
+	</select>
+	<insert id="insertCfdp" parameterType="com.wondersgroup.wszygl.model.CfdpModel">
+		<![CDATA[ 
+			insert into CEN_CORE_V20.TB_EMR_CFDPNR_TEMP(
+				id,
+				yljgdm,
+				cfbh,
+				cfdpnr,
+				type,
+				hgbz,
+				dpsj
+			) values(
+				sys_guid(),
+				#{yljgdm,jdbcType=VARCHAR},
+				#{cfbh,jdbcType=VARCHAR},
+				#{cfdpnr,jdbcType=VARCHAR},
+				#{type,jdbcType=VARCHAR},
+				#{hgbz,jdbcType=VARCHAR},
+				sysdate
+			)
+		]]>
+	</insert>
+	<select id="findCfdp" resultType="com.wondersgroup.wszygl.model.Cfdp">
+		<![CDATA[select id,yljgdm,cfbh,hgbz,cfdpnr,type from cen_core_v20.TB_EMR_CFDPNR_TEMP where yljgdm=#{yljgdm} and  cfbh=#{cfbh}]]>
+	</select>
+	<update id="updateCfdp" parameterType="com.wondersgroup.wszygl.model.CfdpModel">
+		<![CDATA[
+			update cen_core_v20.tb_emr_cfdp_temp set yl='1' where yljgdm=#{yljgdm} and  cfbh=#{cfbh}
+		]]>
+	</update>
+	<update id="updateCfdp1" parameterType="com.wondersgroup.wszygl.model.CfdpModel">
+		<![CDATA[
+			update cen_core_v20.tb_emr_cfdp_temp set yl='0' where yljgdm=#{yljgdm} and  cfbh=#{cfbh}
+		]]>
+	</update>
+	 <select id="findCfdpnr" resultType="com.wondersgroup.wszygl.model.Cfdp">
+		<![CDATA[
+			select id,cfdpnr,type,hgbz from cen_core_v20.TB_EMR_CFDPNR_TEMP where id=#{id}
+		]]>
+	</select>
+	<update id="updateCfdpnr" parameterType="com.wondersgroup.wszygl.model.Cfdp">
+		<![CDATA[
+			update cen_core_v20.TB_EMR_CFDPNR_TEMP set cfdpnr=#{cfdpnr},type=#{type},hgbz=#{hgbz} where id=#{id}
+		]]>
+	</update> 
+	
+	<select id="findJy" resultType="com.wondersgroup.wszygl.model.JyjcModel">
+		<![CDATA[
+			select * from cen_core_v20.tb_emr_cfdp_jyjc where bz=3 and yljgdm=#{yljgdm} and checkserialnum=#{jzlsh}
+		]]>
+	</select>
+	<select id="findJc" resultType="com.wondersgroup.wszygl.model.JyjcModel">
+		<![CDATA[
+			select * from cen_core_v20.tb_emr_cfdp_jyjc where bz=2 and yljgdm=#{yljgdm} and idnumber=#{sfzh}
+		]]>
+	</select>
+	<select id="findTjfx" resultType="com.wondersgroup.wszygl.model.CfdpTjfxModel">
+		<![CDATA[
+			select t.yljgdm, l.jgmc, t.zs, nvl(j.dps,0) as dps, nvl(k.bhgs,0) as bhgs,nvl(m.hgs,0) as hgs
+  from (select yljgdm, count(yljgdm) as zs
+          from cen_core_v20.tb_emr_cfdp_temp t
+         where t.cfklrq >= to_date('2018-01-01', 'yyyy-mm-dd')
+         group by yljgdm) t
+  left join (select yljgdm, count(yljgdm) as dps
+               from cen_core_v20.tb_emr_cfdp_temp t
+              where t.cfklrq >= to_date('2018-01-01', 'yyyy-mm-dd')
+                and yl is not null
+              group by yljgdm) j
+    on t.yljgdm = j.yljgdm
+  left join (select yljgdm, count(yljgdm) as bhgs
+               from cen_core_v20.tb_emr_cfdp_temp t
+              where t.cfklrq >= to_date('2018-01-01', 'yyyy-mm-dd')
+                and yl = '0'
+              group by yljgdm) k
+    on t.yljgdm = k.yljgdm
+   left join (select yljgdm, count(yljgdm) as hgs
+               from cen_core_v20.tb_emr_cfdp_temp t
+              where t.cfklrq >= to_date('2018-01-01', 'yyyy-mm-dd')
+                and yl = '1'
+              group by yljgdm) m
+    on t.yljgdm = m.yljgdm
+  left join sys_jgdm_list l
+    on t.yljgdm = l.jgdm
+		]]>
+	</select>
+	<delete id="deleteCfdp" parameterType="com.wondersgroup.wszygl.model.Cfdp">
+		<![CDATA[
+			delete cen_core_v20.TB_EMR_CFDPNR_TEMP where id=#{id}
+		]]>
+	</delete>
+</mapper>

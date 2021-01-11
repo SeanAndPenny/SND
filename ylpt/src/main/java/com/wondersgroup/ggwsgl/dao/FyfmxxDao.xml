@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.ggwsgl.dao.FyfmxxDao">
+	<select id="getFmxx" parameterType="java.lang.String"
+		resultType="com.wondersgroup.ggwsgl.model.FyfmxxModel">
+<![CDATA[
+	select a.cdoctorreporgname as jg ,
+       to_char(a.childbirthtime, 'yyyy-mm-dd') as sj,
+       decode(a.cFmfs,'1', '顺产', '2', '剖宫产', '3', '产钳',  '4', '臂牵', '5', '臀助',  '6',   '其他',   '7',
+              '吸引',
+              '8',
+              '穿颅',
+              '9',
+              '毁胎') as fs,
+       case
+         when a.iRytz is null then
+          '未传'
+         else
+          a.iRytz || cast(' 公斤' as varchar(5))
+       end as rytz,
+       case
+         when a.iRyssy is null then
+          '未传'
+         else
+          a.iRyssy || '  mm/Hg'
+       end as ryxy1,
+       case
+         when a.iRyszy is null then
+          '未传'
+         else
+          a.iRyszy || '  mm/Hg'
+       end as ryxy2,
+       a.iYz || ' 周' as fmyz,
+       decode(a.cCcfs, '1', '催产素', '2', '人工破膜', '3', '未催产') as ccfs,
+       case
+         when a.iChssy is null then
+          '未传'
+         else
+          a.iChssy || '  mm/Hg'
+       end as chlxsxy1,
+       case
+         when a.iChszy is null then
+          '未传'
+         else
+          a.iChszy || ' mmHg'
+       end as chlxsxy2,
+       decode(a.cSxyy,
+              '1',
+              '宫缩乏力',
+              '2',
+              '切口撕裂',
+              '3',
+              '胎盘因素',
+              '4',
+              '妊娠并发症') as sxyy,
+       decode(a.cHBsAg,
+              '1',
+              '孕期筛查阴性',
+              '2',
+              '孕期未筛查或不详',
+              '3',
+              '孕期筛查阳性') as ygsc,
+       decode(b.cXb, '1', '男', '2', '女') as yexb,
+       b.iSg || ' cm' as yesc,
+       b.iTz || 'g' as yetz,
+       case
+         when b.iTouw is null then
+          '未传'
+         else
+          b.iTouw || ' cm'
+       end as yetw,
+       b.cQjqk as qjqk ,
+       decode(b.iCsjz, '1', '活产', '2', '死胎', '3', '死产', '4', '早新死') as chqk,
+       c.hzxm as xm,
+       to_char(c.csrq, 'yyyy-mm-dd') as csrq,
+       CAST('汉族' AS VARCHAR(4)) as mz,
+       CAST('中国' AS VARCHAR(4)) as gj,
+       c.lxdh,
+       nvl(c.xzz_sfsczdz, '地址不详') as dz,
+       decode(b.cCsqx,
+              '1',
+              '腹裂',
+              '2',
+              '脊柱裂',
+              '3',
+              '腭裂',
+              '4',
+              '肠肛门闭锁或狭窄',
+              '5',
+              '尿道下裂',
+              '6',
+              '脐膨出',
+              '7',
+              '无脑畸形',
+              '8',
+              '马蹄内翻足',
+              '无缺陷') as ywcsqx
+  from cen_core_v20.TB_FY_YFFM a
+  left join cen_core_v20.TB_FY_XSE b
+    on a.sfzh = b.yfsfzh
+  left join cen_core_v20.TB_PERSONALINFO c
+    on a.sfzh = c.sfzh where 1=1 and a.sfzh=  #{sfzh}
+    
+	
+	]]>
+
+	</select>
+
+
+
+</mapper>

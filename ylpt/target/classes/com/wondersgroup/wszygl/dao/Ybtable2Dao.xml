@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.Ybtable2Dao"> 
+       
+      <sql id="commonWhere"> 
+		       <if test="kssj != null and kssj !='' and kssj !='undefined' and kssj.length==4">
+			     <![CDATA[ and YYYY>=trim(#{kssj}) ]]> 
+			     <![CDATA[  and YYYY<=trim(#{jssj}) ]]>
+		       </if> 
+		       <if test="kssj != null and kssj !='' and kssj !='undefined' and kssj.length==7">
+			     <![CDATA[ and YYYY||'-'||MM>=trim(#{kssj}) ]]> 
+			     <![CDATA[  and YYYY||'-'||MM<=trim(#{jssj}) ]]>
+		       </if> 
+		     
+		     
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   YLJGQNDM =trim(#{jgdm})]]>
+		    </if>
+		     
+		     <if test="qylx != null and qylx !='' and qylx !='undefined' ">
+			    <![CDATA[ and   QYGL =trim(#{qylx})]]>
+		    </if> 
+		    <if test="jglx != null and jglx !='' and jglx !='undefined' ">
+			    <![CDATA[ and   jglx =trim(#{jglx})]]>
+		    </if> 
+		    <if test="jbdm != null and jbdm !='' and jbdm !='undefined' ">
+			    <![CDATA[ and   YLJGJBDM =trim(#{jbdm})]]>
+		    </if> 
+		     
+      </sql>  
+   
+<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+  <![CDATA[
+       select  * from ( select yyyy||mm as cbsj,cblx,
+ decode(QYGL,'0','区内参保','1','区外参保','2','异地参保') as qylxmc,
+ yljgjb, decode(jglx, '0', '医院', '1', '药店', '2', '其他') as jglxmc ,
+yljgmc ,]]>
+
+ <if test="ywlx =='jezs' ">
+			    <![CDATA[ sum(YLFYHJ) as ylje,'参保金额' as yw ]]>
+</if> 
+<if test="ywlx =='mzje' ">
+			    <![CDATA[ sum(MZYLFY) as ylje,'门诊参保金额' as yw ]]>
+</if> 
+<if test="ywlx =='zyje' ">
+			    <![CDATA[ sum(ZYYLFY) as ylje,'住院参保金额' as yw ]]>
+</if> 
+
+  <![CDATA[
+from T_YB_FYTJ t  where 1=1
+			]]>
+			<include refid="commonWhere"></include> 
+			<![CDATA[
+group by  yyyy||mm  ,cblx,
+ decode(QYGL,'0','区内参保','1','区外参保','2','异地参保')  ,
+ yljgjb, decode(jglx, '0', '医院', '1', '药店', '2', '其他')   ,
+yljgmc
+			]]>
+			
+			 <![CDATA[
+)order by ylje desc
+			]]>
+
+</select>
+  
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.PlatLoginDao">
+	<resultMap type="com.wondersgroup.wszygl.model.PlatLoginModel" id="PlatLoginResult">
+		<result column="logid" property="logid" />
+		<result column="operationname" property="operationname" />
+		<result column="operator" property="operator" />
+		<result column="actionclasssname" property="actionclasssname" />
+		<result column="ip" property="ip" />
+		<result column="ssproject" property="ssproject" />
+		<result column="projectname" property="projectname" />
+		<result column="operationsj" property="operationsj" />
+		
+	</resultMap>
+
+	<sql id="commonWhere">
+		<if test="platlogname != null and platlogname != ''">
+			<![CDATA[ AND t.loginname = #{platlogname}]]>
+		</if>
+		<if test="platname != null and platname != ''">
+			<![CDATA[ AND n.otherlogxm like '%'||#{platname}||'%']]>
+		</if>
+		<if test="yljgdm != null and yljgdm != ''">
+			<![CDATA[ AND z.jgdm = #{yljgdm}]]>
+		</if>
+		<if test="platform != null and platform != ''">
+			<![CDATA[ AND  y.platfromkey = #{platform}]]>
+		</if>
+	</sql>	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.PlatLoginModel" >
+		<![CDATA[
+      select n.id as tabid,n.otherlogname as operator,n.otherlogxm as xm,y.platfromname as platform,to_char(n.authenticatetime,'yyyy-MM-dd') as attestationtime,
+      t.loginname as platloginname,x.lognum as loginnumber from tb_platform_user n join tb_auth_user t on n.userid = t.userid      
+            join tb_platform_sys y
+                    on n.otherplatkey = y.platfromkey
+                  join (select count(1) as lognum, p.operator,p.projectname
+                         from tb_pt_log p
+                        where p.actionmethodname = 'login'
+                        group by p.operator,p.projectname) x
+                    on t.username || '(' || t.loginname || ')' = x.operator
+                       and y.platfromname=x.projectname
+      
+      left join tb_auth_unit z on t.unitid = z.unitid
+      where n.removed='0'
+
+		 ]]>
+		<include refid="commonWhere"></include>
+	</select>
+	<select id="getXtList" resultType="map" >
+		<![CDATA[		
+		select tb.platfromkey as pkey,tb.platfromname as pname from tb_platform_sys tb where tb.removed='0'
+		]]>
+	</select>
+
+</mapper>

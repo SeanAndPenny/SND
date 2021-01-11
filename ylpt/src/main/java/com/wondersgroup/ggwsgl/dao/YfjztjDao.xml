@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.ggwsgl.dao.YfjztjDao">
+
+	<sql id="commonWhere">
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  d.organ_code = #{yljgdm}]]>
+		</if>
+		<choose>
+			<when
+				test="startdate != null and startdate!=''  and enddate !=null and enddate!=''">
+              <![CDATA[  and  to_char(b.fshotdated,'yyyy-mm-dd')>= #{startdate} and to_char(b.fshotdated,'yyyy-mm-dd')<= #{enddate} 
+          		]]>
+			</when>
+			<when
+				test="startdate != null and startdate!=''  and ( enddate ==null or enddate =='') ">
+               <![CDATA[ and to_char(b.fshotdated,'yyyy-mm-dd')>= #{startdate}
+           		]]>
+			</when>
+			<when
+				test="(startdate == null or startdate=='' ) and ( enddate !=null and enddate !='') ">
+              <![CDATA[ and  to_char(b.fshotdated,'yyyy-mm-dd')<= #{enddate}
+           		]]>
+			</when>
+			<otherwise>
+
+			</otherwise>
+		</choose>
+
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.YfjztjModel">
+		<![CDATA[
+			select d.organ_code jgdm, d.organ_name jgmc, count(distinct b.fchildno) jzrs,count(b.fchildno) jzrc,count(distinct b.fbactid) as ypzl
+			from cen_core_v20.epi_jzjl_bf b, cen_core_v20.sys_organcode d where b.ustationcode = d.new_basecode and length(d.organ_code) = 10
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ group by  d.organ_code, d.organ_name]]>
+	</select>
+
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.ggwsgl.model.YljgModel">
+		<![CDATA[
+			select j.jgdm,j.jgmc  from  cen_core_v20.sys_jgdm_list j where length(jgdm)=10  
+		]]>
+
+	</select>
+	<select id="getAllTb"
+		resultType="com.wondersgroup.ggwsgl.model.TbModel">
+		<![CDATA[
+			select d.organ_code jgdm, d.organ_name jgmc, count(distinct b.fchildno) rs,count(distinct b.fbactid) as ypzl
+			from cen_core_v20.epi_jzjl_bf b, cen_core_v20.sys_organcode d where b.ustationcode = d.new_basecode and length(d.organ_code) = 10 
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ group by  d.organ_code, d.organ_name]]>
+	</select>
+</mapper>

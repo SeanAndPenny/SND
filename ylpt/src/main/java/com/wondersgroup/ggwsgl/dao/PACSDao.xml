@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.ggwsgl.dao.PACSDao">
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.PACSModel">
+	</select>
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.ggwsgl.model.YljgModel">
+		<![CDATA[
+			select j.jgdm,j.jgmc  from  cen_core_v20.sys_jgdm_list j where length(jgdm)=10  
+		]]>
+
+	</select>
+</mapper>

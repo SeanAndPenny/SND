@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.MedicalPersonDao">
+	
+
+	<sql id="commonWhere">
+		<if test="idcardtype != null and idcardtype !='' ">
+			<![CDATA[ AND idcard =trim(#{idcardtype})]]>
+		</if>
+		<if test="xm != null and xm !=''">
+			<![CDATA[ AND unitname  LIKE  '%'||#{xm}||'%']]>
+		</if>
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  LIKE  '%'||#{yljgdm}||'%']]>
+		</if>
+	</sql>
+
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.MedicalPersonModel" >
+	  <![CDATA[
+			 select a.*,nvl(b.num,0)as num ,ylyl1 as xqzt,f_dy_yljgmc(yljgdm) as yljgmc from cen_core_v20.T_JSQY_UPLOADTO a
+       left join (select count(1) as num , PERSONID from cen_core_v20.T_JSQY_HT group by PERSONID) b
+       on a.id = b.PERSONID
+			 WHERE 2 = 2
+			 ]]>  
+		<!-- <![CDATA[
+			select *  from cen_core_v20.T_JSQY_UPLOADTO
+			 WHERE 2 = 2
+			 ]]> -->
+		<include refid="commonWhere"></include>
+		<!-- <![CDATA[
+			order by JOINWORKDATE desc
+			 ]]> -->
+	</select>
+	
+
+	<select id="getByPersonid" resultType="com.wondersgroup.wszygl.model.MedicalPersonHtModel" >
+		<![CDATA[
+			select *  from cen_core_v20.T_JSQY_HT h, cen_core_v20.T_JSQY_UPLOADTO u
+			 WHERE h.PERSONID=u.id and h.PERSONID=#{id}
+		]]>
+	</select>
+	<select id="getById" resultType="com.wondersgroup.wszygl.model.MedicalPersonModel" >
+		<![CDATA[
+			select *  from cen_core_v20.T_JSQY_UPLOADTO
+			 WHERE id=#{id}
+		]]>
+	</select>
+	<insert id="saveHt" parameterType="com.wondersgroup.wszygl.model.MedicalPersonHtModel">
+		<![CDATA[ INSERT INTO cen_core_v20.T_JSQY_HT (
+			ID,
+			YLJGDM, 
+			YLJGMC, 
+			PERSONID, 
+			STARTTIME,
+			ENDTIME,
+			CREATETIME,
+			REMOVED,
+			CREATEID,
+			REMOVEDID,
+			UPDATETIME
+			
+		) VALUES (
+			sys_guid(), 
+			#{yljgdm,jdbcType=VARCHAR}, 
+			'', 
+			#{personid,jdbcType=VARCHAR}, 
+			#{starttime,jdbcType=VARCHAR},
+			#{endtime,jdbcType=VARCHAR},  
+			to_char(SYSDATE,'YYYY-MM-DD'),
+			'0',
+			#{createid,jdbcType=VARCHAR},
+			'',
+			''
+		)]]>
+	</insert>
+	<select id="getTxByPersonid" resultType="com.wondersgroup.wszygl.model.MedicalPersonTxModel" >
+		   <![CDATA[
+			select *  from cen_core_v20.T_JSQY_TX
+			 WHERE PERSONID=#{id}
+			 order by txdate desc
+		]]>      
+		       <!--  <![CDATA[
+			select (unitname || decode(gender, '1', ' 先生', '2', ' 女士') || ' :您在' ||
+       f_dy_yljgmc(h.yljgdm) || '签署的工作合同将于' || endtime || '到期请及时续签') as txnr,
+       to_char(sysdate,'yyyy-mm-dd')as txsj
+  from cen_core_v20.T_JSQY_HT h, cen_core_v20.T_JSQY_UPLOADTO u
+ WHERE h.PERSONID = u.id and h.PERSONID=#{id}
+   and endtime >= to_char(sysdate - 30, 'yyyy-mm-dd')
+		]]>           -->
+	</select>
+	
+	
+	
+	
+	<select id="getCkxxByidcard" resultType="com.wondersgroup.wszygl.model.MedicalPersonModel" >
+		<![CDATA[
+			 select unitname,decode(gender,'1','男','2','女') as gender,decode(folk,'01','汉族',folk)as folk,idcard,nativeplace,
+to_char(birthdate,'yyyy-mm-dd')as birthdate,phone,
+f_Dy_ZZXX(politicallandscape) as politicallandscape ,
+
+joinpartydate,
+hospitalname,sectionname,sectionid,to_char(joinworkdate,'yyyy-mm-dd')joinworkdate,
+f_Dy_PRACLEVEL(praclevel) as praclevel,
+
+f_Dy_organizationcode(organizationcode) as organizationcode,
+f_Dy_PERSONTYPE(medicaltype) as medicaltype,f_Dy_TELQUALIFICATION(telqualification) as telqualification ,
+telqualificationtime,
+decode(applypratype,'1','临床','2','口腔','3','公共卫生','4','中医','其他')as  applypratype,
+sub_section,corpcardcode,
+f_Dy_FLOWCODE(flowcode) as flowcode,
+decode(tjxxh,'1','是','2','否')as tjxxh,
+decode(qkyx,'1','是','2','否')qkyx,to_char(flowtime,'yyyy-mm-dd')flowtime,
+decode(technicaltitle,'1','正高','2','副高','3','中级','4','师级/助理','5','士级','9','待聘','待聘') as technicaltitle,
+decode(edu,'1','研究生教育','2','大学本科/专科教','3','大学专科毕业','4','中等职业教育','6','普通高级中学教育','7','初级中学教育','8','小学教育','其他') as edu,
+case   
+  when major like '1%' then '医学'  when major like '01' then '哲学'  when major like '02' then '经济学' 
+    when major like '03' then '法学' when major like '04' then '教育学' when major like '05' then '文学'
+    when major like '06' then '历史学' when major like '07' then '理学' when major like '08' then '工学'
+       when major like '09' then '农学' else '其他'
+  end as major,
+decode(edudegree,'2','博士','3','硕士','4','学士','其他') as edudegree
+  from cen_core_v20.T_JSQY_UPLOADTO
+			 WHERE idcard=#{idcard} and rownum<=1
+		]]>
+	</select>
+	
+	
+	
+	
+	<update id="getXq" parameterType="com.wondersgroup.wszygl.model.MedicalPersonHtModel">
+		update CEN_CORE_V20.T_JSQY_HT set STARTTIME=ENDTIME,
+		ENDTIME=to_char(add_months(to_date(ENDTIME,'yyyy-mm-dd'),24),'yyyy-mm-dd'),CREATETIME=to_char(sysdate,'yyyy-mm-dd')
+		 where PERSONID=#{id}  
+	</update>
+	
+	<update id="getXgxqzt" parameterType="com.wondersgroup.wszygl.model.MedicalPersonHtModel">
+		update CEN_CORE_V20.T_JSQY_UPLOADTO set ylyl1='3' where id=#{id}  
+	</update>
+	
+	
+	
+	<select id="findAll" resultType="com.wondersgroup.wszygl.model.MedicalPersonModel" >
+		<![CDATA[
+			 select unitname,decode(gender,'1','男','2','女') as gender,decode(folk,'01','汉族',folk)as folk,idcard,nativeplace,
+to_char(birthdate,'yyyy-mm-dd')as birthdate,phone,
+f_Dy_ZZXX(politicallandscape) as politicallandscape ,
+
+joinpartydate,
+hospitalname,sectionname,sectionid,to_char(joinworkdate,'yyyy-mm-dd')joinworkdate,
+f_Dy_PRACLEVEL(praclevel) as praclevel,
+
+f_Dy_organizationcode(organizationcode) as organizationcode,
+f_Dy_PERSONTYPE(medicaltype) as medicaltype,f_Dy_TELQUALIFICATION(telqualification) as telqualification ,
+telqualificationtime,
+decode(applypratype,'1','临床','2','口腔','3','公共卫生','4','中医','其他')as  applypratype,
+sub_section,corpcardcode,
+f_Dy_FLOWCODE(flowcode) as flowcode,
+decode(tjxxh,'1','是','2','否')as tjxxh,
+decode(qkyx,'1','是','2','否')qkyx,to_char(flowtime,'yyyy-mm-dd')flowtime,
+decode(technicaltitle,'1','正高','2','副高','3','中级','4','师级/助理','5','士级','9','待聘','待聘') as technicaltitle,
+decode(edu,'1','研究生教育','2','大学本科/专科教','3','大学专科毕业','4','中等职业教育','6','普通高级中学教育','7','初级中学教育','8','小学教育','其他') as edu,
+case   
+  when major like '1%' then '医学'  when major like '01' then '哲学'  when major like '02' then '经济学' 
+    when major like '03' then '法学' when major like '04' then '教育学' when major like '05' then '文学'
+    when major like '06' then '历史学' when major like '07' then '理学' when major like '08' then '工学'
+       when major like '09' then '农学' else '其他'
+  end as major,
+decode(edudegree,'2','博士','3','硕士','4','学士','其他') as edudegree
+  from cen_core_v20.T_JSQY_UPLOADTO
+			 WHERE 1=1
+		]]>
+			<include refid="commonWhere"></include>
+	</select>
+	
+	
+</mapper>

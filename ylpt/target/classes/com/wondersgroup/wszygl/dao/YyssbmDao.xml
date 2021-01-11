@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.YyssbmDao">	
+	<sql id="commonWhere">
+		<if test=" yljgdm != null and '' != yljgdm">
+			<![CDATA[  and  yljgdm = #{yljgdm}]]>
+		</if>
+		<if test=" ssmc!=null and ssmc != '' ">
+			<![CDATA[  and  ssmc like '%'||#{ssmc}||'%']]>
+		</if>
+	</sql>
+	
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.SsbmyljgModel" >
+
+		<![CDATA[
+			select t.yljgdm,j.jgmc as yljgmc,ssbm,ssmc from cen_core_v20.tb_ssbm_yljg t left join sys_jgdm_list j on t.yljgdm=j.jgdm where 1=1 
+			]]>
+			<include refid="commonWhere"></include>
+	
+	</select>
+	<select id="getAllYljg" resultType="com.wondersgroup.ylfwgl.model.YljgModel" >
+		<![CDATA[
+			select j.jgdm,j.jgmc  from  cen_core_v20.sys_jgdm_list j where length(jgdm)=10
+		]]>
+		
+	</select>
+	
+</mapper>

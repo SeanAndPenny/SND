@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.MrsjqkDao">
+  <sql id="commonWhere">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and tjsj> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and tjsj<=trim(#{enddate})]]>
+    </if>
+    <if test="yljgdm != null and yljgdm !='' ">
+      <![CDATA[  and yljgdm  =trim(#{yljgdm})]]>
+    </if>
+    <if test="bm != null and bm !='' ">
+      <![CDATA[  and ywbm  =trim(#{bm})]]>
+    </if>
+  </sql>
+  
+   
+  
+   
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.MrsjqkModel">
+    <![CDATA[
+     select zwbm,ywbm,tjsj as dksj ,sl ,b.mc as yljgmc,yljgdm   from  tb_mrshtjb a 
+     inner join tb_volap_yljg b
+     on a.yljgdm=b.id
+ where 1=1  
+     
+    ]]>
+    <include refid="commonWhere"></include>
+
+  </select>
+  
+  <select id="getAllYljg"
+		resultType="com.wondersgroup.wszygl.model.YljgMcModel">
+		<![CDATA[
+			select id as jgdm,mc as jgmc from tb_volap_yljg 
+			where YYJB in('1','2','3')
+			order by jgmc   desc
+		]]>
+
+	</select>
+  <select id="getAllBm"
+		resultType="com.wondersgroup.wszygl.model.BmModel">
+		<![CDATA[
+			select ywbm as bm ,zwbm as bmc from tb_mrshtjb_bak
+		]]>
+
+	</select>
+  
+  
+ 
+</mapper>

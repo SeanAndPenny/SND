@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JjhznlfxDao">
+  <sql id="commonWhere">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(CREATE_TIME,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(CREATE_TIME,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+  </sql>
+  
+  
+  <sql id="commonWhere2">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(CREATE_TIME,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(CREATE_TIME,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+    <if test="xb != null and xb !='' and xb==0">
+      <![CDATA[ and GENDER_CAPTION='男']]>
+    </if>
+    <if test="xb != null and xb !='' and xb==1 ">
+      <![CDATA[  and GENDER_CAPTION='女']]>
+    </if>
+    <if test="nllx != null and nllx !='' ">
+      <![CDATA[  and CAST(nvl(substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1),0) as int)
+         > CAST(substr(trim(#{nllx}),0,instr(trim(#{nllx}),'~')-1) as int)]]>
+         <![CDATA[  and CAST(nvl(substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1),0) as int) 
+         <=CAST(substr(trim(#{nllx}), instr(trim(#{nllx}),'~')+1,10) as int)]]>
+    </if>
+    
+  </sql>
+
+  <select id="getJjhznlfxList" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+  <![CDATA[
+  select sum(nsl) as nsl,0-sum(vsl) as vsl,nllx from
+(select case  when xbdm='1' then sl end as nsl,
+case  when xbdm='2' then sl end as vsl,nllx from  
+(select count(1) as sl,
+       decode(GENDER_CAPTION, '男', '1', '女', '2') as xbdm,
+       GENDER_CAPTION as xbmc,
+       case 
+  when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 0 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 10 then '0~10' 
+   when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 10 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 20 then '10~20' 
+  when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 20 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 30 then '20~30'
+    when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 30 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 40 then '30~40'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 40 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 50 then '40~50'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 50 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 60 then '50~60'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 60 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 70 then '60~70'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 70 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 80 then '70~80'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 80 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 90 then '80~90'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 90 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 100 then '90~100'
+    when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 100 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 110 then '100~110'
+       end  as nllx 
+  from tb_fz_mxb  where 1=1 and REG_AGE_CAPTION like '%岁%']]>
+       <include refid="commonWhere"></include>
+    <![CDATA[    group by GENDER_CAPTION,
+  case 
+  when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 0 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 10 then '0~10' 
+   when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 10 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 20 then '10~20' 
+  when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 20 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 30 then '20~30'
+    when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 30 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 40 then '30~40'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 40 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 50 then '40~50'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 50 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 60 then '50~60'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 60 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 70 then '60~70'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 70 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 80 then '70~80'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 80 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 90 then '80~90'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 90 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 100 then '90~100'
+     when substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) > 100 
+    and substr(REG_AGE_CAPTION, 0, instr(REG_AGE_CAPTION, '岁') - 1) <= 110 then '100~110'
+          end ))
+         group by nllx
+ 	 order by nllx  desc  ]]>
+              
+  </select>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+ 
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+    <![CDATA[
+      select name,GENDER_CAPTION as xbmc,REG_AGE_CAPTION as nl,PATIENT_SAY as zs,CREATE_TIME as fzsj,
+NURSE_NAME as fzhs, DEPT_NAME as fzks,TO_WHERE as fzjg
+ from TB_FZ_MXB  
+ where 1=1  and REG_AGE_CAPTION like '%岁%'
+     
+    ]]>
+    <include refid="commonWhere2"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

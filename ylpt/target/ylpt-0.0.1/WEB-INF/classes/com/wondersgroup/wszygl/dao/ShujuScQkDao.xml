@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.ShujuScQkDao">
+
+<sql id="commonWhere">
+		  <if test="bm != null and bm !='' ">
+			<![CDATA[ AND EN_TABLE_NAME =trim(#{bm})]]>
+		</if>
+		<if test="ywlx != null and ywlx !='' ">
+			<![CDATA[ AND TYPE_NUM =trim(#{ywlx})]]>
+		</if>
+		 
+	</sql>
+	
+	<sql id="commonWhere1">
+		  <if test="jgfl != null and jgfl !='' ">
+			<![CDATA[ AND jg =trim(#{jgfl})]]>
+		</if>
+		 
+		 
+	</sql>
+ 
+  <select id="getShujuScQklist" resultType="com.wondersgroup.wszygl.model.ShujuScQkModel">
+  <![CDATA[
+    select * from 
+(select CH_TABLE_NAME as zwm,
+       EN_TABLE_NAME as ywm,
+       TYPE_NUM      as ywlx,
+       SJC_FZ        as sjc,
+       ywsj ,
+       rownum        as rowno
+  from GXQ_CHECKDATA t
+  where is_use = 1
+   ]]>
+  <include refid="commonWhere"></include>
+   <![CDATA[
+   order by ORDER_NUM
+  )
+ -- where   rowno >50*(${ccc}-1)  and rowno <=50*${ccc}
+    ]]>
+   </select>
+  
+     <select id="getList" resultType="com.wondersgroup.wszygl.model.ShujuScQkModel">
+  <![CDATA[
+    select * from (select 
+    decode(${ywlx},'1','资源数据','2','医疗数据','3','公卫数据','4','家庭医生')as ywlx,
+    #{zwm} as  zwm,
+    #{ywm} as ywm,
+    #{sjc} sjc,
+    ${ywsj} as ywsj,
+     MAX(to_char(jlgxsj,'yyyy-MM-dd hh24:mi:ss'))as jlgxsj,
+      case when  ROUND(TO_NUMBER(sysdate - max(jlgxsj)) * 24 * 60)<#{sjc} then '1'
+         else '0' end   jg
+      from ${ywm}) where 1=1
+   ]]>
+   <include refid="commonWhere1"></include>
+   </select>
+
+<select id="getywlist" resultType="com.wondersgroup.wszygl.model.ShujuScQkModel">
+  <![CDATA[
+     select  ywlx,  ywlxmc from TB_YWFF
+
+    ]]>
+    
+   </select>
+   
+   
+   <select id="getZsl" resultType="int">
+  <![CDATA[
+     select count(1)  from GXQ_CHECKDATA t where is_use=1  
+
+    ]]>
+    <include refid="commonWhere"></include>
+   </select>
+
+</mapper>

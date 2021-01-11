@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.YyjsDao">	
+	<sql id="commonWhere">
+		<if test="id != null ">
+			<![CDATA[  and  yljgdm = #{id}]]>
+		</if>
+	</sql>
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.YyjsModel" >
+
+		<![CDATA[
+			select * from cen_core_v20.tb_yyjs_temp 
+			]]>
+	
+	</select>
+
+	
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JjhzzdbfxDao">
+  <sql id="commonWhere">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(CREATE_TIME,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(CREATE_TIME,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+  </sql>
+  
+  <sql id="commonWhere2">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(CREATE_TIME,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(CREATE_TIME,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+    <if test="ids != null and ids !='' ">
+      <![CDATA[ and b.id=trim(#{ids})]]>
+    </if>
+  </sql>
+  
+  
+  
+  <select id="getJjhzzdbfxList" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+  <![CDATA[
+        select * from 
+(select count(1) as sl,PATIENT_SAY as zdblx ,b.id as ids from TB_FZ_MXB a
+left join TB_FZ_LXZDB b
+on a.PATIENT_SAY=b.mc where 1=1
+    ]]>
+       <include refid="commonWhere"></include>
+    <![CDATA[   group by PATIENT_SAY,b.id
+order by count(1) desc)
+where rownum<=15   ]]>
+              
+  </select>
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+    <![CDATA[
+      select name,GENDER_CAPTION as xbmc,REG_AGE_CAPTION as nl,PATIENT_SAY as zs,CREATE_TIME as fzsj,
+NURSE_NAME as fzhs, DEPT_NAME as fzks,TO_WHERE as fzjg,PATIENT_SAY as fzzs
+ from TB_FZ_MXB   a
+  left join TB_FZ_LXZDB b on a.PATIENT_SAY=b.mc
+ where 1=1  
+     
+    ]]>
+    <include refid="commonWhere2"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

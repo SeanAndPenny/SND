@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JjhzfxDao"> 
+      <sql id="commonWhere"> 
+		    <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and CREATE_TIME>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and CREATE_TIME<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1]]>
+		    </if> 
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			     <![CDATA[  and DATASOURCE=trim(#{jgdm})]]>
+		    </if>  
+		    
+      </sql> 
+      
+       <sql id="commonWherezcd"> 
+		    <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and DDYYSJ>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and DDYYSJ<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1]]>
+		    </if> 
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			     <![CDATA[  and SZJGDM=trim(#{jgdm})]]>
+		    </if>   
+      </sql> 
+      
+  <select id="getchart01List" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+	<![CDATA[ 
+	  select count(1) as sl,
+       RESET_LEVEL as fzjb,
+       decode(RESET_LEVEL,
+              '01',
+              '一级分诊',
+              '02',
+              '二级分诊',
+              '03',
+              '三级分诊',
+              '04',
+              '四级分诊',
+              '未知级别') as fzjbmc
+  from TB_FZ_MXB
+ where 1 = 1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+     group by RESET_LEVEL order by RESET_LEVEL
+	]]>
+ </select>
+  
+  <select id="getchart02List" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+	<![CDATA[ 
+	  select count(1) as sl,
+       to_char(CREATE_TIME,'yyyyMM') as fzsj
+  from TB_FZ_MXB
+ where 1 = 1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+     group by to_char(CREATE_TIME,'yyyyMM') order by to_char(CREATE_TIME,'yyyyMM')
+	]]>
+ </select>
+ <select id="getchart03List" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+	<![CDATA[ 
+	   select nvl(sum(nsl),0) as nsl,  nvl(sum(vsl),0) as vsl, nllx
+  from (select case
+                 when xbdm = '1' then
+                  sl
+               end as nsl,
+               case
+                 when xbdm = '2' then
+                  sl
+               end as vsl,
+               nllx
+          from (select count(1) as sl,
+                       decode(GENDER_CAPTION, '男', '1', '女', '2') as xbdm,
+                       GENDER_CAPTION as xbmc,
+                       case
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') >= 0 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 10 then
+                          '0~10'
+                          
+                          
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 10 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 20 then
+                          '10~20'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 20 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 30 then
+                          '20~30'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 30 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 40 then
+                          '30~40'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 40 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 50 then
+                          '40~50'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 50 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 60 then
+                          '50~60'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 60 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 70 then
+                          '60~70'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 70 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 80 then
+                          '70~80'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 80 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 90 then
+                          '80~90'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 90 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 100 then
+                          '90~100'
+                          
+                       end as nllx
+                  from tb_fz_mxb
+                 where 1 = 1
+                   and to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy')<=100
+                    and to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy')>=0
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+       group by GENDER_CAPTION,
+                          case
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') >= 0 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 10 then
+                          '0~10'
+                          
+                          
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 10 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 20 then
+                          '10~20'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 20 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 30 then
+                          '20~30'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 30 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 40 then
+                          '30~40'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 40 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 50 then
+                          '40~50'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 50 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 60 then
+                          '50~60'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 60 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 70 then
+                          '60~70'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 70 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 80 then
+                          '70~80'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 80 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 90 then
+                          '80~90'
+                         when to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') > 90 and
+                              to_char(CREATE_TIME,'yyyy')-to_char(BIRTHDAY,'yyyy') <= 100 then
+                          '90~100'
+                         
+                       end))
+ group by nllx
+ order by nllx desc
+	]]>
+ </select>
+ 
+ <select id="getchart04List" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+	<![CDATA[ 
+	  select count(1) as dyccl,
+      SZJGDM AS  yljgdm,
+      B.MC AS  yljgmc,
+        round((sum(((pcsj-HJSJ) * 24 * 60)) / count(1)),2) as ccpjxjsj
+  from tb_yj_cljk A
+  INNER JOIN TB_VOLAP_YLJG B
+  ON A.SZJGDM=B.ID
+where 1=1 and cph is not null
+ ]]>
+  <include refid="commonWherezcd"></include> 
+ <![CDATA[ 
+AND SZJGDM IN ('76150479932050523A1002','46699327832050511A1001','46695190832050512C2201','32050846695632X_XG')
+group by SZJGDM,B.MC  ORDER BY count(1) DESC
+	   ]]>
+     
+ </select>
+ <select id="getchart05List" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+	<![CDATA[ 
+	  select *
+  from (select count(1) as sl, PATIENT_SAY as zdblx, b.id as ids
+          from TB_FZ_MXB a
+          left join TB_FZ_LXZDB b
+            on a.PATIENT_SAY = b.mc
+         where 1 = 1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[ 
+    group by PATIENT_SAY, b.id
+         order by count(1) desc)
+ where rownum <= 15
+   ]]>
+ </select>
+ <select id="getbajgList" resultType="com.wondersgroup.wszygl.model.SwxxJgdmModel">
+	<![CDATA[ 
+	  select id as jgdm,mc as jgmc from tb_volap_yljg where 1=1 
+	  and id in('46699327832050511A1001','46695190832050512C2201')
+	   ]]>
+     <include refid="commonWherejg"></include> 
+   
+ </select>
+ <sql id="commonWherejg"> 
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined'">
+			     <![CDATA[ and id=trim(#{jgdm})]]>
+		    </if>
+		    
+      </sql> 
+ 
+</mapper>

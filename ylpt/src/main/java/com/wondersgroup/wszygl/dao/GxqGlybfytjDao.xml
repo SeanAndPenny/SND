@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.GxqGlybfytjDao"> 
+      <sql id="commonWhere"> 
+            <if test="sjlx=='year'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY||'-'||MM>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY||'-'||MM<=trim(#{jssj}) ]]>
+		       </if> 
+		      
+		    </if>
+		      <if test="jgdm != null and jgdm !=''  ">
+			     <![CDATA[  and  yljgbm=trim(#{jgdm}) ]]>
+		       </if>      
+      </sql> 
+       
+  <select id="getechar01" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select sum(nvl(rchj,0)) rs ,yljgbm as yljgdm ,nvl(b.yljgmc,a.yljgmc) yljgmc
+    from TB_YBJGDZ b
+  inner  join  T_YB_FYTJ a
+on a.yljgbm = b.ybjgdm
+
+where b.jglx='1' 
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group  by yljgbm,nvl(b.yljgmc,a.yljgmc)  order by rs desc
+	]]>
+ </select>
+  <select id="getchartCf01" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select sum(nvl(rchj,0)) rs ,yljgbm as yljgdm ,nvl(b.yljgmc,a.yljgmc) yljgmc
+    from TB_YBJGDZ b   
+   left join T_YB_FYTJ a
+on a.yljgbm = b.ybjgdm
+
+where b.jglx='0' 
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group  by yljgbm,nvl(b.yljgmc,a.yljgmc)  order by rs desc
+	]]>
+ </select>
+   
+  <select id="getchart02" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select sum(nvl(YLFYHJ,0)) ylje ,yljgbm as yljgdm ,nvl(b.yljgmc,a.yljgmc) yljgmc
+    from TB_YBJGDZ b
+left  join  T_YB_FYTJ a
+on a.yljgbm = b.ybjgdm
+
+where b.jglx='1' 
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group  by yljgbm,nvl(b.yljgmc,a.yljgmc)  order by ylje desc
+	]]>
+ </select>
+  
+  <select id="chartCf02" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select sum(nvl(YLFYHJ,0)) ylje ,yljgbm as yljgdm ,nvl(b.yljgmc,a.yljgmc) yljgmc
+    from TB_YBJGDZ b
+left  join  T_YB_FYTJ a
+on a.yljgbm = b.ybjgdm
+
+where b.jglx='0' 
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group  by yljgbm,nvl(b.yljgmc,a.yljgmc)  order by ylje desc
+	]]>
+ </select>
+ 
+ <select id="getchart03" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select rq,sum(nvl(kjcyy,0))kjcyy,sum(nvl(gxyrmyy,0))gxyrmyy,sum( nvl(mjyy,0))mjyy,sum(nvl(sdfy,0))sdfy,sum(nvl(sdfe,0))sdfe,sum(nvl(bb,0))bb,
+ sum(nvl(dq,0))dq,sum(nvl(bq,0))bq,
+ sum(nvl(zyy,0))zyy,sum(nvl(jlyy,0))jlyy,sum(nvl(gjyy,0))gjyy,
+ sum(nvl(dwrmyy,0))dwrmyy  from 
+ (select 
+ case when ybjgdm='3010' then sum(rs)   end   kjcyy , 
+  case when ybjgdm='1001' then sum(rs)   end   gxyrmyy ,
+   case when ybjgdm='3008' then sum(rs)   end   mjyy ,  
+   case when ybjgdm='3001' then sum(rs)   end   sdfy ,  
+    case when ybjgdm='3006' then sum(rs)   end   sdfe , 
+    case when ybjgdm='3002' then sum(rs)   end   bb ,
+    case when ybjgdm='3004' then sum(rs)   end   dq ,
+   case when ybjgdm='3003' then sum(rs)   end   bq ,
+    case when ybjgdm='3005' then sum(rs)   end   zyy , 
+    case when ybjgdm='3007' then sum(rs)   end   jlyy , 
+       case when ybjgdm='3103' then sum(rs)   end   gjyy ,   
+          case when ybjgdm='3101' then sum(rs)   end   dwrmyy ,         
+    rq,yljgmc 
+   from 
+ (select yyyy || mm as rq,b.ybjgdm,b.yljgmc,sum (nvl(rchj,0)) as rs from TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '1'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by  yyyy || mm ,b.ybjgdm ,b.yljgmc 
+   order by yyyy || mm desc)
+   group by rq,yljgmc,ybjgdm
+    )group by rq order by rq 
+	]]>
+ </select>
+  
+  
+  <select id="getchartCf03" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select rq,sum(nvl(zhjd,0))zhjd,sum(nvl(ssjd,0))ssjd,sum( nvl(ysjd,0))ysjd,sum(nvl(htjd,0))htjd,sum(nvl(ddjd,0))ddjd,sum(nvl(tajd,0))tajd,
+ sum(nvl(xgjd,0))xgjd  from 
+ (select 
+ case when ybjgdm='1010' then sum(rs)   end   zhjd , 
+  case when ybjgdm='4119' then sum(rs)   end   ssjd ,
+   case when ybjgdm='4552' then sum(rs)   end   ysjd ,  
+   case when ybjgdm='1004' then sum(rs)   end   htjd ,  
+    case when ybjgdm='1011' then sum(rs)   end   ddjd , 
+    case when ybjgdm='1009' then sum(rs)   end   tajd ,
+    case when ybjgdm='4554' then sum(rs)   end   xgjd ,
+     case when ybjgdm='0000' then sum(rs)   end   fqjd ,         
+    rq,yljgmc 
+   from 
+ (select yyyy || mm as rq,b.ybjgdm,b.yljgmc,sum (nvl(rchj,0)) as rs from TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '0'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by  yyyy || mm ,b.ybjgdm ,b.yljgmc 
+   order by yyyy || mm desc)
+   group by rq,yljgmc,ybjgdm
+    )group by rq order by rq 
+	]]>
+ </select>
+  
+  <select id="getchart04" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select a.rq ,
+round(kjcyy/zs*100,2) kjcyy,
+round(gxyrmyy/zs*100,2) gxyrmyy,
+round(mjyy/zs*100,2) mjyy,
+round(sdfy/zs*100,2) sdfy,
+round(sdfe/zs*100,2) sdfe,
+round(bb/zs*100,2) bb,
+round(dq/zs*100,2) dq,
+round(bq/zs*100,2) bq,
+round(zyy/zs*100,2) zyy,
+round(jlyy/zs*100,2) jlyy,
+round(gjyy/zs*100,2) gjyy,
+round(dwrmyy/zs*100,2) dwrmyy 
+from 
+( select rq,sum(nvl(kjcyy,0))kjcyy,sum(nvl(gxyrmyy,0))gxyrmyy,sum( nvl(mjyy,0))mjyy,sum(nvl(sdfy,0))sdfy,sum(nvl(sdfe,0))sdfe,sum(nvl(bb,0))bb,
+ sum(nvl(dq,0))dq,sum(nvl(bq,0))bq,
+ sum(nvl(zyy,0))zyy,sum(nvl(jlyy,0))jlyy,sum(nvl(gjyy,0))gjyy,
+ sum(nvl(dwrmyy,0))dwrmyy  from 
+ (select 
+ case when ybjgdm='3010' then sum(rs)   end   kjcyy , 
+  case when ybjgdm='1001' then sum(rs)   end   gxyrmyy ,
+   case when ybjgdm='3008' then sum(rs)   end   mjyy ,  
+   case when ybjgdm='3001' then sum(rs)   end   sdfy ,  
+    case when ybjgdm='3006' then sum(rs)   end   sdfe , 
+    case when ybjgdm='3002' then sum(rs)   end   bb ,
+    case when ybjgdm='3004' then sum(rs)   end   dq ,
+   case when ybjgdm='3003' then sum(rs)   end   bq ,
+    case when ybjgdm='3005' then sum(rs)   end   zyy , 
+    case when ybjgdm='3007' then sum(rs)   end   jlyy , 
+       case when ybjgdm='3103' then sum(rs)   end   gjyy ,   
+          case when ybjgdm='3101' then sum(rs)   end   dwrmyy ,         
+    rq,yljgmc 
+   from 
+ (select yyyy || mm as rq,b.ybjgdm,b.yljgmc,sum (nvl(rchj,0)) as rs from TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '1'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by  yyyy || mm ,b.ybjgdm ,b.yljgmc 
+   order by yyyy || mm desc)
+   group by rq,yljgmc,ybjgdm
+    )group by rq order by rq )a left join (
+   select sum (nvl(rchj,0)) as zs  from   TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '1'
+	]]>
+	<include refid="commonWhere"></include>
+	 <![CDATA[   
+	   
+  )b  
+    on 1=1 order by a.rq
+	]]> 
+ </select>
+  
+   <select id="getchartCf04" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select a.rq ,
+round(zhjd/zs*100,2) zhjd,
+round(ssjd/zs*100,2) ssjd,
+round(ysjd/zs*100,2) ysjd,
+round(htjd/zs*100,2) htjd,
+round(ddjd/zs*100,2) ddjd,
+round(tajd/zs*100,2) tajd,
+round(xgjd/zs*100,2) xgjd 
+from 
+( select rq,sum(nvl(zhjd,0))zhjd,sum(nvl(ssjd,0))ssjd,sum( nvl(ysjd,0))ysjd,sum(nvl(htjd,0))htjd,sum(nvl(ddjd,0))ddjd,sum(nvl(tajd,0))tajd,
+ sum(nvl(xgjd,0))xgjd from 
+ (select 
+  case when ybjgdm='1010' then sum(rs)   end   zhjd , 
+  case when ybjgdm='4119' then sum(rs)   end   ssjd ,
+   case when ybjgdm='4552' then sum(rs)   end   ysjd ,  
+   case when ybjgdm='1004' then sum(rs)   end   htjd ,  
+    case when ybjgdm='1011' then sum(rs)   end   ddjd , 
+    case when ybjgdm='1009' then sum(rs)   end   tajd ,
+    case when ybjgdm='4554' then sum(rs)   end   xgjd ,
+     case when ybjgdm='0000' then sum(rs)   end   fqjd ,         
+    rq,yljgmc 
+   from 
+ (select yyyy || mm as rq,b.ybjgdm,b.yljgmc,sum (nvl(rchj,0)) as rs from TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '0'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by  yyyy || mm ,b.ybjgdm ,b.yljgmc 
+   order by yyyy || mm desc)
+   group by rq,yljgmc,ybjgdm
+    )group by rq order by rq )a left join (
+   select sum (nvl(rchj,0)) as zs  from   TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '0'
+	]]>
+	<include refid="commonWhere"></include>
+	 <![CDATA[   
+	  
+  )b  
+    on 1=1 order by a.rq
+	]]> 
+ </select>
+  
+  
+  <select id="getchart05" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select rq,sum(nvl(kjcyy,0))kjcyy,sum(nvl(gxyrmyy,0))gxyrmyy,sum( nvl(mjyy,0))mjyy,sum(nvl(sdfy,0))sdfy,sum(nvl(sdfe,0))sdfe,sum(nvl(bb,0))bb,
+ sum(nvl(dq,0))dq,sum(nvl(bq,0))bq,
+ sum(nvl(zyy,0))zyy,sum(nvl(jlyy,0))jlyy,sum(nvl(gjyy,0))gjyy,
+ sum(nvl(dwrmyy,0))dwrmyy  from 
+ (select 
+ case when ybjgdm='3010' then sum(rs)   end   kjcyy , 
+  case when ybjgdm='1001' then sum(rs)   end   gxyrmyy ,
+   case when ybjgdm='3008' then sum(rs)   end   mjyy ,  
+   case when ybjgdm='3001' then sum(rs)   end   sdfy ,  
+    case when ybjgdm='3006' then sum(rs)   end   sdfe , 
+    case when ybjgdm='3002' then sum(rs)   end   bb ,
+    case when ybjgdm='3004' then sum(rs)   end   dq ,
+   case when ybjgdm='3003' then sum(rs)   end   bq ,
+    case when ybjgdm='3005' then sum(rs)   end   zyy , 
+    case when ybjgdm='3007' then sum(rs)   end   jlyy , 
+       case when ybjgdm='3103' then sum(rs)   end   gjyy ,   
+          case when ybjgdm='3101' then sum(rs)   end   dwrmyy ,         
+    rq,yljgmc 
+   from 
+ (select yyyy || mm as rq,b.ybjgdm,b.yljgmc,sum (nvl(YLFYHJ,0)) as rs from TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '1'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by  yyyy || mm ,b.ybjgdm ,b.yljgmc 
+   order by yyyy || mm desc)
+   group by rq,yljgmc,ybjgdm
+    )group by rq order by rq 
+	]]>
+ </select> 
+ <select id="getchartCf05" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select rq,sum(nvl(zhjd,0))zhjd,sum(nvl(ssjd,0))ssjd,sum( nvl(ysjd,0))ysjd,sum(nvl(htjd,0))htjd,sum(nvl(ddjd,0))ddjd,sum(nvl(tajd,0))tajd,
+ sum(nvl(xgjd,0))xgjd  from 
+ (select 
+ case when ybjgdm='1010' then sum(rs)   end   zhjd , 
+  case when ybjgdm='4119' then sum(rs)   end   ssjd ,
+   case when ybjgdm='4552' then sum(rs)   end   ysjd ,  
+   case when ybjgdm='1004' then sum(rs)   end   htjd ,  
+    case when ybjgdm='1011' then sum(rs)   end   ddjd , 
+    case when ybjgdm='1009' then sum(rs)   end   tajd ,
+    case when ybjgdm='4554' then sum(rs)   end   xgjd ,
+     case when ybjgdm='0000' then sum(rs)   end   fqjd ,         
+    rq,yljgmc 
+   from 
+ (select yyyy || mm as rq,b.ybjgdm,b.yljgmc,sum (nvl(YLFYHJ,0)) as rs from TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '0'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by  yyyy || mm ,b.ybjgdm ,b.yljgmc 
+   order by yyyy || mm desc)
+   group by rq,yljgmc,ybjgdm
+    )group by rq order by rq 
+	]]>
+ </select>
+  
+  <select id="getchart06" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select a.rq ,
+round(kjcyy/zs*100,2) kjcyy,
+round(gxyrmyy/zs*100,2) gxyrmyy,
+round(mjyy/zs*100,2) mjyy,
+round(sdfy/zs*100,2) sdfy,
+round(sdfe/zs*100,2) sdfe,
+round(bb/zs*100,2) bb,
+round(dq/zs*100,2) dq,
+round(bq/zs*100,2) bq,
+round(zyy/zs*100,2) zyy,
+round(jlyy/zs*100,2) jlyy,
+round(gjyy/zs*100,2) gjyy,
+round(dwrmyy/zs*100,2) dwrmyy 
+from 
+( select rq,sum(nvl(kjcyy,0))kjcyy,sum(nvl(gxyrmyy,0))gxyrmyy,sum( nvl(mjyy,0))mjyy,sum(nvl(sdfy,0))sdfy,sum(nvl(sdfe,0))sdfe,sum(nvl(bb,0))bb,
+ sum(nvl(dq,0))dq,sum(nvl(bq,0))bq,
+ sum(nvl(zyy,0))zyy,sum(nvl(jlyy,0))jlyy,sum(nvl(gjyy,0))gjyy,
+ sum(nvl(dwrmyy,0))dwrmyy  from 
+ (select 
+ case when ybjgdm='3010' then sum(rs)   end   kjcyy , 
+  case when ybjgdm='1001' then sum(rs)   end   gxyrmyy ,
+   case when ybjgdm='3008' then sum(rs)   end   mjyy ,  
+   case when ybjgdm='3001' then sum(rs)   end   sdfy ,  
+    case when ybjgdm='3006' then sum(rs)   end   sdfe , 
+    case when ybjgdm='3002' then sum(rs)   end   bb ,
+    case when ybjgdm='3004' then sum(rs)   end   dq ,
+   case when ybjgdm='3003' then sum(rs)   end   bq ,
+    case when ybjgdm='3005' then sum(rs)   end   zyy , 
+    case when ybjgdm='3007' then sum(rs)   end   jlyy , 
+       case when ybjgdm='3103' then sum(rs)   end   gjyy ,   
+          case when ybjgdm='3101' then sum(rs)   end   dwrmyy ,         
+    rq,yljgmc 
+   from 
+ (select yyyy || mm as rq,b.ybjgdm,b.yljgmc,sum (nvl(YLFYHJ,0)) as rs from TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '1'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by  yyyy || mm ,b.ybjgdm ,b.yljgmc 
+   order by yyyy || mm desc)
+   group by rq,yljgmc,ybjgdm
+    )group by rq order by rq )a left join (
+   select sum (nvl(YLFYHJ,0)) as zs  from   TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '1'
+	]]>
+	<include refid="commonWhere"></include>
+	 <![CDATA[   
+	   
+  )b  
+    on 1=1 order by a.rq
+	]]> 
+ </select>
+  <select id="getchartCf06" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select a.rq ,
+round(zhjd/zs*100,2) zhjd,
+round(ssjd/zs*100,2) ssjd,
+round(ysjd/zs*100,2) ysjd,
+round(htjd/zs*100,2) htjd,
+round(ddjd/zs*100,2) ddjd,
+round(tajd/zs*100,2) tajd,
+round(xgjd/zs*100,2) xgjd 
+from 
+( select rq,sum(nvl(zhjd,0))zhjd,sum(nvl(ssjd,0))ssjd,sum( nvl(ysjd,0))ysjd,sum(nvl(htjd,0))htjd,sum(nvl(ddjd,0))ddjd,sum(nvl(tajd,0))tajd,
+ sum(nvl(xgjd,0))xgjd from 
+ (select 
+  case when ybjgdm='1010' then sum(rs)   end   zhjd , 
+  case when ybjgdm='4119' then sum(rs)   end   ssjd ,
+   case when ybjgdm='4552' then sum(rs)   end   ysjd ,  
+   case when ybjgdm='1004' then sum(rs)   end   htjd ,  
+    case when ybjgdm='1011' then sum(rs)   end   ddjd , 
+    case when ybjgdm='1009' then sum(rs)   end   tajd ,
+    case when ybjgdm='4554' then sum(rs)   end   xgjd ,
+     case when ybjgdm='0000' then sum(rs)   end   fqjd ,         
+    rq,yljgmc 
+   from 
+ (select yyyy || mm as rq,b.ybjgdm,b.yljgmc,sum (nvl(YLFYHJ,0)) as rs from TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '0'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by  yyyy || mm ,b.ybjgdm ,b.yljgmc 
+   order by yyyy || mm desc)
+   group by rq,yljgmc,ybjgdm
+    )group by rq order by rq )a left join (
+   select sum (nvl(YLFYHJ,0)) as zs  from   TB_YBJGDZ b
+     left join T_YB_FYTJ a on a.yljgbm = b.ybjgdm
+     where b.jglx = '0'
+	]]>
+	<include refid="commonWhere"></include>
+	 <![CDATA[   
+	   
+  )b  
+    on 1=1 order by a.rq
+	]]> 
+ </select>
+  
+ <select id="getMinSwsj" resultType="String">
+	select min(yyyy) from T_YB_FYTJ t 
+ </select> 
+  <select id="getMaxSwsj" resultType="String">
+	 select max(yyyy) from T_YB_FYTJ t
+  </select>  
+  
+</mapper>

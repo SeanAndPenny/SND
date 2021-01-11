@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.GxysjfxDao">
+  <sql id="commonWhere">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(JKSJ,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(JKSJ,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+    <if test="yljgdm != null and yljgdm !='' ">
+      <![CDATA[ and yljgdm=trim(#{yljgdm})]]>
+    </if>
+  </sql>
+  
+  <select id="getGxysjLyfx" resultType="com.wondersgroup.wszygl.model.GxysjfxModel">
+  <![CDATA[
+     select count(1) as lyrs ,  xxlybm,
+       xxlymc  as xxlymc
+  from tb_gxy_hzglk where 1=1
+  ]]>
+ <include refid="commonWhere"></include>
+    <![CDATA[
+      group by xxlybm,xxlymc
+  ]]>    
+  </select>
+  
+  <select id="getGxyXyfxList" resultType="com.wondersgroup.wszygl.model.GxysjfxModel">
+  <![CDATA[
+    select count(1) as xyrs ,  sfxy,
+        decode(sfxy,'1','吸烟','0','不吸烟')as sfxymc
+  from tb_gxy_hzglk where 1=1
+  ]]>
+ <include refid="commonWhere"></include>
+    <![CDATA[
+      group by sfxy
+  ]]>    
+  </select>
+  
+<select id="getGxyWxFcList" resultType="com.wondersgroup.wszygl.model.GxysjfxModel">
+  <![CDATA[
+   select count(1) as wxfcrs,wxfcmc, wxfcbm
+ from tb_gxy_hzglk a where 1=1
+  ]]>
+ <include refid="commonWhere"></include>
+    <![CDATA[
+      group by WXFCBM,WXFCMC
+  ]]>    
+  </select>
+  
+  
+  <select id="getGxyNlFx" resultType="com.wondersgroup.wszygl.model.GxysjfxModel">
+  <![CDATA[
+   select COUNT(1) AS NLRS,
+       CASE
+        WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) > 0 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 30 THEN
+          '0~30'
+         WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) >30 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 50 THEN
+          '30~50'
+          WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) > 50 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 70 THEN
+          '50~70'
+           WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) > 70 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 90 THEN
+          '70~90'
+           WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) > 90 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 110 THEN
+          '90~110'
+           WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) >110 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 130 THEN
+          '110~130'
+       END nllx
+  from TB_GXY_HZGLK   where 1=1
+  ]]>
+ <include refid="commonWhere"></include>
+    <![CDATA[
+      GROUP BY CASE 
+       WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) > 0 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 30 THEN
+          '0~30'
+         WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) > 30 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 50 THEN
+          '30~50'
+          WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) > 50 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 70 THEN
+          '50~70'
+           WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) > 70 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 90 THEN
+          '70~90'
+           WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) > 90 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 110 THEN
+          '90~110'
+           WHEN (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) >110 AND
+              (TO_CHAR(SYSDATE, 'YYYY') - TO_CHAR(CSRQ, 'YYYY')) <= 130 THEN
+          '110~130'
+       END
+      
+  ]]>    
+  </select>
+ 
+</mapper>

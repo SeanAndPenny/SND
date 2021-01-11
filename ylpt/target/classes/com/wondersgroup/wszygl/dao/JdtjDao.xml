@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JdtjDao">
+
+     <sql id="commonWhere">
+		<if test="jdlx != null  and jdlx !=''">
+			<![CDATA[ AND  jdlx=#{jdlx}]]>
+		</if>
+
+		 
+	</sql>
+  
+  <select id="getJdtj" resultType="com.wondersgroup.wszygl.model.JdtjModel">
+  <![CDATA[
+      select sum(jd_total_rs) as qqjdzrs  from T_JDBL_FX  
+    ]]>
+  </select>
+    <select id="getJdxx" resultType="com.wondersgroup.wszygl.model.JdtjModel">
+  <![CDATA[
+      select sum(jd_hj_rs) as rs ,'hjjd' as jdlx,'户籍建档人数' as lxmc from T_JDBL_FX t
+union all
+select sum(JD_FHJ_RS) as rs ,'fhjjd' as jdlx,'非户籍建档人数' as lxmc from T_JDBL_FX t
+union all
+select sum(JD_OTHER_RS)as rs ,'qtjd' as jdlx,'其他建档人数' as lxmc from T_JDBL_FX t
+    ]]>
+  </select>
+  
+   <select id="getJdTjxxecharts" resultType="com.wondersgroup.wszygl.model.JdtjModel">
+  <![CDATA[
+select t.sl,t.yljgmc,round(t.sl/b.sl,5)*100 as  bl  from 
+(select  JD_TOTAL_RS as sl,WGHDZ_NAME as  yljgmc from T_JDBL_FX 
+group by WGHDZ_NAME,JD_TOTAL_RS)t
+left join (select sum(JD_TOTAL_RS) as sl from T_JDBL_FX) b
+on 1=1
+      
+    ]]>
+  </select>
+  
+  
+  
+  
+  
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JdtjModel">
+    <![CDATA[
+      
+     select a.wghdz_name as dz ,b.mc,jd_total_rs as zrs,
+jd_hj_rs as jdhjrs,JD_FHJ_RS as fjdhjrs,jd_other_rs as qtrs
+ from T_JDBL_FX   a 
+left join tb_volap_yljg b
+on a.WGHDZ_CODE1=b.id
+    ]]>
+     
+  </select>
+  
+  
+  
+  
+  
+  <select id="jdtjXzxx" resultType="com.wondersgroup.wszygl.model.JdtjModel">
+  <![CDATA[
+      select aa.rs,aa.lxmc,aa.yljgdm,round(aa.rs/bb.zrs,5)*100 as bl, yljgmc from 
+ (select rs,lxmc , yljgdm,b.mc as yljgmc from
+( select sum(jd_hj_rs) as rs ,'hjjd' as jdlx,'户籍建档人数' as lxmc ,WGHDZ_CODE1 as yljgdm from T_JDBL_FX t group by  WGHDZ_CODE1
+union all
+select sum(JD_FHJ_RS) as rs ,'fhjjd' as jdlx,'非户籍建档人数' as lxmc,WGHDZ_CODE1 as yljgdm from T_JDBL_FX t group by WGHDZ_CODE1
+union all
+select sum(JD_OTHER_RS)as rs ,'qtjd' as jdlx,'其他建档人数' as lxmc,WGHDZ_CODE1  as yljgdm from T_JDBL_FX t group by WGHDZ_CODE1 )a
+left  join tb_volap_yljg b
+on a.yljgdm=b.id
+where 1=1 
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[ )aa
+ left join 
+ ( select sum(rs)as zrs   from
+( select sum(jd_hj_rs) as rs ,'hjjd' as jdlx,'户籍建档人数' as lxmc ,WGHDZ_CODE1 as yljgdm from T_JDBL_FX t group by  WGHDZ_CODE1
+union all
+select sum(JD_FHJ_RS) as rs ,'fhjjd' as jdlx,'非户籍建档人数' as lxmc,WGHDZ_CODE1 as yljgdm from T_JDBL_FX t group by WGHDZ_CODE1
+union all
+select sum(JD_OTHER_RS)as rs ,'qtjd' as jdlx,'其他建档人数' as lxmc,WGHDZ_CODE1  as yljgdm from T_JDBL_FX t group by WGHDZ_CODE1 )a
+left  join tb_volap_yljg b
+on a.yljgdm=b.id
+where 1=1 ]]>
+<include refid="commonWhere"></include>
+<![CDATA[) bb
+   on 1=1  ]]>
+  </select>
+
+</mapper>

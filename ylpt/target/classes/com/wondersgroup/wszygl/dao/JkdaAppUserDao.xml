@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JkdaAppUserDao">
+	<sql id="commonWhere">
+		<if test="idcard != null and idcard !=''">
+			<![CDATA[  and  idcard = #{idcard}]]>
+		</if>
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.JkdaAppUserModel">
+
+		<![CDATA[
+			select id,loginname,psw,decode(flag,'0','启用','1','未启用')as flag,decode(removed,'0','未删除','1','已删除')as removed,idcard,tel from  CEN_CORE_V20.Tb_Mobile_User where 1=1
+			]]>
+		<include refid="commonWhere"></include>
+
+	</select>
+
+
+</mapper>

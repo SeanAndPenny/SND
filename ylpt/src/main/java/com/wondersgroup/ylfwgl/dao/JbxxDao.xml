@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.ylfwgl.dao.JbxxDao">
+	
+
+	<sql id="commonWhere">
+		<if test="sfz != null and sfz !=''">
+			<![CDATA[  and  t.jbxx_sfzh = #{sfz}]]>
+		</if>
+		<if test="xm != null and xm !=''">
+			<![CDATA[  and  t.jbxx_xm like '%'||#{xm}||'%' ]]>
+		</if>
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  t.jbxx_jdjg =#{yljgdm} ]]>
+		</if>
+	</sql>
+
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.ylfwgl.model.JbxxModel" >
+		<![CDATA[
+			select  * from cen_core_v20.JKDA_GR_JBXX t where t.etlbz ='2'
+			 ]]>
+		<include refid="commonWhere"></include>
+	</select>
+	
+	
+
+
+</mapper>

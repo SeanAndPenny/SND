@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.AreaSqjlDao">
+
+
+	<sql id="commonWhere">
+		<if test="code != null ">
+			<![CDATA[ AND code  LIKE  '%'||#{code}||'%']]>
+		</if>
+	</sql>
+
+
+
+
+	<select id="ifexists" resultType="java.lang.Long"
+		parameterType="com.wondersgroup.wszygl.model.AreaSqjlModel">
+		<![CDATA[SELECT count(0) FROM T_AREA_SQJL WHERE id =#{id} and removed='0' ]]>
+	</select>
+	<insert id="save"
+		parameterType="com.wondersgroup.wszygl.model.AreaSqjlModel">
+		<![CDATA[ INSERT INTO T_AREA_SQJL (
+			ID, 
+			WHOCREATEID, 
+			FLAG, 
+			CREATEDATE,
+			UPDATESQL,
+			REMOVED,
+			UPDATETIME,
+			OLDXX,
+			NEWXX,
+			WHOCREATENAME,
+			CODE,
+			WHOUPDATENAME
+		) VALUES (
+			#{id,jdbcType=VARCHAR}, 
+			#{whocreateid,jdbcType=VARCHAR}, 
+			'1', 
+			to_char(SYSDATE,'YYYY-MM-DD'),
+			#{updatesql,jdbcType=VARCHAR}, 
+			'0',
+			null,
+			#{oldxx,jdbcType=VARCHAR},
+			#{newxx,jdbcType=VARCHAR},
+			#{whocreatename,jdbcType=VARCHAR},
+			#{code,jdbcType=VARCHAR},
+			#{whoupdatename,jdbcType=VARCHAR}
+		)]]>
+	</insert>
+
+	<update id="update"
+		parameterType="com.wondersgroup.wszygl.model.AreaSqjlModel">
+		<![CDATA[ UPDATE T_AREA_SQJL ]]>
+		<set>
+			<if test="whoupdateid != null"><![CDATA[ whoupdateid = #{whoupdateid,jdbcType=VARCHAR}, ]]></if>
+			<if test="whoupdatename != null"><![CDATA[ whoupdatename = #{whoupdatename,jdbcType=VARCHAR}, ]]></if>
+
+			<if test="flag != null"><![CDATA[ flag = #{flag,jdbcType=DATE}, ]]></if>
+			<![CDATA[ UPDATETIME = to_char(SYSDATE,'YYYY-MM-DD') ]]>
+		</set>
+		<![CDATA[ WHERE ID = #{id}]]>
+	</update>
+
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.AreaSqjlModel">
+		<![CDATA[
+					SELECT ID,
+		       WHOCREATEID,
+		       CASE
+		         WHEN FLAG = '1' THEN
+		          '申请待审核'
+		         WHEN FLAG = '2' THEN
+		          '申请不通过'
+		         WHEN FLAG = '3' THEN
+		          '申请通过'
+		         WHEN FLAG = '4' THEN
+		          '处理完成'
+		         ELSE
+		          ''
+		       END AS FLAG,
+		       CREATEDATE,
+		       UPDATESQL,
+		       REMOVED,
+		       UPDATETIME,
+		       WHOUPDATEID,
+		       OLDXX,
+		       NEWXX,
+		       WHOCREATENAME,
+		       CODE,
+		       WHOUPDATENAME
+		  FROM T_AREA_SQJL  WHERE REMOVED='0' ORDER BY  CREATEDATE DESC
+		]]>
+
+	</select>
+
+	<select id="getById"
+		resultType="com.wondersgroup.wszygl.model.AreaSqjlModel">
+		<![CDATA[
+			select *  from T_AREA_SQJL where id=#{id} and removed='0'
+		]]>
+
+	</select>
+	<delete id="delete"
+		parameterType="com.wondersgroup.wszygl.model.AreaSqjlModel">
+		<![CDATA[ DELETE FROM T_AREA_SQJL WHERE ID = #{id}]]>
+	</delete>
+	<update id="exculeSql" statementType="STATEMENT">
+		${updateSql}
+	</update>
+
+</mapper>

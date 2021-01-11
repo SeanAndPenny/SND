@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.YzbfxDao"> 
+      <sql id="commonWhere"> 
+            <if test="sjlx=='year'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and To_CHAR(STFSJ,'YYYY')>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and To_CHAR(STFSJ,'YYYY')<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and To_CHAR(STFSJ,'YYYY-MM')>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and To_CHAR(STFSJ,'YYYY-MM')<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		     
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   yljgdm =trim(#{jgdm})]]>
+		    </if> 
+      </sql> 
+      
+     <sql id="commonWhere2"> 
+            <if test="sjlx=='year'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and To_CHAR(STFSJ,'YYYY')>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and To_CHAR(STFSJ,'YYYY')<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and To_CHAR(STFSJ,'YYYY-MM')>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and To_CHAR(STFSJ,'YYYY-MM')<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		     
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   yljgdm =trim(#{jgdm})]]>
+		    </if> 
+      </sql>  
+         
+  <select id="getyzbtj" resultType="com.wondersgroup.wszygl.model.YzbfxModel">
+	<![CDATA[ 
+	select  
+ nvl(sum(decode(tfbz,'1',ypfy,0))-sum(decode(tfbz,'2',ypfy,0)),0) as mzypfy,
+nvl(sum(decode(tfbz,'1',qtfy,0))-sum(decode(tfbz,'2',qtfy,0)),0) as mzqtfy
+ from 
+(select sum(ypfy) as ypfy,sum(qtfy)qtfy,tfbz from
+(select 
+case when MXFYLB in('12','13','14') then sum(abs(MXXMJE))  end as ypfy,
+ case when MXFYLB not in('12','13','14') then sum(abs(MXXMJE))  end as qtfy ,tfbz
+from TB_HIS_MZ_Fee_Detail
+where 1=1 
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+ 
+group by MXFYLB,tfbz)
+group by tfbz)
+	]]>
+ </select>
+ 
+  <select id="getzyyzbtj" resultType="com.wondersgroup.wszygl.model.YzbfxModel">
+  <![CDATA[ 
+  select  
+ nvl(sum(decode(tfbz,'1',ypfy,0))-sum(decode(tfbz,'2',ypfy,0)),0) as zyypfy,
+nvl(sum(decode(tfbz,'1',qtfy,0))-sum(decode(tfbz,'2',qtfy,0)),0) as zyqtfy
+ from 
+(select sum(ypfy) as ypfy,sum(qtfy)qtfy,tfbz from
+(select 
+case when MXFYLB in('12','13','14') then sum(abs(MXXMJE))  end as ypfy,
+ case when MXFYLB not in('12','13','14') then sum(abs(MXXMJE))  end as qtfy ,tfbz
+from TB_HIS_ZY_Fee_Detail
+where 1=1 
+     ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+ 
+group by MXFYLB,tfbz)
+group by tfbz)
+  ]]>
+ </select>
+ 
+ 
+  <select id="getyzbJgfx" resultType="com.wondersgroup.wszygl.model.YzbfxModel">
+	<![CDATA[ 
+	 with mzyp as
+ (
+select  
+ nvl(sum(decode(tfbz,'1',ypfy,0))-sum(decode(tfbz,'2',ypfy,0)),0) as mzypfy,
+yljgdm
+ from 
+(select sum(ypfy) as ypfy,tfbz,yljgdm from
+(select 
+case when MXFYLB in('12','13','14') then sum(abs(MXXMJE))  end as ypfy,tfbz,yljgdm
+from TB_HIS_MZ_Fee_Detail
+where 1=1 
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by MXFYLB,tfbz,yljgdm)
+group by tfbz,yljgdm)
+group by yljgdm),
+zyyp as (
+select  
+ nvl(sum(decode(tfbz,'1',ypfy,0))-sum(decode(tfbz,'2',ypfy,0)),0) as zyypfy,yljgdm
+ from 
+(select sum(ypfy) as ypfy,tfbz,yljgdm from
+(select 
+case when MXFYLB in('12','13','14') then sum(abs(MXXMJE))  end as ypfy ,tfbz,yljgdm
+from TB_HIS_ZY_Fee_Detail
+where 1=1 
+	]]>
+	<include refid="commonWhere"></include> 
+	  <![CDATA[
+	  group by MXFYLB,tfbz,yljgdm)
+group by tfbz,yljgdm)
+group by yljgdm
+)
+select  nvl(sum(mzypfy),0)/10000 as mzypfy,nvl(sum(zyypfy),0)/10000 as zyypfy ,nvl(a.yljgdm,b.yljgdm) as  yljgdm ,
+c.mc as yljgmc
+ from mzyp a
+full join zyyp b
+on a.yljgdm=b.yljgdm
+inner join tb_volap_yljg c
+on nvl(a.yljgdm,b.yljgdm)=c.id
+where c.yylb='A1'
+group by nvl(a.yljgdm,b.yljgdm),c.mc
+	  ]]>
+ </select>
+ <select id="getyzbJcfx" resultType="com.wondersgroup.wszygl.model.YzbfxModel">
+	<![CDATA[ 
+	 with mzyp as
+ (
+select  
+ nvl(sum(decode(tfbz,'1',ypfy,0))-sum(decode(tfbz,'2',ypfy,0)),0) as mzypfy,
+yljgdm
+ from 
+(select sum(ypfy) as ypfy,tfbz,yljgdm from
+(select 
+case when MXFYLB in('12','13','14') then sum(abs(MXXMJE))  end as ypfy,tfbz,yljgdm
+from TB_HIS_MZ_Fee_Detail
+where 1=1 
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by MXFYLB,tfbz,yljgdm)
+group by tfbz,yljgdm)
+group by yljgdm),
+zyyp as (
+select  
+ nvl(sum(decode(tfbz,'1',ypfy,0))-sum(decode(tfbz,'2',ypfy,0)),0) as zyypfy,yljgdm
+ from 
+(select sum(ypfy) as ypfy,tfbz,yljgdm from
+(select 
+case when MXFYLB in('12','13','14') then sum(abs(MXXMJE))  end as ypfy ,tfbz,yljgdm
+from TB_HIS_ZY_Fee_Detail
+where 1=1 
+	]]>
+	<include refid="commonWhere"></include> 
+	  <![CDATA[
+	  group by MXFYLB,tfbz,yljgdm)
+group by tfbz,yljgdm)
+group by yljgdm
+)
+select  nvl(sum(mzypfy),0)/10000 as mzypfy,nvl(sum(zyypfy),0)/10000 as zyypfy ,nvl(a.yljgdm,b.yljgdm) as  yljgdm ,
+c.mc as yljgmc
+ from mzyp a
+full join zyyp b
+on a.yljgdm=b.yljgdm
+inner join tb_volap_yljg c
+on nvl(a.yljgdm,b.yljgdm)=c.id
+where c.yylb='AA'
+group by nvl(a.yljgdm,b.yljgdm),c.mc
+	  ]]>
+ </select>
+ 
+ 
+ 
+ <select id="getechar05" resultType="com.wondersgroup.wszygl.model.YzbfxModel">
+  
+	<![CDATA[ 
+	with mzyp as
+ (
+select  
+ nvl(sum(decode(tfbz,'1',ypfy,0))-sum(decode(tfbz,'2',ypfy,0)),0) as mzypfy,
+rq
+ from 
+(select sum(ypfy) as ypfy,tfbz,rq from
+(select 
+case when MXFYLB in('12','13','14') then sum(abs(MXXMJE))  end as ypfy,tfbz,to_char(STFSJ,'yyyyMMdd') as rq
+from TB_HIS_MZ_Fee_Detail a
+where 1=1 
+	   ]]>
+    <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by MXFYLB,tfbz,to_char(STFSJ,'yyyyMMdd'))
+group by tfbz,rq)
+group by rq),
+zyyp as (
+select  
+ nvl(sum(decode(tfbz,'1',ypfy,0))-sum(decode(tfbz,'2',ypfy,0)),0) as zyypfy,rq
+ from 
+(select sum(ypfy) as ypfy,tfbz,rq from
+(select 
+case when MXFYLB in('12','13','14') then sum(abs(MXXMJE))  end as ypfy ,tfbz,to_char(STFSJ,'yyyyMMdd') as rq
+from TB_HIS_ZY_Fee_Detail a
+where 1=1 
+	]]>
+	<include refid="commonWhere"></include> 
+	  <![CDATA[
+	  group by MXFYLB,tfbz,to_char(STFSJ,'yyyyMMdd'))
+group by tfbz,rq)
+group by rq
+)
+select  nvl(sum(mzypfy),0) as mzypfy,nvl(sum(zyypfy),0) as zyypfy ,
+
+nvl(a.rq,b.rq) as  rq   
+ from mzyp a full join zyyp b on a.rq=b.rq
+group by nvl(a.rq,b.rq)  order by nvl(a.rq,b.rq)
+	  ]]>
+	  
+	  
+	  
+ </select>
+ 
+ <select id="getMinSwsj" resultType="String">
+	select min(To_CHAR(STFSJ,'YYYY-MM')) from TB_HIS_MZ_FEE_DETAIL t 
+ </select> 
+  <select id="getMaxSwsj" resultType="String">
+	 select max(To_CHAR(STFSJ,'YYYY-MM')) from TB_HIS_MZ_FEE_DETAIL t
+  </select> 
+
+ 
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.YwxxXz2Dao">
+
+<sql id="commonWhere">
+	<if test=" kssj != null and kssj !='' ">
+		<![CDATA[ and ${pdtj1}  >=trim(#{kssj})]]>
+	</if>
+	<if test=" jssj != null and jssj !='' ">
+		<![CDATA[ and ${pdtj2} <=trim(#{jssj})]]>
+	</if>
+	<if test="jgdm != null and jgdm !='' and jgdm!='null' ">
+		<![CDATA[ and ${pdtj3} =trim(#{jgdm})]]>
+	</if>
+	
+	<if test="mcdm1 != null and mcdm1 !='' ">
+		<![CDATA[ and ${pdtj4}> trim(#{mcdm1}) ]]>
+	</if> 
+	<if test="mcdm2 != null and mcdm2 !='' ">
+		<![CDATA[ and ${pdtj4}<=trim(#{mcdm2}) ]]>
+	</if> 
+	  
+	<if test="pdtj5 != null and pdtj5 !='' ">
+		<![CDATA[ and ${pdtj5} ]]>
+	</if>
+	<if test="pdtj6 != null and pdtj6 !='' ">
+		<![CDATA[ and ${pdtj6} ]]>
+	</if>
+	<if test="pdtj7 != null and pdtj7 !='' ">
+		<![CDATA[ and ${pdtj7} ]]>
+	</if>	
+	<if test="pdtj8 != null and pdtj8 !='' ">
+		<![CDATA[ and ${pdtj8} ]]>
+	</if>
+	<if test="pdtj9 != null and pdtj9 !='' ">
+		<![CDATA[ and ${pdtj9} ]]>
+	</if>
+	<if test="pdtj10 != null and pdtj10 !='' ">
+		<![CDATA[ and ${pdtj10} ]]>
+	</if>
+</sql>     
+<sql id="commonWhere33">
+	<if test=" id6 != null and id6 !='' and !id6.contains('undefined')">
+		<![CDATA[ and    ${id6} ]]>
+	</if>
+	 
+	 
+</sql>      
+
+
+<select id="getYwxxzs" resultType="java.util.LinkedHashMap" >
+    <![CDATA[
+    select
+*
+from
+(
+      ${sqlnr}   where 1=1
+    ]]>
+  <include refid="commonWhere"></include> 
+   <include refid="commonWhere33"></include> 
+  <![CDATA[
+  		)
+  	 
+  	where   条数 >15*(${ccc}-1)  and 条数 <=15*${ccc}
+  ]]>
+  </select>
+  
+<select id="getCount" resultType="int" >
+    <![CDATA[
+    
+    select count(1) from (${sqlnr} where 1=1
+       
+    ]]>
+ <include refid="commonWhere"></include> 
+  <include refid="commonWhere33"></include> 
+ <![CDATA[
+    
+   )
+       
+    ]]>
+  </select>
+  
+
+
+</mapper>

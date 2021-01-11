@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.BasycxDao">
+	 <sql id="commonWhere">
+		<if test="kssj != null and kssj !='' ">
+			<![CDATA[ AND to_char(OUT_HP_DT,'yyyy-mm-dd')> =trim(#{kssj})]]>
+		</if>
+		<if test="jssj != null and jssj !='' ">
+			<![CDATA[ AND to_char(OUT_HP_DT,'yyyy-mm-dd')< =trim(#{jssj})]]>
+		</if>
+		<if test="bajgdm != null and bajgdm !='' ">
+			<![CDATA[ AND ORGAN_CODE =trim(#{bajgdm})]]>
+		</if>
+
+	</sql>
+	 
+	<sql id="commonWhere2">
+		<if test="kssj != null and kssj !='' ">
+			<![CDATA[ AND to_char(a.OUT_HP_DT,'yyyy-mm-dd')> =trim(#{kssj})]]>
+		</if>
+		<if test="jssj != null and jssj !='' ">
+			<![CDATA[ AND to_char(a.OUT_HP_DT,'yyyy-mm-dd')< =trim(#{jssj})]]>
+		</if>
+		<if test="jbdm != null and jbdm !='' ">
+			<![CDATA[ AND  a.M_DIS_CODE =trim(#{jbdm})]]>
+		</if>
+		<if test="bajgdm != null and bajgdm !='' ">
+			<![CDATA[ AND a.ORGAN_CODE =trim(#{bajgdm})]]>
+		</if>
+
+	</sql>
+	
+	<select id="getAllYljg"  resultType="com.wondersgroup.wszygl.model.YljgMcModel">
+		<![CDATA[ 
+		  select id as jgdm ,mc as jgmc from tb_volap_yljg where yyjb is not null
+             group by id,mc
+       ]]> 
+	</select>
+	
+    <select id="getBasycxechats"  resultType="com.wondersgroup.wszygl.model.BasycxModel">
+		<![CDATA[
+	  select jbdm,jbmc,rs from ( Select M_DIS_CODE as jbdm, M_DIS_NAME as jbmc, count(1) as rs
+                  From T_FIRSTPAGEMEDICALRECORD c
+                 Where 1 = 1
+    ]]> 
+   <include refid="commonWhere"></include>
+   <![CDATA[
+    Group By c.M_DIS_CODE, M_DIS_NAME  order by rs desc)
+                   where rownum<=15  order by rs desc 
+		]]> 
+		
+	</select>
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.BasycxModel">
+		<![CDATA[
+	    select a.ORGAN_NAME as yljgmc,
+OUT_DPT_NAME as ksmc,M_DIS_NAME as jbmc,
+b.OPER_NAME as ssmc , TOTAL_COST as zfy,name as xm,decode(sex,'1','男','2','女') as xb, AGE_YEAR as nl ,to_char(IN_HP_DT,'yyyy-mm-dd') as rysj,WGHDZ_NAME as xzmc
+ from T_FIRSTPAGEMEDICALRECORD a
+left join t_mr_operationrecord b
+on a.ORGAN_CODE=b.ORGAN_CODE and a.HP_S_NO=b.HP_S_NO
+where 1=1
+		]]>
+		<include refid="commonWhere2"></include>
+		<![CDATA[
+		order  by  to_char(IN_HP_DT,'yyyy-mm-dd') desc
+		]]>
+	</select>
+	 
+
+	
+	
+	
+	
+	
+	
+	
+	<select id="getBasyxz"  resultType="com.wondersgroup.wszygl.model.BasycxModel">
+		<![CDATA[
+	     Select M_DIS_CODE as jbdm, M_DIS_NAME as jbmc, count(1) as rs,ORGAN_CODE as yljgdm,
+  ORGAN_name as yljgmc    From T_FIRSTPAGEMEDICALRECORD a  Where 1 = 1
+   ]]> 
+   <include refid="commonWhere2"></include>
+   <![CDATA[
+       Group By a.M_DIS_CODE, M_DIS_NAME,ORGAN_CODE,ORGAN_name
+		]]> 
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

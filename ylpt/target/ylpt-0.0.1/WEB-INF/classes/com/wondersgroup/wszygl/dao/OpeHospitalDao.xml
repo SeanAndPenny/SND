@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.OpeHopitalDao">
+	
+
+	<sql id="commonWhere">
+		 <if test="gradeid != null ">
+			<![CDATA[ and gradeid=#{gradeid}]]>
+		</if> 
+		
+	</sql>
+
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.OpeHospitalModel" >
+		<![CDATA[ 
+			SELECT de.gopename,de.gradename,j.yljgdm,o.jgmc as yljgmc,'默认' as zt,'' as sqr,'' as sqsj
+  			FROM  cen_etl_v20.tb_ope_detail DE INNER JOIN cen_core_v20.tb_ssbm_yljg j ON 
+  			de.gopename = j.ssmc AND de.opecode = j.ssbm INNER JOIN sys_jgdm_list o on j.yljgdm=o.jgdm
+         	WHERE 1 = 1
+         ]]>
+         	<include refid="commonWhere"></include>
+      	<![CDATA[
+      		union all
+      		select j.gopename,
+       		j.gradename,
+       		t.yljgdm,
+       		o.jgmc as yljgmc,
+       		decode(t.auditid, '1', '审核通过', '2', '审核未通过', '待审核'),
+       		t.sqr,to_char(t.requesttime,'yyyy-mm-dd')
+  			from tb_ope_request t, tb_ope_detail j, sys_jgdm_list o
+ 			where t.detailid = j.gradeid
+   			and t.yljgdm = o.jgdm
+   		]]>
+		<include refid="commonWhere"></include>
+	</select>
+	<select id="findXx" resultType="com.wondersgroup.wszygl.model.OpeHospitalModel">
+		<![CDATA[
+			SELECT de.gopename,de.gradename,j.yljgdm,o.jgmc as yljgmc,'默认' as zt
+  			FROM  cen_etl_v20.tb_ope_detail DE INNER JOIN cen_core_v20.tb_ssbm_yljg j ON 
+  			de.gopename = j.ssmc AND de.opecode = j.ssbm INNER JOIN sys_jgdm_list o on j.yljgdm=o.jgdm
+         	WHERE 1 = 1  and gradeid=#{gradeid}
+      		union all
+      		select j.gopename,j.gradename,t.yljgdm,o.jgmc as yljgmc,decode('t.auditid','1','审核通过','2','审核未通过','待审核') from 
+      		tb_ope_request t,tb_ope_detail j,
+      		sys_jgdm_list o where t.detailid=j.gradeid and t.yljgdm=o.jgdm and t.auditid='1' and gradeid=#{gradeid}
+		]]>
+	</select>
+	<update id="updateOpe">
+		<![CDATA[
+			update tb_ope_request set auditid='1' where id=#{id}
+		]]>
+	</update>
+	
+	<update id="updateOpe1">
+		<![CDATA[
+			update tb_ope_request set auditid='2' where id=#{id}
+		]]>
+	</update>
+
+
+</mapper>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.wondersgroup.api:wdinf-logger:0.0.5-RELEASE">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../../../../maven/wdMavenRes/com/wondersgroup/api/wdinf-logger/0.0.5-RELEASE/wdinf-logger-0.0.5-RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../../../../../maven/wdMavenRes/com/wondersgroup/api/wdinf-logger/0.0.5-RELEASE/wdinf-logger-0.0.5-RELEASE-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../../../../maven/wdMavenRes/com/wondersgroup/api/wdinf-logger/0.0.5-RELEASE/wdinf-logger-0.0.5-RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

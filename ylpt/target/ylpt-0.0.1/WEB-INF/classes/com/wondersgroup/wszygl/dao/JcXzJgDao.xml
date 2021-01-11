@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JcXzJgDao">
+	 <sql id="commonWhere">
+		<if test="sfws != null and sfws !='' ">
+			<![CDATA[ AND sfws =trim(#{sfws})]]>
+		</if>
+		 
+	</sql>
+ 
+	 
+	 <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JcModel">
+		<![CDATA[
+	select brxm,
+       decode(brxb, '1', '男', '2', '女') as brxb,
+       sqksmc,
+       jcmc,
+       yljgdm,
+       b.mc as yljgmc,
+       sfws
+  from TB_RIS_REPORT a
+  left join tb_volap_yljg b
+    on a.yljgdm = b.id
+ where 1 = 1
+   and substr(bgrq, 0, 4) = to_char(sysdate, 'yyyy')
+		]]>
+		<include refid="commonWhere"></include>
+	</select>
+	
+	<select id="getJcXzJg" resultType="com.wondersgroup.wszygl.model.JcModel">
+	<![CDATA[
+	 select count(1) as rs ,yljgdm,b.mc as yljgmc,sfws from TB_rIS_REPORT a
+left join tb_volap_yljg b
+on a.yljgdm=b.id where 1=1  and substr(a.bgrq,0,4)=to_char(sysdate,'yyyy')  	]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ group by yljgdm,b.mc,sfws  ]]>
+	 </select>
+	
+	 
+
+
+</mapper>

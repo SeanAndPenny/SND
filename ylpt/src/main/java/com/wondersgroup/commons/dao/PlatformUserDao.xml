@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.commons.dao.PlatformUserDao">
+	
+
+	<sql id="commonWhere">
+		<if test="loginname != null ">
+			<![CDATA[ AND LOGINNAME = #{loginname}]]>
+		</if>
+	</sql>
+
+	<select id="getByUseridAndKeyWord" resultType="com.wondersgroup.commons.model.PlatformUser">
+		<![CDATA[SELECT * FROM TB_PLATFORM_USER U WHERE 1=1 AND U.USERID=#{userid} AND U.OTHERPLATKEY=#{otherplatkey} and U.REMOVED='0']]>
+	</select>
+	<select id="getSysByKeyWord"
+		resultType="com.wondersgroup.commons.model.PlatformSys">
+		<![CDATA[SELECT * FROM TB_PLATFORM_SYS S WHERE 1=1  AND S.PLATFROMKEY=#{platfromkey} and S.REMOVED='0' ]]>
+	</select>
+
+	<insert id="insertPtlog"
+		parameterType="com.wondersgroup.commons.model.PtLog">
+		<![CDATA[ INSERT INTO TB_PT_LOG (
+			LOGID, 
+			OPERATIONNAME, 
+			OPERATOR, 
+			ACTIONCLASSNAME,
+			ACTIONMETHODNAME,
+			IP,
+			SSPROJECT,
+			PROJECTNAME,
+			OPERATIONSJ
+		) VALUES (
+			#{logid,jdbcType=VARCHAR}, 
+			#{operationname,jdbcType=VARCHAR}, 
+			#{operator,jdbcType=VARCHAR},
+			#{actionclassname,jdbcType=VARCHAR},
+			#{actionmethodname,jdbcType=VARCHAR},
+			#{ip,jdbcType=VARCHAR},
+			#{ssproject,jdbcType=VARCHAR},
+			#{projectname,jdbcType=VARCHAR},
+			SYSDATE		
+		)]]>
+	</insert>
+
+	<insert id="insertUser"
+		parameterType="com.wondersgroup.commons.model.PlatformUser">
+		<![CDATA[ INSERT INTO TB_PLATFORM_USER (
+			ID, 
+			USERID, 
+			OTHERLOGNAME, 
+			OTHERLOGPSW,
+			OTHERPLATKEY,
+			OTHERPLATNAME,
+			AUTHENTICATETIME,
+			REMOVEDTIME,
+			REMOVED,
+			OTHERLOGXM
+		) VALUES (
+			sys_guid(), 
+			#{userid,jdbcType=VARCHAR}, 
+			#{otherlogname,jdbcType=VARCHAR},
+			#{otherlogpsw,jdbcType=VARCHAR},
+			#{otherplatkey,jdbcType=VARCHAR},
+			#{otherplatname,jdbcType=VARCHAR},
+			sysdate,
+			null,
+			'0',
+			#{otherlogxm,jdbcType=VARCHAR}	
+		)]]>
+	</insert>
+
+	<insert id="insertSys"
+		parameterType="com.wondersgroup.commons.model.PlatformSys">
+		<![CDATA[ INSERT INTO TB_PLATFORM_SYS (
+			ID, 
+			PLATFROMKEY, 
+			PLATFROMNAME, 
+			REMOVED,
+			URL,
+			LOGINNAME,
+			PASSWORD
+		) VALUES (
+			sys_guid(), 
+			#{platfromkey,jdbcType=VARCHAR}, 
+			#{platfromname,jdbcType=VARCHAR},
+			'0',
+			#{url,jdbcType=VARCHAR},
+			#{loginname,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR}
+		)]]>
+	</insert>
+</mapper>

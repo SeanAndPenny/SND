@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.OperationRecordDao">
+	
+
+	<sql id="commonWhere">
+		<if test="id != null ">
+			<![CDATA[ AND CA.ID  =  #{id}]]>
+		</if>
+		<if test="ssmc != null and ssmc != '' ">
+			<![CDATA[ AND DE.gradename like '%'||#{ssmc}||'%']]>
+		</if>
+	</sql>
+	<sql id="yljgdm">
+		<if test="id != null ">
+			<![CDATA[ AND yljgdm  =  #{id}]]>
+		</if>
+	</sql>
+
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.OperationRecordModel" >
+		<![CDATA[ 
+			select ca.id,ca.catalogname as name,ca.catalogup,de.gopename,de.opecode,de.gradename, de.gradeid  from 
+			cen_etl_v20.tb_ope_catalog CA,
+			cen_etl_v20.tb_ope_detail DE
+			where Ca.id=DE.id	
+   		]]>
+		<include refid="commonWhere"></include>
+	</select>
+	<select id="getAll" resultType="com.wondersgroup.wszygl.model.OperationRecordModel" >
+			<![CDATA[ SELECT CA.ID,CA.CATALOGNAME AS NAME,CA.CATALOGUP AS PID,GR.GRADENAME ,DE.OPENAME,de.opecode
+				  FROM TB_OPE_CATALOG CA, TB_OPE_GRADE GR, TB_OPE_DETAIL DE
+				 WHERE CA.ID = GR.ID
+				   AND GR.CATALOGID = DE.ID
+   			]]>
+	</select>
+	<select id="getAllCatlog" resultType="com.wondersgroup.wszygl.model.OpeCatlogModel" >
+			<![CDATA[ 
+				select ca.id ,ca.catalogname as name,ca.cataloglevel,ca.catalogup  from cen_etl_v20.tb_ope_catalog CA
+   			]]>
+	</select>
+	
+	<select id="getYljg" resultType="com.wondersgroup.wszygl.model.OpeCatlogModel" >
+			<![CDATA[ 
+				select yljgdm as id,yljgmc as name,'' as cataloglevel,'' as catalogup 
+				 from cen_core_v20.tb_ssbm_yljg where 1=1
+   			]]>
+   			<include refid="yljgdm"></include>
+   			<![CDATA[group by yljgdm,yljgmc]]>
+	</select>
+	
+	<select id="getOpeByGradeid" resultType="com.wondersgroup.wszygl.model.OperationRecordModel" >
+			<![CDATA[ 
+				select ca.id,ca.catalogname as name,ca.catalogup,de.gopename,de.opecode,de.gradename, de.gradeid  from 
+			cen_etl_v20.tb_ope_catalog CA,
+			cen_etl_v20.tb_ope_detail DE
+			where Ca.id=DE.id and  DE.gradeid=#{gradeid}
+   			]]>
+	</select>
+	<select id="getOrgCodeByOrgid" resultType="com.wondersgroup.commons.model.TbAuthOrganization">
+		<![CDATA[
+			select * from cen_etl_v20.tb_auth_org where orgid = #{orgid}
+		]]>
+	</select>
+	
+	
+	<select id="getOneByCode" resultType="com.wondersgroup.wszygl.model.OperationRecordModel" >
+		
+	</select>
+	<insert id="save" parameterType="com.wondersgroup.wszygl.model.OperationRecordModel">
+		<![CDATA[ INSERT INTO cen_etl_v20.tb_ope_request  (
+			ID, 
+			yljgdm,
+			requestid,
+			requesttime,
+			detailid,
+			remark,
+			sqr
+		) VALUES (
+			#{id,jdbcType=VARCHAR}, 
+			#{yljgdm,jdbcType=VARCHAR},
+			#{requestid,jdbcType=VARCHAR},
+			sysdate,
+			#{detailid,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{sqr,jdbcType=VARCHAR}
+		)]]>
+	</insert>
+	<select id="findJgdm" resultType="com.wondersgroup.wszygl.model.OperationRecordModel">
+		<![CDATA[
+			select jgdm from cen_etl_v20.sys_jgdm_list where jgmc like '%'||#{jgmc}||'%' and  rownum<=1
+		]]>
+	</select>
+
+</mapper>

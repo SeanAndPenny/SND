@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.ggwsgl.dao.JkzDao">
+	<sql id="commonWhere">
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  b.jgdm = #{yljgdm}]]>
+		</if>
+		<choose>
+			<when
+				test="startdate != null and startdate!=''  and enddate !=null and enddate!=''">
+              <![CDATA[  and to_char(A.BHKDAT,'yyyy-mm-dd')>= #{startdate} and  to_char(A.BHKDAT,'yyyy-mm-dd')<= #{enddate}
+          		]]>
+			</when>
+			<when
+				test="startdate != null and startdate!=''  and ( enddate ==null or enddate =='') ">
+               <![CDATA[ and to_char(A.BHKDAT,'yyyy-mm-dd')>= #{startdate}
+           		]]>
+			</when>
+			<when
+				test="(startdate == null or startdate=='' ) and ( enddate !=null and enddate !='') ">
+              <![CDATA[ and to_char(A.BHKDAT,'yyyy-mm-dd')<= #{enddate}
+           		]]>
+			</when>
+			<otherwise>
+
+			</otherwise>
+		</choose>
+
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.JkzModel">
+		<![CDATA[
+			select b.jgmc as tjjg, a.EMPNAM as xm,decode(a.sex, 1, '男', 2, '女') as xb, A.IDC as sfz, decode
+			(A.TRDSRTNAM,1001,'食品卫生',1002,'公共场所',1003,'生活饮用水',1004,'药品',1005,'其他') as hy,
+			to_char(A.BHKDAT,'yyyy-mm-dd') as tjrq,A.RCDEMP as ysxm,A.MHKADV as jl, decode(A.REMARKABLE, 1, '已发证', 0, '不发证') as sffz 
+			from cen_core_v20.TD_TJ_BHK_XCQ a inner join cen_etl_v20.sys_jgdm_list b  on a.yljgdm=b.jgdm where 1=1 	
+		]]>
+		<include refid="commonWhere"></include>
+	</select>
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.ggwsgl.model.YljgModel">
+		<![CDATA[
+			select j.jgdm,j.jgmc  from  cen_core_v20.sys_jgdm_list j where length(jgdm)=10 
+		]]>
+
+	</select>
+	<select id="getAllTb"
+		resultType="com.wondersgroup.ggwsgl.model.TbModel">
+		<![CDATA[
+			select b.jgmc,b.jgdm,count(*) rs from cen_core_v20.TD_TJ_BHK_XCQ a inner join cen_etl_v20.sys_jgdm_list b  on a.yljgdm=b.jgdm 
+			where 1=1
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ group by b.jgmc,b.jgdm]]>
+	</select>
+</mapper>

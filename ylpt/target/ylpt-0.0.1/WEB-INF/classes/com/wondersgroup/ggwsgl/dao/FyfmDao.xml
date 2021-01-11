@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.ggwsgl.dao.FyfmDao">
+	<sql id="commonWhere">
+		<if test=" yljgdm !=''">
+			<![CDATA[  and  b.cDoctorreporgid = #{yljgdm}]]>
+		</if>
+
+		<choose>
+			<when test="sfzh != null and sfzh!=''  ">
+              <![CDATA[  and a.sfzh=  #{sfzh} 
+          		]]>
+			</when>
+			<when
+				test="startdate != null and startdate!=''  and enddate !=null and enddate!=''">
+              <![CDATA[  and to_char(b.childbirthtime,'yyyy-mm-dd')>=  #{startdate} and  to_char(b.childbirthtime,'yyyy-mm-dd')<= #{enddate} 
+          		]]>
+			</when>
+			<when
+				test="startdate != null and startdate!=''  and ( enddate ==null or enddate =='') ">
+               <![CDATA[ and to_char(b.childbirthtime,'yyyy-mm-dd')>= #{startdate}  
+           		]]>
+			</when>
+			<when
+				test="(startdate == null or startdate=='' ) and ( enddate !=null and enddate !='') ">
+              <![CDATA[ and to_char(b.childbirthtime,'yyyy-mm-dd')<=#{enddate} 
+           		]]>
+			</when>
+			<otherwise>
+
+			</otherwise>
+		</choose>
+	</sql>
+
+
+
+
+
+
+
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.FyfmModel">
+		<![CDATA[
+			select a.hzxm as hzxm, a.sfzh as sfzh,to_char(a.csrq,'yyyy-mm-dd') as csrq,a.lxdh as lxdh,
+			to_char(b.childbirthtime,'yyyy-mm-dd') as childbirthtime,b.cdoctorreporgname as cdoctorreporgname,irytz as irytz,decode(b.cccfs,'1','催产素','2','人工破膜','3','未催产') as cccfs,
+			b.cdoctorname as cdoctorname,decode(c.cxb,'1','男','2','女') as cxb,c.isg||'  cm' as isg,c.itz||'  g' as itz  from cen_core_v20. TB_PERSONALINFO a inner join cen_core_v20.  TB_FY_YFFM b
+			on a.sfzh=b.sfzh  left join cen_core_v20.TB_FY_XSE c on a.sfzh=c.yfsfzh where 1=1
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ order by to_char(b.childbirthtime,'yyyy-mm-dd') desc]]>
+	</select>
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.ggwsgl.model.YljgModel">
+		<![CDATA[
+			select *  from   cen_core_v20.sys_jgdm_list  where length(jgdm)=10
+		]]>
+
+	</select>
+	<select id="getAllTb"
+		resultType="com.wondersgroup.ggwsgl.model.TbModel">
+		<![CDATA[
+			select b.cdoctorreporgid as jgdm,b.cdoctorreporgname jgmc,count(*) as rs from cen_core_v20. TB_PERSONALINFO a inner 
+			join cen_core_v20.TB_FY_YFFM b on a.sfzh=b.sfzh  left join cen_core_v20.TB_FY_XSE c on a.sfzh=c.yfsfzh where 1=1 
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ group by b.cdoctorreporgid,b.cdoctorreporgname]]>
+	</select>
+</mapper>

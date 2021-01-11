@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.MzjfxDao">
+	
+
+<select id="getMzjfx" resultType="com.wondersgroup.wszygl.model.MjzywFxModel">
+	<![CDATA[  
+     select sum(mzrs) as mzrs,sum(jzrs) as jzrs,yljgdm,yljgmc  from  tb_getMzjfx a where 1=1
+       ]]> 
+        <include refid="commonWhere2"></include>  
+        <![CDATA[
+group by yljgdm,yljgmc
+        ]]>
+</select>
+<select id="getMzjjcfx" resultType="com.wondersgroup.wszygl.model.MjzywFxModel">
+	<![CDATA[ 
+     select sum(mzrs) as mzrs,yljgdm,yljgmc from tb_getMzjjcfx a where 1=1
+       ]]> 
+        <include refid="commonWhere2"></include>  
+        <![CDATA[
+group by yljgdm,yljgmc
+        ]]>
+</select>
+
+<select id="getMzJbfl" resultType="com.wondersgroup.wszygl.model.MjzywFxModel">
+	<![CDATA[ 
+ select * from  (select * from 
+(select sum(rs) as rs,jbflbm,jbflmc from tb_getMzJbfl a where 1=1  
+       ]]> 
+        <include refid="commonWhere2"></include>  
+        <![CDATA[ 
+        group by jbflbm ,jbflmc ) order by rs desc) where rownum<=10
+        ]]>
+</select>
+
+<select id="getMjzywecharts" resultType="com.wondersgroup.wszygl.model.MjzywFxModel">
+	<![CDATA[
+	   select  count(1)  as mzrs , a.yljgdm,b.zdjc as yljgmc from TB_YL_MZ_Medical_Record a
+     inner join T_UNIT_SITE_DICT b
+     on a.yljgdm=b.yljgdm and a.JZKSBM=b.zddm
+     where 1=1 
+       ]]> 
+        <include refid="commonWhere2"></include>  
+        <![CDATA[
+       
+group by a.yljgdm,b.zdjc
+        ]]>
+</select>
+
+
+ <select id="getMinSwsj" resultType="String">
+ select minsj from  tb_mzsj
+ </select>
+ <select id="getMaxSwsj" resultType="String">
+  select maxsj from  tb_mzsj
+ </select>
+ 
+ <select id="getmjzjgList" resultType="com.wondersgroup.wszygl.model.SwxxJgdmModel">
+ <![CDATA[
+ select id as jgdm,mc as jgmc from tb_volap_yljg where yyjb is not null
+ ]]>
+  <include refid="commonWhere"></include>  
+ </select>
+ 
+ 
+ <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.MjzywFxModel">
+  <![CDATA[
+        select  hzxm,c.mc as yljgmc, jzksmc,to_char(jzksrq,'yyyy-mm-dd') as jzksrq,
+ zzysxm,jzzdsm,b.mc as jbflmc
+ from TB_YL_MZ_MEDICAL_RECORD a
+inner join SYS_MZJBFL_LIST b
+on a.jbflbm=b.id
+inner join tb_volap_yljg c
+on a.yljgdm=c.id
+where 1=1 
+			]]>
+<include refid="commonWheretable"></include> 
+</select>
+
+ <sql id="commonWhere">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and   id= trim(#{jgdm})]]>
+		   </if> 
+ </sql>
+ <sql id="commonWhere2">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and   a.yljgdm= trim(#{jgdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   JZKSRQ>= to_date(#{kssj},'yyyy-MM-dd')]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			       <![CDATA[ and   JZKSRQ<= to_date(#{jssj},'yyyy-MM-dd')+1]]>
+		   </if>
+ </sql>
+ 
+ <sql id="commonWheretable">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and   a.yljgdm= trim(#{jgdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   JZKSRQ>= to_date(#{kssj},'yyyy-MM-dd')]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			       <![CDATA[ and   JZKSRQ<= to_date(#{jssj},'yyyy-MM-dd')+1]]>
+		   </if>
+		   <if test="jbflbm != null and jbflbm !='' ">
+			       <![CDATA[ and   trim(jbflbm)= trim(#{jbflbm})]]>
+		   </if>
+ </sql>
+ 
+ 
+ <select id="getechars03" resultType="com.wondersgroup.wszygl.model.MjzywFxModel">
+  <![CDATA[ 
+select sum(rs) as rs,jbflbm,jbflmc from  tb_getechars03 a
+where 1=1
+			]]>
+<include refid="commonWhere2"></include> 
+  <![CDATA[ group by jbflbm,jbflmc 
+  ]]>
+</select>
+ 
+ <select id="getechars04" resultType="com.wondersgroup.wszygl.model.MjzywFxModel">
+  <![CDATA[ 
+select * from 
+(select * from 
+(select sum(rs)as rs ,JZZDBM,jzzdmc from    tb_getechars04 a
+where 1=1
+			]]>
+<include refid="commonWheretable"></include> 
+  <![CDATA[  group by JZZDBM ,jzzdmc ) order by rs desc )where rownum<=10
+  ]]>
+</select>
+ 
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.SsJbxzJgDao">
+   <sql id="commonWhere">
+    <if test="ssjb != null and ssjb !='' ">
+      <![CDATA[ AND ssjb =trim(#{ssjb})]]>
+    </if>
+  </sql>
+ 
+   
+   <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.SslistModel">
+    <![CDATA[
+      select b.mc as yljgmc,a.ssczmc,to_char(sskssj,'yyyy-mm-dd') as rq,ssqzd,sshzd,ssysxm,mzysxm from TB_Operation_Detail a
+left join tb_volap_yljg b
+on a.yljgdm=b.id
+where 1=1   and  to_char(sskssj,'yyyy-mm-dd')>=to_char(sysdate-30,'yyyy-mm-dd')
+    ]]>
+    <include refid="commonWhere"></include>
+  </select>
+  
+  <select id="getssJbxzJg" resultType="com.wondersgroup.wszygl.model.SslistModel">
+  <![CDATA[
+   	select count(1) as rs ,yljgdm,b.mc as yljgmc,ssjb from TB_Operation_Detail a
+left join tb_volap_yljg b
+on a.yljgdm=b.id where 1=1  and  to_char(sskssj,'yyyy-mm-dd')>=to_char(sysdate-30,'yyyy-mm-dd')
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+    group by yljgdm,b.mc,ssjb
+     ]]>
+   </select>
+  
+   
+
+
+</mapper>

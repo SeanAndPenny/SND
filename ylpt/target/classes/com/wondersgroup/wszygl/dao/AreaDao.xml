@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.AreaDao">
+	<resultMap type="com.wondersgroup.wszygl.model.AreaModel"
+		id="AreaResult">
+		<result column="name" property="name" />
+		<result column="code" property="code" />
+		<result column="lelevel" property="lelevel" />
+		<result column="pid" property="pid" />
+	</resultMap>
+
+	<sql id="commonWhere">
+		<if test="code != null and code.length()==6">
+			<![CDATA[ AND T.CODE  LIKE  '%'||#{code}||'%'    and T.LELEVEL='2']]>
+		</if>
+		<if test="code != null and code.length()==9">
+			<![CDATA[ AND T.CODE  LIKE  '%'||#{code}||'%'  and T.LELEVEL='3' ]]>
+		</if>
+	</sql>
+
+
+
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.AreaModel">
+		<![CDATA[
+			SELECT T.NAME,
+                       T.CODE,
+                       CASE
+                         WHEN T.LELEVEL = '1' THEN
+                          '区'
+                         WHEN T.LELEVEL = '2' THEN
+                          '街道'
+                         WHEN T.LELEVEL = '3' THEN
+                          '社区居委会'
+                         ELSE
+                          ''
+                       END AS LELEVEL,
+                       T.PID,
+                       T.VERSION,
+                       T.UPDATETIME,
+                       T.REMARK,
+                       T.REMOVED,
+                       (SELECT COUNT(0) FROM  T_AREA A WHERE A.PID=T.CODE) AS CHILDS                     
+                  FROM T_AREA T
+                 WHERE 1 = 1
+			 ]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ORDER BY CODE DESC ]]>
+	</select>
+	<select id="getAll"
+		resultType="com.wondersgroup.wszygl.model.AreaModel">
+		<![CDATA[SELECT * FROM T_AREA T WHERE 1=1 ]]>
+	</select>
+	<select id="getOneByCode"
+		resultType="com.wondersgroup.wszygl.model.AreaModel">
+		<![CDATA[SELECT * FROM T_AREA WHERE CODE =#{code} ]]>
+	</select>
+
+
+</mapper>

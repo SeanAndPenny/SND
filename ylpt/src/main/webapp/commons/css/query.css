@@ -1,0 +1,41 @@
+.label2 {
+	width: 120px;
+	text-align: center;
+}
+
+.label3 {
+	width: 120px;
+	text-align: right;
+}
+.label4 {
+	width:108px;
+	text-align: right;
+}
+.label5 {
+	width:86px;
+	text-align: right;
+}
+.block {
+	padding-top: 10px;
+}
+
+.input2 {
+	width: 60%; 
+}
+.input3 {
+	width: 20%;
+}
+.input4 {
+	width: 223.8px;
+	position: absolute;
+	padding-left: 10px;
+}
+
+.textarea2 {
+	width: 87%
+}
+.bt{
+	font-size:22px;
+	font-weight:600;
+	padding:15px;
+}

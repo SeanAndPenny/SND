@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JkdaLogDao">
+
+	<sql id="commonWhere">
+		<if test="yljg != null  and yljg !=''">
+			<![CDATA[ AND  f.orgcode=#{yljg}]]>
+		</if>
+
+		<if test="days != null  and days !=''">
+			<![CDATA[ AND  to_char(l.dysj,'YYYY-MM-DD')  LIKE  '%'||#{days}||'%']]>
+		</if>
+	</sql>
+
+
+
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.JkdaLogModel">
+
+		<![CDATA[
+			select *
+                  from cendoc.TB_JKDA_LOG l,
+                       (select u.loginname , o.orgname as lnam, o.orgcode
+                          from cen_etl_v20.tb_auth_org  o,
+                               cen_etl_v20.tb_auth_user u
+                         where u.orgid = o.orgid) f
+                 where l.dyz = f.loginname
+			]]>
+		<include refid="commonWhere"></include>
+
+	</select>
+
+
+</mapper>

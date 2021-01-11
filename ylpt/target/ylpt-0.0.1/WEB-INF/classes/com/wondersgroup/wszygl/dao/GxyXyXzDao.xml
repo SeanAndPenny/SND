@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.GxyXyXzDao">
+   
+  <sql id="commonWhere2">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(JKSJ,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(JKSJ,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+    <if test="sfxy != null and sfxy !='' ">
+      <![CDATA[ and sfxy=trim(#{sfxy})]]>
+    </if>
+    <if test="yljgdm != null and yljgdm !='' ">
+      <![CDATA[ and yljgdm=trim(#{yljgdm})]]>
+    </if>
+  </sql> 
+  <select id="getGxyXyXzList" resultType="com.wondersgroup.wszygl.model.GxysjfxModel">
+  <![CDATA[
+          select count(1) as xyrs,
+       sfxy,
+       decode(sfxy, '1', '吸烟', '0', '不吸烟') as sfxymc,
+       yljgdm,
+       b.mc as yljgmc
+  from tb_gxy_hzglk a
+  left join tb_volap_yljg b
+  on a.yljgdm=b.id
+ where 1 = 1
+    ]]>
+       <include refid="commonWhere2"></include>
+    <![CDATA[   
+     group by sfxy,yljgdm ,b.mc
+     ]]>
+              
+  </select>
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.GxysjfxModel">
+    <![CDATA[
+      select b.mc as yljgmc,
+       xm,
+       decode(sfxy, '1', '吸烟', '0', '不吸烟') as sfxymc,
+       decode(xb, '1', '男', '2', '女') as xb,
+       jkysxm,
+       to_char(JKSJ,'yyyy-mm-dd') as JKSJ,
+       jzd_xng as xzmc,
+       shzlnlmc
+  from tb_gxy_hzglk a
+  left join tb_volap_yljg b
+    on a.yljgdm = b.id
+ where 1 = 1
+    
+
+     
+    ]]>
+    <include refid="commonWhere2"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

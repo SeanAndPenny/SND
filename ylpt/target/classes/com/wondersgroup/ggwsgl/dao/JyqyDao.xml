@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.ggwsgl.dao.JyqyDao">
+	<sql id="commonWhere">
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  t.yljgdm = #{yljgdm}]]>
+		</if>
+		<choose>
+			<when
+				test="startdate != null and startdate!=''  and enddate !=null and enddate!=''">
+              <![CDATA[  and to_char(t.signtime,'yyyy-mm-dd')>=  #{startdate} and to_char(t.signtime,'yyyy-mm-dd')<=#{enddate} 
+          		]]>
+			</when>
+			<when
+				test="startdate != null and startdate!=''  and ( enddate ==null or enddate =='') ">
+               <![CDATA[ and to_char(t.signtime,'yyyy-mm-dd')>= #{startdate} 
+           		]]>
+			</when>
+			<when
+				test="(startdate == null or startdate=='' ) and ( enddate !=null and enddate !='') ">
+              <![CDATA[ and to_char(t.signtime,'yyyy-mm-dd')<= #{enddate} 
+           		]]>
+			</when>
+			<otherwise>
+
+			</otherwise>
+		</choose>
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.JyqyModel">
+		<![CDATA[
+			select  t.name,to_char(t.signtime,'yyyy-MM-dd') as signtime,t.adddoctor,t.chargeteam,t.chargehospital,t.idno,t.address,
+			t.phone from cen_core_v20.tb_resident t where signtime is not null	
+		]]>
+		<include refid="commonWhere"></include>
+	</select>
+
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.ggwsgl.model.YljgModel">
+		<![CDATA[
+			select j.jgdm,j.jgmc  from  sys_jgdm_list j where jgjb in ('1','2')
+		]]>
+
+	</select>
+	<select id="getAllTb"
+		resultType="com.wondersgroup.ggwsgl.model.TbModel">
+		<![CDATA[
+			select j.jgdm,j.jgmc,count(*) as rs from cen_core_v20.tb_resident t inner join cen_core_v20.sys_jgdm_list j 
+			on t.yljgdm=j.jgdm where t.signtime is not null 
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ group by j.jgmc,j.jgdm]]>
+	</select>
+</mapper>

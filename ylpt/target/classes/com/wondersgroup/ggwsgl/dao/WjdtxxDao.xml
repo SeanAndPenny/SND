@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.ggwsgl.dao.WjdtxxDao">
+	<sql id="commonWhere">
+		<if test="xm != null and xm !=''">
+			<![CDATA[  and  xm = #{xm}]]>
+		</if>
+		<if test="zjhm != null and zjhm !=''">
+			<![CDATA[  and  zjhm = #{zjhm}]]>
+		</if>
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  yljgdm = #{yljgdm}]]>
+		</if>
+
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.WjdtxxModel">
+		<![CDATA[
+			select F_DY_YLJGMC(yljgdm) AS YLJGMC,yljgdm,xm,xb,csrq,zjhm,(nl||'岁') as nl,lxdh,dz,to_char(jlgxsj,'yyyy-mm-dd') as jlgxsj,
+			 decode(nvl(num,0),'0','未做提醒','已提醒') as num  from cen_core_v20.tb_w_jdtx  a
+			  left join (select sfzh,count(1)as num from  cen_core_v20.TB_DX_WJKDTXZT
+			 group by sfzh) b on a.zjhm=b.sfzh  where 1 = 1
+		]]>
+		<include refid="commonWhere"></include>
+	</select>
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.ggwsgl.model.YljgModel">
+		<![CDATA[
+			select *  from   cen_core_v20.sys_jgdm_list  where length(jgdm)=10
+		]]>
+
+	</select>
+<select id="getAllCkzt"
+		resultType="com.wondersgroup.ggwsgl.model.CkztModel">
+		<![CDATA[
+			select *  from   cen_core_v20.TB_CKZT
+		]]>
+
+	</select>
+
+	<select id="getWjktx"
+		resultType="com.wondersgroup.ggwsgl.model.WjdtxxModel">
+		<![CDATA[
+			select (jdysxm||'您好,您社区下有一名叫: '||#{xm}||',身份证码是: '||#{zjhm}||' 的居民没建档,请及时联系建档')as nr,
+			sjhm
+			  from   cen_core_v20.TB_DX_WJKDX
+			where    yljgdm = #{yljgdm}
+		]]>
+
+	</select>
+
+
+
+
+
+	<insert id="updatetxzt"
+		parameterType="com.wondersgroup.ggwsgl.model.WjdtxxModel">
+		<![CDATA[ INSERT INTO cen_core_v20.TB_DX_WJKDTXZT (sfzh) 
+		VALUES (#{zjhm})]]>
+	</insert>
+	<!--老年人高危提醒  -->
+	<update id="updaLnrGwTx"
+		parameterType="com.wondersgroup.ggwsgl.model.LnrGwTxModel">
+		<![CDATA[  update cen_core_v20.tb_ndtj_bak_xin set ylyl1='1'
+		where zjhm= #{zjhm} ]]>
+	</update>
+	
+	<select id="getLnrGwTx"
+		resultType="com.wondersgroup.ggwsgl.model.WjdtxxModel">
+		<![CDATA[
+			select ('您好,有一位名叫'||xm||
+      ',身份证码是: '||zjhm||
+      case when xxdz is not null then ';居住在: '||xxdz
+      end 
+      ||' 的老年人于'||to_char(tjrq,'yyyy-mm-dd') ||'在'||f_dy_yljgmc(a.yljgdm)||'做老年人体检时发现'
+      ||case when xzbpgjl = '1' then '心脏病高危 ' end
+      ||case when nczpljl = '1' then '脑卒中高危 ' end||'请继续跟踪') as nr,
+      b.sjhm
+        from (select * from (select t.*,               
+          row_number() over(partition by zjhm order by t.tjrq desc) rn
+          from cen_core_v20.tb_ndtj_bak_xin t) c
+           where rn <=1  )a
+           inner join cen_core_v20.TB_DX_LNRGWTX b
+           on a.yljgdm=b.yljgdm
+           where zjhm=  #{zjhm}
+		]]>
+
+	</select>
+
+</mapper>

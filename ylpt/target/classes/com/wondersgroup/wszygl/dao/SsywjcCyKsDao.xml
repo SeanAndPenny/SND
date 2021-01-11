@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.SsywjcCyKsDao">
+	 <sql id="commonWhere">
+		<if test="rq != null and rq !='' ">
+			<![CDATA[ AND to_char(a.cYSJ,'yyyy-mm-dd') =trim(#{rq})]]>
+		</if>
+		<if test="yljgdm != null and yljgdm !='' ">
+			<![CDATA[ AND  a.yljgdm =trim(#{yljgdm})]]>
+		</if>
+
+	</sql>
+ 
+	 
+	 <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.SsywjcModel">
+		<![CDATA[
+	   select c.mc as yljgmc,a.CYKSMC as cyks,a.cysj,b.xm,decode(b.xb,'1','男','2','女',b.xb) as xb
+      from TB_YL_ZY_Medical_Record  a 
+       left join TB_YL_Patient_Information b
+       on a.yljgdm=b.yljgdm and a.kh=b.kh and a.klx=b.klx
+   
+       left join TB_VOLAP_YLJG c
+       on a.yljgdm=c.id
+       where 1=1
+		]]>
+		<include refid="commonWhere"></include>
+	</select>
+	
+	<select id="getSywjcCyKs" resultType="com.wondersgroup.wszygl.model.SsywjcModel">
+	<![CDATA[
+	  select count(1) as rs ,CYKSMC as cyks from TB_YL_ZY_Medical_Record  a where 1=1
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ group by CYKSMC ]]>
+	 </select>
+	
+	 
+
+
+</mapper>

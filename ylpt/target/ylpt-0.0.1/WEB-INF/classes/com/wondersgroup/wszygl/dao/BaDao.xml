@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.BaDao"> 
+      <sql id="commonWhere"> 
+		    <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and CYSJ>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and CYSJ<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1]]>
+		    </if> 
+		      
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   yljgdm =trim(#{jgdm})]]>
+		    </if> 
+      </sql> 
+      <sql id="commonWhere2"> 
+             <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   id =trim(#{jgdm})]]>
+		    </if> 
+      </sql>  
+
+        <sql id="commonWhere3"> 
+		    <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and CYSJ>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and CYSJ<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1]]>
+		    </if> 
+		      
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   a.yljgdm =trim(#{jgdm})]]>
+		    </if> 
+		    <if test="jbflbm != null and jbflbm !='' and jbflbm !='undefined' ">
+			    <![CDATA[ and   jbflbm =trim(#{jbflbm})]]>
+		    </if> 
+      </sql> 
+  <select id="getbazh" resultType="com.wondersgroup.wszygl.model.BaModel">
+	<![CDATA[ 
+	 select  count(1) as rs ,a.yljgdm,case when yljgdm='46695190832050512C2201' then b.mc 
+else replace(b.mc,'苏州高新区','') end  as yljgmc from TB_CIS_MAIN a
+inner join tb_volap_yljg b
+on a.yljgdm=b.id 
+ where yylb='A1'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+    group by a.yljgdm,b.mc
+	]]>
+ </select>
+ <select id="getbajc" resultType="com.wondersgroup.wszygl.model.BaModel">
+	<![CDATA[ 
+	 select  count(1) as rs ,a.yljgdm,case when yljgdm='46695190832050512C2201' then b.mc 
+else replace(b.mc,'苏州高新区','') end  as yljgmc from TB_CIS_MAIN a
+inner join tb_volap_yljg b
+on a.yljgdm=b.id 
+ where yylb='AA'
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+    group by a.yljgdm,b.mc
+	]]>
+ </select>
+ 
+ <select id="getbaJbdl" resultType="com.wondersgroup.wszygl.model.BaModel">
+	<![CDATA[ 
+	  select  count(1) as rs ,jbflbm,  jbflmc from tb_cis_main a 
+where 1=1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+   group by jbflbm,jbflmc
+	]]>
+ </select>
+ 
+ 
+ 
+  
+   <select id="getechars04" resultType="com.wondersgroup.wszygl.model.BaModel">
+	<![CDATA[ 
+	  select * from (select * from 
+ (select count(1) as rs,zyZDBM as jbbm,zyzdmc as  jbmc from tb_cis_main    a 
+ where 1=1
+	   ]]>
+     <include refid="commonWhere3"></include> 
+   <![CDATA[  
+group by zyZDBM,zyzdmc
+order by  count(1)desc) where rownum<=10) order by rs
+ 
+	]]>
+ </select>
+ 
+ 
+ 
+ 
+ 
+ <select id="getbajgList" resultType="com.wondersgroup.wszygl.model.SwxxJgdmModel">
+	<![CDATA[ 
+	  select  id as jgdm,mc as jgmc from tb_volap_yljg where yyjb is not null 
+	   ]]>
+     <include refid="commonWhere2"></include> 
+    
+ </select>
+ 
+ <select id="getMinSwsj" resultType="String">
+	select min(to_char(CYSJ,'yyyy-MM-dd')) from TB_CIS_MAIN t 
+ </select> 
+  <select id="getMaxSwsj" resultType="String">
+	 select max(to_char(CYSJ,'yyyy-MM-dd')) from TB_CIS_MAIN t
+  </select> 
+ 
+  
+ <select id="getbafxKsxz" resultType="com.wondersgroup.wszygl.model.BaModel">
+	<![CDATA[ 
+	   select count(1) as rs,ryksbm,ryksmc,yljgdm from TB_CIS_MAIN t where 1=1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+    group by ryksbm,ryksmc,yljgdm
+ 
+	]]>
+ </select>
+ 
+ <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.BaModel">
+	  <![CDATA[
+	select count(1) as rs ,jbflmc,ryksmc from  TB_CIS_MAIN 		  
+ where 1 = 1
+    ]]>
+		<include refid="commonWhere22"></include>
+<![CDATA[
+group by ryksmc,jbflmc
+]]>
+	</select>
+ 
+ <sql id="commonWhere22"> 
+		    <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and CYSJ>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and CYSJ<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1]]>
+		    </if> 
+		      
+		    <if test="yljgdm != null and yljgdm !='' and yljgdm !='undefined' ">
+			    <![CDATA[ and   yljgdm =trim(#{yljgdm})]]>
+		    </if> 
+		    <if test="ryksbm != null and ryksbm !='' ">
+			    <![CDATA[ and   ryksbm =trim(#{ryksbm})]]>
+		    </if> 
+      </sql> 
+ 
+ 
+</mapper>

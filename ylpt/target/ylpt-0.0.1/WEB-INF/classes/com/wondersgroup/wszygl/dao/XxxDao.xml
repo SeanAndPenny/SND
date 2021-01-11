@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.XxxDao">
+	 <sql id="commonWhere">
+	     <if  test="tjsjwd==0">
+		    <if test="kssj != null and kssj !='' ">
+			     <![CDATA[   ${pdtj1} to_char(to_date(trim(#{kssj}),'yyyy-MM-dd'),'yyyyMMdd')]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' ">
+			     <![CDATA[   ${pdtj2}  to_char(to_date(trim(#{jssj}),'yyyy-MM-dd'),'yyyyMMdd')]]>
+		    </if> 
+		    <if test="jgdm != null and jgdm !='' ">
+			    <![CDATA[   ${pdtj3} trim(#{jgdm})]]>
+		    </if> 
+		</if>
+		<if test="tjsjwd==1">
+		
+		     <if test="kssj != null and kssj !='' ">
+			       <![CDATA[   ${pdtj1} trim(#{kssj})]]>
+		     </if>
+		     <if test="jssj != null and jssj !='' ">
+			       <![CDATA[   ${pdtj2}  trim(#{jssj})]]>
+		     </if> 
+		     <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[   ${pdtj3} trim(#{jgdm})]]>
+		     </if> 
+		</if>
+      </sql>
+      
+       
+     
+<select id="getKkk" resultType="com.wondersgroup.wszygl.model.xxxModel">
+	<![CDATA[
+	  	 select t.*   from tb_zcd_sql_wdtj_zym t  where 1=1 and ywbz=trim(#{ywbz}) and wddm=trim(#{wdtj})
+       ]]> 
+</select>
+
+<select id="getXxx" resultType="com.wondersgroup.wszygl.model.xxxModel">
+	<![CDATA[
+	  	 select t.*   from tb_zcd_sql_bbpz t  where 1=1 and ywbz=trim(#{ywbz}) and  yxbz=trim(#{yxbz})
+       ]]> 
+</select>
+
+
+
+
+
+	
+<select id="getXxxlist" resultType="com.wondersgroup.wszygl.model.xxxModel">
+<include refid="wdtj1"></include> 
+<![CDATA[
+	  	 ${sqlnr1} (${sqlnr2}) t where 1=1
+       ]]>
+       <include refid="commonWhere"></include>     
+   <![CDATA[
+   ${sqlnr3}
+     ]]> 
+<include refid="wdtj2"></include>    
+</select> 
+
+
+<!-- 总量 -->
+<select id="getzlSum" resultType="String">
+<include refid="wdtj1"></include> 
+<![CDATA[
+	  	select nvl(sum(sl1),0) from ( ${sqlnr1} (${sqlnr2}) t where 1=1
+       ]]>
+       <include refid="commonWhere"></include>     
+   <![CDATA[
+   ${sqlnr3}
+     ]]> 
+<include refid="wdtj2"></include>  
+  <![CDATA[) ]]>
+</select> 
+
+
+
+
+
+<select id="getKkklist" resultType="com.wondersgroup.wszygl.model.xxxModel">
+<![CDATA[
+	  	 ${sqlnr1} (${sqlnr2}) t where 1=1
+       ]]>
+       <include refid="commonWhere"></include>     
+   <![CDATA[
+   ${sqlnr3}
+     ]]>  
+</select>
+<!-- 维度总量分析 -->
+<select id="getzlSum2" resultType="String">
+<![CDATA[
+	  select nvl(sum(sl1),0) from (${sqlnr1} (${sqlnr2}) t where 1=1
+       ]]>
+       <include refid="commonWhere"></include>     
+   <![CDATA[
+   ${sqlnr3}
+     ]]>  
+     <![CDATA[)]]>  
+</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<sql id="wdtj1">
+		    <if test="wdtj == null or wdtj =='' or wdtj=='yljgdm' ">
+			     <![CDATA[ select * from ( ]]>
+		    </if>
+		     <if test="wdtj != null and  wdtj !='' and wdtj!= 'yljgdm'">
+			     <![CDATA[ select sum(${wdtj}) as ${wdtj}  from ( ]]>
+		    </if> 
+		    	    
+ </sql>
+<sql id="wdtj2">
+      <if test="wdtj == null or wdtj =='' or wdtj=='yljgdm' ">
+			    <![CDATA[ )]]>
+		    </if> 
+	 <if test="wdtj != null and  wdtj !='' and wdtj!= 'yljgdm'">
+			     <![CDATA[ )  ]]>
+		 </if> 
+
+</sql>   
+      
+      
+      
+      
+      
+      
+      
+
+
+
+
+
+<select id="getmcpzList" resultType="com.wondersgroup.wszygl.model.McpzModel">
+	<![CDATA[
+	  	 select t.*   from TB_ZCD_SQL_ZDMCPZ t  where 1=1 and ywbz=trim(#{ywbz})
+       ]]>
+       <include refid="wdtj3"></include>   
+</select>
+
+<select id="getmcp" resultType="com.wondersgroup.wszygl.model.McpzModel">
+	<![CDATA[
+	  	 select t.*    from TB_ZCD_SQL_ZDMCPZ t  where 1=1 and ywbz=trim(#{ywbz}) 
+       ]]>
+       
+</select>
+
+<sql id="wdtj3">
+   <if test="wdtj != null and  wdtj !='' and wdtj!= 'yljgdm'">
+	 <![CDATA[ and wdtj=trim(#{wdtj}) ]]>
+ </if> 
+</sql> 
+
+
+
+
+
+<select id="getCzrkYljg" resultType="com.wondersgroup.wszygl.model.YljgMcModel">
+	<![CDATA[
+	  	 select distinct YLJGDM as jgdm,JDMC as jgmc   from T_ZD_PCS_JD t  where 1=1 
+       ]]> 
+         <include refid="commonWhere22"></include>   
+</select>
+<sql id="commonWhere22">
+	      <if test="yljgdm != null and yljgdm !='' ">
+			       <![CDATA[ and   trim(yljgdm)= trim(#{yljgdm}) or  trim(JDDM)=trim(#{yljgdm})]]>
+		   </if>
+ </sql>
+ 
+ 
+ 
+ <select id="getLdrkYljg" resultType="com.wondersgroup.wszygl.model.YljgMcModel">
+	<![CDATA[
+	  	 select distinct YLJGDM as jgdm,pcsmc as jgmc   from ld_pcs t  where 1=1 
+       ]]> 
+         <include refid="commonWhere33"></include>   
+</select>
+<sql id="commonWhere33">
+	      <if test="yljgdm != null and yljgdm !='' ">
+			       <![CDATA[ and   trim(yljgdm)= trim(#{yljgdm}) or  trim(pcs)=trim(#{yljgdm})]]>
+		   </if>
+ </sql>
+ 
+
+<select id="getAllYljg" resultType="com.wondersgroup.wszygl.model.YljgMcModel">
+	<![CDATA[
+	  	 select id as jgdm,replace(mc,'苏州高新区','') as jgmc   from tb_volap_yljg t  where 1=1 and yyjb is not null
+       ]]> 
+        <include refid="commonWhere2"></include>  
+</select>
+<sql id="commonWhere2">
+	      <if test="yljgdm != null and yljgdm !='' ">
+			       <![CDATA[ and   id= trim(#{yljgdm})]]>
+		   </if>
+ </sql>
+ 
+<select id="getAllWdtj" resultType="com.wondersgroup.wszygl.model.wdtjModel">
+	<![CDATA[
+	  	select t.wdyw, t.wdmc from TB_ZCD_SQL_WDTJ t  where 1=1 and yxbz=1 
+       ]]> 
+        <include refid="commonWhere3"></include>  
+</select>
+<sql id="commonWhere3">
+	      <if test="ywbz != null and ywbz !='' ">
+			       <![CDATA[ and   ywbz= trim(#{ywbz})]]>
+		   </if>
+ </sql>
+ 
+ 
+ <select id="getQx" resultType="com.wondersgroup.wszygl.model.ZhjgUserModel">
+	<![CDATA[
+	  	select a.orgid AS orgId,org_code as orgCode from cen_auth.v_tb_auth_user a 
+      where  1=1
+  
+       ]]> 
+        <include refid="commonWhere4"></include>  
+</select>
+<sql id="commonWhere4">
+	      <if test="loginUser != null and loginUser !='' ">
+			       <![CDATA[ and   loginname= (#{loginUser})]]>
+		   </if>
+ </sql>
+ 
+ 
+  <select id="fakeAuthUserInfo" resultType="com.wondersgroup.wszygl.model.ZhjgUserModel">
+	<![CDATA[
+	  	select * from cen_auth.v_tb_auth_user a 
+      where  1=1
+  
+       ]]> 
+        <include refid="commonWhere5"></include>  
+</select>
+ <sql id="commonWhere5">
+	      <if test="loginname1 != null and loginname1 !='' ">
+			       <![CDATA[ and   loginname= (#{loginname1})]]>
+		   </if>
+		   <if test="pwd1 != null and pwd1 !='' ">
+			       <![CDATA[ and   psw= (#{pwd1})]]>
+		   </if>
+ </sql>
+ 
+</mapper>

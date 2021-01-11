@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.ggwsgl.dao.JkDaDyCsDao">
+	<sql id="commonWhere">
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  yljgdm = #{yljgdm}]]>
+		</if>
+		<if test="dyz != null and dyz !=''">
+			<![CDATA[  and  dyz = #{dyz}]]>
+		</if>
+		<if test="startdate != null and startdate !=''">
+			<![CDATA[  and to_char(dysj,'yyyy-mm-dd')>=  #{startdate}  ]]>
+		</if>
+		<if test="enddate != null and enddate !=''">
+			<![CDATA[  and  to_char(dysj,'yyyy-mm-dd')<= #{enddate}]]>
+		</if>
+		<![CDATA[  order by  dysj   desc ]]>
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.JkDaDyCsModel">
+		<![CDATA[
+			select  orgname,unitname,dyz,bdyz,kh,dysj,decode(ywlx,'1','调阅','2','查看') as ywlx,ip from cendoc.TB_JKDA_LOG  where 1 = 1
+		and orgname is not null
+		]]>
+		<include refid="commonWhere"></include>
+	</select>
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.ggwsgl.model.YljgModel">
+		<![CDATA[
+			select *  from   cen_core_v20.sys_jgdm_list  where length(jgdm)=10
+		]]>
+
+	</select>
+</mapper>

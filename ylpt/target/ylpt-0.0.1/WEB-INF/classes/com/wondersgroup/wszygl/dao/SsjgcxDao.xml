@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.SsjgcxDao">
+  <select id="getSsjg" resultType="com.wondersgroup.wszygl.model.SslistModel">
+  <![CDATA[
+   select count(1) as rs , b.mc  as yljgmc, a.yljgdm 
+       from TB_OPERATION_DETAIL a
+       left join tb_volap_yljg b
+       on a.yljgdm=b.id
+       where to_char(sskssj,'yyyy-mm-dd')>=to_char(sysdate-30,'yyyy-mm-dd')
+group by b.mc,a.yljgdm
+ order by rs desc 
+    ]]>
+    
+   </select>
+  
+   
+
+
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.ggwsgl.dao.TjxxDao">
+	<sql id="commonWhere">
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  j.jgdm = #{yljgdm}]]>
+		</if>
+		<choose>
+			<when
+				test="startdate != null and startdate!=''  and enddate !=null and enddate!=''">
+              <![CDATA[  and to_char(t.zjrq,'yyyy-mm-dd')>= #{startdate} and to_char(t.zjrq,'yyyy-mm-dd')<= #{enddate} 
+          		]]>
+			</when>
+			<when
+				test="startdate != null and startdate!=''  and ( enddate ==null or enddate =='') ">
+               <![CDATA[ and to_char(t.zjrq,'yyyy-mm-dd')>= #{startdate} 
+           		]]>
+			</when>
+			<when
+				test="(startdate == null or startdate=='' ) and ( enddate !=null and enddate !='') ">
+              <![CDATA[ and to_char(t.zjrq,'yyyy-mm-dd')<= #{enddate} 
+           		]]>
+			</when>
+			<otherwise>
+
+			</otherwise>
+		</choose>
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.TjxxModel">
+		<![CDATA[
+			select j.jgmc,t.yljgdm,t.xm,t.kh,t.nl,t.tjbh,decode(xb, '1', '男', '2', '女', '未知') as sex,
+			t.zjjg,t.jy,to_char(t.zjrq,'yyyy-mm-dd') as zjrq,t.zjys from CEN_CORE_V20.TB_YL_TJBGSY t 
+			left join cen_core_v20.sys_jgdm_list j on t.yljgdm = j.jgdm where 1 = 1
+		]]>
+		<include refid="commonWhere"></include>
+	</select>
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.ggwsgl.model.YljgModel">
+		<![CDATA[
+			select j.jgdm,j.jgmc  from  cen_core_v20.sys_jgdm_list j where length(jgdm)=10 
+		]]>
+
+	</select>
+	<select id="getAllTb"
+		resultType="com.wondersgroup.ggwsgl.model.TbModel">
+		<![CDATA[
+			select j.jgmc,j.jgdm,count(*) rs from CEN_CORE_V20.TB_YL_TJBGSY t inner join cen_core_v20.sys_jgdm_list j 
+			on t.yljgdm = j.jgdm where 1=1
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ group by j.jgmc,j.jgdm]]>
+	</select>
+	<select id="getTjxxDetail"
+		resultType="com.wondersgroup.ggwsgl.model.TjxxDetailModel">
+		<![CDATA[
+			select j.ksmc,t.xmmc,t.xmjcjg,decode(t.jcycbz, '0', '正常', '1', '异常', '9', '其他') 
+       		as sfyc from cen_core_v20.tb_yl_tjmx t inner join cen_core_v20.tb_yl_tjbg j on t.yljgdm=j.yljgdm and t.bglsh=j.bglsh
+       		where j.tjbh=#{tjbh} and j.yljgdm=#{yljgdm}
+     	]]>
+	</select>
+</mapper>

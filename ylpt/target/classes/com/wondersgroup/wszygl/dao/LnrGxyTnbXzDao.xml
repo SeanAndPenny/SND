@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.LnrGxyTnbXzDao">
+   
+  <sql id="commonWhere">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[   and to_char(a.jksj,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[  and to_char(a.jksj,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if> 
+    <if test="yljgdm != null and yljgdm !='' and yljgdm!='undefined'">
+      <![CDATA[ and a.yljgdm=trim(#{yljgdm})]]>
+    </if>
+  </sql> 
+  <select id="getLnrGxyTnbXz" resultType="com.wondersgroup.wszygl.model.LnrModel">
+  <![CDATA[
+           select sum(tnbgxyrs) as tnbgxyrs,  
+       yljgdm,
+       b.mc as yljgmc,  
+       round(sum(tnbgxyrs) /c.rs, 5) * 100  as tnbgxyzb      
+  from (  select count(1) as  tnbgxyrs,a.yljgdm
+          from tb_gxy_hzglk a
+          inner join tb_tnb_hzglk b
+          on a.yljgdm=b.yljgdm and a.CXJMJKDABH=b.CXJMJKDABH
+        where to_char(sysdate,'yyyy')-to_char(a.csrq,'yyyy')>=50
+         
+    ]]>
+       <include refid="commonWhere"></include>
+    <![CDATA[   
+       group by   a.yljgdm 
+      ) a
+         left join tb_volap_yljg b
+         on a.yljgdm=b.id
+         left join tb_50rstj c
+         on c.yljgdm=a.yljgdm
+ group by  yljgdm,b.mc,c.rs
+     ]]>
+              
+  </select>
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.LnrModel">
+    <![CDATA[
+            select  a.xm,
+  decode(a.xb,'1','男','2','女')as xb,
+  to_char(a.jksj,'yyyy-mm-dd') as gxyjksj,
+  to_char(b.jksj,'yyyy-mm-dd') as tnbjksj,
+  a.jkysxm as gxyjkysxm,
+  b.jkysxm as tnbjkysxm,
+  TNBFXMC,
+  c.mc as yljgmc,
+      to_char(sysdate,'yyyy')-to_char(a.csrq,'yyyy') as nl
+          from tb_gxy_hzglk a
+          inner join tb_tnb_hzglk b
+          on a.yljgdm=b.yljgdm and a.CXJMJKDABH=b.CXJMJKDABH
+          left join tb_volap_yljg c
+          on a.yljgdm=c.id
+        where to_char(sysdate,'yyyy')-to_char(a.csrq,'yyyy')>=50
+
+       
+     
+    ]]>
+    <include refid="commonWhere"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

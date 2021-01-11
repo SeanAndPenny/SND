@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.XxxQsfxDao">       
+
+
+<sql id="commonWhere">
+	     <if test="sjlx=='day' ">
+	       <if test="kssj != null and kssj !='' ">
+			     <![CDATA[   and ${pdtj1}>= to_char(to_date(trim(#{kssj}),'yyyy-MM-dd'),'yyyyMMdd')]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' ">
+			     <![CDATA[  and ${pdtj2} <= to_char(to_date(trim(#{jssj}),'yyyy-MM-dd'),'yyyyMMdd')]]>
+		    </if> 
+		    <if test="jgdm != null and jgdm !='' ">
+			    <![CDATA[  and ${pdtj3}= trim(#{jgdm})]]>
+		    </if>
+	     </if>
+		 <if test="sjlx=='month' ">
+	       <if test="kssj != null and kssj !='' ">
+			     <![CDATA[   and substr(${pdtj1},0,6 )>= to_char(to_date(trim(#{kssj}),'yyyy-MM'),'yyyyMM')]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' ">
+			     <![CDATA[   and substr(${pdtj2},0,6 )<=  to_char(to_date(trim(#{jssj}),'yyyy-MM'),'yyyyMM')]]>
+		    </if> 
+		    <if test="jgdm != null and jgdm !='' ">
+			    <![CDATA[  and ${pdtj3}= trim(#{jgdm})]]>
+		    </if>
+	     </if>   
+		  <if test="sjlx=='year' ">
+	       <if test="kssj != null and kssj !='' ">
+			     <![CDATA[   and substr(${pdtj1},0,4 )>= to_char(to_date(trim(#{kssj}),'yyyy'),'yyyy')]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' ">
+			     <![CDATA[   and substr(${pdtj2},0,4 )<=  to_char(to_date(trim(#{jssj}),'yyyy'),'yyyy')]]>
+		    </if> 
+		    <if test="jgdm != null and jgdm !='' ">
+			    <![CDATA[  and ${pdtj3}= trim(#{jgdm})]]>
+		    </if>
+	     </if> 
+      </sql>
+
+
+<select id="getXxx" resultType="com.wondersgroup.wszygl.model.xxxModel">
+	<![CDATA[
+	  	 select t.*   from TB_ZCD_SQL_QSFX t  where 1=1 and ywbz=trim(#{ywbz}) and yxbz=trim(#{yxbz})
+       ]]> 
+</select>
+<select id="getYyy" resultType="com.wondersgroup.wszygl.model.xxxModel">
+	<![CDATA[
+	  	 select t.*   from TB_ZCD_SQL_QSFX_wdtj t  where 1=1 and ywbz=trim(#{ywbz}) 
+	  	 and wddm=trim(#{wdtj})
+       ]]> 
+</select>
+
+<select id="getmcpzList" resultType="com.wondersgroup.wszygl.model.McpzModel">
+	<![CDATA[
+	  	 select t.*   from TB_ZCD_SQL_ZDMCPZ t  where 1=1 and ywbz=trim(#{ywbz})
+       ]]>
+       <include refid="wdtj3"></include>   
+</select>
+<select id="getmcp" resultType="com.wondersgroup.wszygl.model.McpzModel">
+	<![CDATA[
+	  	 select t.*    from TB_ZCD_SQL_ZDMCPZ t  where 1=1 and ywbz=trim(#{ywbz}) 
+       ]]>
+       
+</select>
+
+<sql id="wdtj3">
+   <if test="wdtj != null and  wdtj !='' and wdtj!= 'yljgdm'">
+	 <![CDATA[ and wdtj=trim(#{wdtj}) ]]>
+ </if> 
+</sql> 
+
+<select id="getAllWdtj" resultType="com.wondersgroup.wszygl.model.wdtjModel">
+	<![CDATA[
+	  	select t.wdyw, t.wdmc from TB_ZCD_SQL_WDTJ t  where 1=1 and yxbz=1 
+       ]]> 
+        <include refid="commonWhere3"></include>  
+</select>
+<sql id="commonWhere3">
+	      <if test="ywbz != null and ywbz !='' ">
+			       <![CDATA[ and   ywbz= trim(#{ywbz})]]>
+		   </if>
+ </sql>
+
+
+	
+<select id="getXxxlist" resultType="com.wondersgroup.wszygl.model.xxxModel">
+<include refid="wdtj1"></include> 
+
+
+     <![CDATA[ ${sqlnr1} (${sqlnr2} ]]>
+     
+	 <include refid="sjlxfx1"></include> 
+	 
+	 <![CDATA[ ${sqlnr4}) t where 1=1 ]]>
+       
+       <include refid="commonWhere"></include>     
+   <![CDATA[
+   ${sqlnr5}
+     ]]> 
+   
+<include refid="wdtj2"></include>    
+</select> 
+
+
+<select id="getYyylist" resultType="com.wondersgroup.wszygl.model.xxxModel">
+ 
+     <![CDATA[ ${sqlnr1} (${sqlnr2} ]]>
+     
+	 <include refid="sjlxfx1"></include> 
+	 
+	 <![CDATA[ ${sqlnr4}) t where 1=1 ]]>
+       
+       <include refid="commonWhere"></include>     
+   <![CDATA[
+   ${sqlnr5}
+     ]]> 
+  
+</select> 
+
+
+
+ <sql id="sjlxfx1">
+   <if test="sjlx=='day' ">
+   ${sqlnr3} as rq
+   </if>
+   <if test="sjlx=='year' ">
+   substr(${sqlnr3},0,4) as rq 
+   </if>
+   <if test="sjlx=='month' ">
+   substr(${sqlnr3},0,6) as rq
+   </if>
+   <if test="sjlx=='' or sjlx==null">
+   ${sqlnr3} as rq
+   </if>
+ </sql>
+
+<sql id="wdtj1">
+		    <if test="wdtj == null or wdtj =='' or wdtj=='yljgdm' ">
+			     <![CDATA[ select * from ( ]]>
+		    </if>
+		     <if test="wdtj != null and  wdtj !='' and wdtj!= 'yljgdm'">
+			     <![CDATA[ select sum(${wdtj}) as ${wdtj} ,rq  from ( ]]>
+		    </if> 
+		    	    
+ </sql>
+<sql id="wdtj2">
+      <if test="wdtj == null or wdtj =='' or wdtj=='yljgdm' ">
+			    <![CDATA[ )]]>
+		    </if> 
+	 <if test="wdtj != null and  wdtj !='' and wdtj!= 'yljgdm'">
+			     <![CDATA[ ) group by rq  order by rq]]>
+		 </if> 
+
+</sql> 
+
+
+
+
+
+
+</mapper>

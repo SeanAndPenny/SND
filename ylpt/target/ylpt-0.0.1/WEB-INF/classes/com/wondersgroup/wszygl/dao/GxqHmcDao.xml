@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.GxqHmcDao">
+  <sql id="commonWhere">
+    <if test=" yljgdm != null and yljgdm  !='' and yljgdm !='undefined' ">
+      <![CDATA[ and yljgdm    =trim(#{yljgdm })]]>
+    </if>
+    <if test=" tbrq != null and tbrq  !='' ">
+      <![CDATA[ and MONTHID    =trim(#{tbrq })]]>
+    </if>
+  </sql>
+ 
+  <select id="getgGxqhmcList" resultType="com.wondersgroup.wszygl.model.GxqHmcModel">
+  <![CDATA[ 
+       select  * from tb_hmc where 1=1  
+    ]]>
+  <include refid="commonWhere"></include> 
+  </select> 
+  
+  
+  
+  
+  <select id="getZsGxqhmcList" resultType="com.wondersgroup.wszygl.model.GxqHmcModel">
+  <![CDATA[ 
+       select  
+       sum(dyxzry_xj) as     zs_dyxzry_xj  ,
+sum(wszy_hjtj_fj) as     zs_wszy_hjtj_fj  ,
+sum(wszy_hjtj_zj) as     zs_wszy_hjtj_zj  ,
+sum(wszy_hjtj_cj) as     zs_wszy_hjtj_cj  ,
+sum(wszy_hjtj_wzc) as     zs_wszy_hjtj_wzc  ,
+sum(wszy_bn_xj) as     zs_wszy_bn_xj  ,
+sum(wszy_bn_zg) as     zs_wszy_bn_zg  ,
+sum(wszy_bn_fg) as     zs_wszy_bn_fg  ,
+sum(wszy_bn_zj) as     zs_wszy_bn_zj  ,
+sum(wszy_bn_cj) as     zs_wszy_bn_cj  ,
+sum(wszy_bn_wzc) as     zs_wszy_bn_wzc  ,
+sum(wszy_bw_xj) as     zs_wszy_bw_xj  ,
+sum(wszy_bw_zg) as     zs_wszy_bw_zg  ,
+sum(wszy_bw_fg) as     zs_wszy_bw_fg  ,
+sum(wszy_bw_zj) as     zs_wszy_bw_zj  ,
+sum(wszy_bw_cj) as     zs_wszy_bw_cj  ,
+sum(wszy_bw_wzc) as     zs_wszy_bw_wzc  ,
+sum(wszy_lsg_xj) as     zs_wszy_lsg_xj  ,
+sum(wszy_lsg_zg) as     zs_wszy_lsg_zg  ,
+sum(wszy_lsg_fg) as     zs_wszy_lsg_fg  ,
+sum(wszy_lsg_zj) as     zs_wszy_lsg_zj  ,
+sum(wszy_lsg_cj) as     zs_wszy_lsg_cj  ,
+sum(wszy_lsg_wzc) as     zs_wszy_lsg_wzc  ,
+sum(fwszy_hjtj_gj) as     zs_fwszy_hjtj_gj  ,
+sum(fwszy_hjtj_zj) as     zs_fwszy_hjtj_zj  ,
+sum(fwszy_hjtj_cj) as     zs_fwszy_hjtj_cj  ,
+sum(fwszy_hjtj_wzc) as     zs_fwszy_hjtj_wzc  ,
+sum(fwszy_bn_xj) as     zs_fwszy_bn_xj  ,
+sum(fwszy_bn_gj) as     zs_fwszy_bn_gj  ,
+sum(fwszy_bn_zj) as     zs_fwszy_bn_zj  ,
+sum(fwszy_bn_cj) as     zs_fwszy_bn_cj  ,
+sum(fwszy_bn_wzc) as     zs_fwszy_bn_wzc  ,
+sum(fwszy_bw_xj) as     zs_fwszy_bw_xj  ,
+sum(fwszy_bw_gj) as     zs_fwszy_bw_gj  ,
+sum(fwszy_bw_zj) as     zs_fwszy_bw_zj  ,
+sum(fwszy_bw_cj) as     zs_fwszy_bw_cj  ,
+sum(fwszy_bw_wzc) as     zs_fwszy_bw_wzc  ,
+sum(fwszy_lsg_xj) as     zs_fwszy_lsg_xj  ,
+sum(fwszy_lsg_gj) as     zs_fwszy_lsg_gj  ,
+sum(fwszy_lsg_zj) as     zs_fwszy_lsg_zj  ,
+sum(fwszy_lsg_cj) as     zs_fwszy_lsg_cj  ,
+sum(fwszy_lsg_wzc) as     zs_fwszy_lsg_wzc  ,
+sum(xltj_hjtj_hj) as     zs_xltj_hjtj_hj  ,
+sum(xltj_hjtj_bsh) as     zs_xltj_hjtj_bsh  ,
+sum(xltj_hjtj_bs) as     zs_xltj_hjtj_bs  ,
+sum(xltj_hjtj_ss) as     zs_xltj_hjtj_ss  ,
+sum(xltj_hjtj_bk) as     zs_xltj_hjtj_bk  ,
+sum(xltj_hjtj_dz) as     zs_xltj_hjtj_dz  ,
+sum(xltj_hjtj_dzyx) as     zs_xltj_hjtj_dzyx  ,
+sum(xltj_bn_xj) as     zs_xltj_bn_xj  ,
+sum(xltj_bn_bsh) as     zs_xltj_bn_bsh  ,
+sum(xltj_bn_bs) as     zs_xltj_bn_bs  ,
+sum(xltj_bn_ss) as     zs_xltj_bn_ss  ,
+sum(xltj_bn_bk) as     zs_xltj_bn_bk  ,
+sum(xltj_bn_dz) as     zs_xltj_bn_dz  ,
+sum(xltj_bn_dzyx) as     zs_xltj_bn_dzyx  ,
+sum(xltj_bw_xj) as     zs_xltj_bw_xj  ,
+sum(xltj_bw_bsh) as     zs_xltj_bw_bsh  ,
+sum(xltj_bw_bs) as     zs_xltj_bw_bs  ,
+sum(xltj_bw_ss) as     zs_xltj_bw_ss  ,
+sum(xltj_bw_bk) as     zs_xltj_bw_bk  ,
+sum(xltj_bw_dz) as     zs_xltj_bw_dz  ,
+sum(xltj_bw_dzyx) as     zs_xltj_bw_dzyx  ,
+sum(xltj_lsg_xj) as     zs_xltj_lsg_xj  ,
+sum(xltj_lsg_bsh) as     zs_xltj_lsg_bsh  ,
+sum(xltj_lsg_bs) as     zs_xltj_lsg_bs  ,
+sum(xltj_lsg_ss) as     zs_xltj_lsg_ss  ,
+sum(xltj_lsg_bk) as     zs_xltj_lsg_bk  ,
+sum(xltj_lsg_dz) as     zs_xltj_lsg_dz  ,
+sum(xltj_lsg_dzyx) as     zs_xltj_lsg_dzyx  ,
+sum(ljjsry_hj) as     zs_ljjsry_hj  ,
+sum(ljjsry_bn_lz) as     zs_ljjsry_bn_lz  ,
+sum(ljjsry_bn_tx) as     zs_ljjsry_bn_tx  ,
+sum(ljjsry_bw_lz) as     zs_ljjsry_bw_lz  ,
+sum(ljjsry_bw_tx) as     zs_ljjsry_bw_tx  ,
+sum(ljjsry_lsg_lz) as     zs_ljjsry_lsg_lz  ,
+sum(ljjsry_lsg_qt) as     zs_ljjsry_lsg_qt  ,
+sum(dyjsry_xj) as     zs_dyjsry_xj  ,
+sum(dyjsry_bn_lz) as     zs_dyjsry_bn_lz  ,
+sum(dyjsry_bn_tx) as     zs_dyjsry_bn_tx  ,
+sum(dyjsry_bw_lz) as     zs_dyjsry_bw_lz  ,
+sum(dyjsry_bw_tx) as     zs_dyjsry_bw_tx  ,
+sum(dyjsry_lsg_lz) as     zs_dyjsry_lsg_lz  ,
+sum(dyjsry_lsg_qt) as     zs_dyjsry_lsg_qt  ,
+sum(ljxzry_hj) as     zs_ljxzry_hj  ,
+sum(ljxzry_wszy_bn) as     zs_ljxzry_wszy_bn  ,
+sum(ljxzry_wszy_bw) as     zs_ljxzry_wszy_bw  ,
+sum(ljxzry_wszy_lsg) as     zs_ljxzry_wszy_lsg  ,
+sum(ljxzry_fwszy_bn) as     zs_ljxzry_fwszy_bn  ,
+sum(ljxzry_fwszy_bw) as     zs_ljxzry_fwszy_bw  ,
+sum(ljxzry_fwszy_lsg) as     zs_ljxzry_fwszy_lsg  ,
+sum(dyxzry_wszy_bn) as     zs_dyxzry_wszy_bn  ,
+sum(dyxzry_wszy_bw) as     zs_dyxzry_wszy_bw  ,
+sum(dyxzry_wszy_lsg) as     zs_dyxzry_wszy_lsg  ,
+sum(dyxzry_fwszy_bn) as     zs_dyxzry_fwszy_bn  ,
+sum(dyxzry_fwszy_bw) as     zs_dyxzry_fwszy_bw  ,
+sum(dyxzry_fwszy_lsg) as     zs_dyxzry_fwszy_lsg  ,
+'合计'    zs_yljgmc  ,
+sum(qkys_bw_53) as     zs_qkys_bw_53  ,
+sum(wszy_hjtj_zg) as     zs_wszy_hjtj_zg  ,
+sum(bwry_wszy_glzy) as     zs_bwry_wszy_glzy  ,
+sum(bnbwlsg_hj) as     zs_bnbwlsg_hj  ,
+sum(fwszy_hjtj_hj) as     zs_fwszy_hjtj_hj  ,
+sum(ryzs_hj) as     zs_ryzs_hj  ,
+sum(ryzs_bn) as     zs_ryzs_bn  ,
+sum(ryzs_bwhtyg) as     zs_ryzs_bwhtyg  ,
+sum(ryzs_lsg) as     zs_ryzs_lsg  ,
+sum(wszy_yi) as     zs_wszy_yi  ,
+sum(wszy_yao) as     zs_wszy_yao  ,
+sum(wszy_hu) as     zs_wszy_hu  ,
+sum(wszy_ji) as     zs_wszy_ji  ,
+sum(wszy_wsgl) as     zs_wszy_wsgl  ,
+sum(wszy_qt) as     zs_wszy_qt  ,
+sum(fwszy_kjzy) as     zs_fwszy_kjzy  ,
+sum(fwszy_xxzy) as     zs_fwszy_xxzy  ,
+sum(fwszy_glzy) as     zs_fwszy_glzy  ,
+sum(fwszy_qt) as     zs_fwszy_qt  ,
+sum(bnry_xj) as     zs_bnry_xj  ,
+sum(bnry_wszy_yi) as     zs_bnry_wszy_yi  ,
+sum(bnry_wszy_yao) as     zs_bnry_wszy_yao  ,
+sum(bnry_wszy_hu) as     zs_bnry_wszy_hu  ,
+sum(bnry_wszy_ji) as     zs_bnry_wszy_ji  ,
+sum(bnry_wszy_wsgl) as     zs_bnry_wszy_wsgl  ,
+sum(bnry_wszy_qt) as     zs_bnry_wszy_qt  ,
+sum(bnry_fwszy_kjzy) as     zs_bnry_fwszy_kjzy  ,
+sum(bnry_fwszy_xxzy) as     zs_bnry_fwszy_xxzy  ,
+sum(bnry_fwszy_glzy) as     zs_bnry_fwszy_glzy  ,
+sum(bnry_fwszy_qt) as     zs_bnry_fwszy_qt  ,
+sum(bwry_xj) as     zs_bwry_xj  ,
+sum(bwry_wszy_yi) as     zs_bwry_wszy_yi  ,
+sum(bwry_wszy_yao) as     zs_bwry_wszy_yao  ,
+sum(bwry_wszy_hu) as     zs_bwry_wszy_hu  ,
+sum(bwry_wszy_ji) as     zs_bwry_wszy_ji  ,
+sum(bwry_wszy_qt) as     zs_bwry_wszy_qt  ,
+sum(bwry_fwszy_kjzy) as     zs_bwry_fwszy_kjzy  ,
+sum(bwry_fwszy_xxzy) as     zs_bwry_fwszy_xxzy  ,
+sum(bwry_fwszy_gkzy) as     zs_bwry_fwszy_gkzy  ,
+sum(bwry_fwszy_qt) as     zs_bwry_fwszy_qt  ,
+sum(lsg_xj) as     zs_lsg_xj  ,
+sum(lsg_wszy_yi) as     zs_lsg_wszy_yi  ,
+sum(lsg_wszy_yao) as     zs_lsg_wszy_yao  ,
+sum(lsg_wszy_hu) as     zs_lsg_wszy_hu  ,
+sum(lsg_wszy_ji) as     zs_lsg_wszy_ji  ,
+sum(lsg_wszy_wsgl) as     zs_lsg_wszy_wsgl  ,
+sum(lsg_wszy_qt) as     zs_lsg_wszy_qt  ,
+sum(lsg_fwszy_hjzy) as     zs_lsg_fwszy_hjzy  ,
+sum(lsg_fwszy_xxzy) as     zs_lsg_fwszy_xxzy  ,
+sum(lsg_fwszy_glzy) as     zs_lsg_fwszy_glzy  ,
+sum(lsg_fwszy_qt) as     zs_lsg_fwszy_qt  ,
+sum(bwhtz_hj) as     zs_bwhtz_hj  ,
+sum(bwhtz_dwht) as     zs_bwhtz_dwht  ,
+sum(bwhtz_nwpq) as     zs_bwhtz_nwpq  ,
+sum(bwhtz_rsdl) as     zs_bwhtz_rsdl  ,
+sum(bwhtz_qt) as     zs_bwhtz_qt  ,
+sum(qkys_hjtj_hj) as     zs_qkys_hjtj_hj  ,
+sum(qkys_hjtj_53) as     zs_qkys_hjtj_53  ,
+sum(qkys_hjtj_32) as     zs_qkys_hjtj_32  ,
+sum(qkys_hjtj_zgpx) as     zs_qkys_hjtj_zgpx  ,
+sum(qkys_bn_xj) as     zs_qkys_bn_xj  ,
+sum(qkys_bn_53) as     zs_qkys_bn_53  ,
+sum(qkys_bn_32) as     zs_qkys_bn_32  ,
+sum(qkys_bn_zgpx) as     zs_qkys_bn_zgpx  ,
+sum(qkys_bw_xj) as     zs_qkys_bw_xj  ,
+sum(qkys_bw_32) as     zs_qkys_bw_32  ,
+sum(qkys_bw_zgpx) as     zs_qkys_bw_zgpx  ,
+sum(qkys_lsg_xj) as     zs_qkys_lsg_xj  ,
+sum(qkys_lsg_53) as     zs_qkys_lsg_53  ,
+sum(qkys_lsg_32) as     zs_qkys_lsg_32  ,
+sum(qkys_lsg_zgpx) as     zs_qkys_lsg_zgpx  ,
+sum(wszy_hjtj_hj) as     zs_wszy_hjtj_hj 
+  from tb_hmc where 1=1  
+    ]]>
+  <include refid="commonWhere"></include> 
+  </select>
+  
+  
+  
+   <select id="getjgList" resultType="com.wondersgroup.wszygl.model.SwxxJgdmModel">
+  <![CDATA[ 
+       
+select ID as jgdm,mc  as jgmc  from tb_volap_yljg where yyjb is not null and id not in ('76150479932050523A1002','46699062432050511A1001')
+    ]]> 
+  </select> 
+</mapper>

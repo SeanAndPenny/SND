@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.commons.dao.TbAuthResourceDao">
+	<resultMap
+		type="com.wondersgroup.commons.model.TbAuthResource"
+		id="TbAuthResourceResult">
+
+		<result column="RESID" property="resid" />
+		<result column="RESNAME" property="resname" />
+		<result column="KEYWORD" property="keyword" />
+		<result column="URL" property="url" />
+		<result column="COMMENTS" property="comments" />
+		<result column="RESLEVEL" property="resLevel" />
+		<result column="TREELAYER" property="treelayer" />
+	</resultMap>
+
+
+
+	<select id="getResourceByUser" resultMap="TbAuthResourceResult">
+		<![CDATA[
+		SELECT Z.RESID,
+	       Z.PRESID,
+	       Z.RESNAME,
+	       Z.KEYWORD,
+	       Z.URL,
+	       Z.COMMENTS,
+	       Z.RES_LEVEL,
+	       Z.TREE_LAYER
+		  FROM TB_AUTH_USER T
+		  JOIN TB_AUTH_USER_RESOURCE Y
+		    ON T.USERID = Y.USERID
+		  JOIN tb_auth_resource Z
+		    ON Y.RESID = Z.RESID
+		 WHERE 1 = 1
+		 ]]>
+		<if test="loginname != null ">
+			<![CDATA[ AND T.LOGINNAME = #{loginname,jdbcType=VARCHAR}]]>
+		</if>
+
+	</select>
+	<select id="getResourceByUnit" resultMap="TbAuthResourceResult">
+		<![CDATA[
+			SELECT Z.RESID,
+		       Z.PRESID,
+		       Z.RESNAME,
+		       Z.KEYWORD,
+		       Z.URL,
+		       Z.COMMENTS,
+		       Z.RES_LEVEL,
+		       Z.TREE_LAYER
+		  FROM TB_AUTH_USER T
+		  JOIN TB_AUTH_UNIT N
+		    ON T.UNITID = N.UNITID
+		  JOIN TB_AUTH_UNIT_RESOURCE B
+		    ON N.UNITID = B.UNITID
+		  JOIN tb_auth_resource Z
+		    ON B.RESID = Z.RESID
+		 WHERE 1 = 1
+		 ]]>
+		<if test="loginname != null ">
+			<![CDATA[ AND T.LOGINNAME = #{loginname,jdbcType=VARCHAR}]]>
+		</if>
+
+	</select>
+	<select id="getResourceByRole" resultMap="TbAuthResourceResult">
+		<![CDATA[
+		select z.resid,z.presid,z.resname,z.keyword,z.url,z.comments,z.res_level,z.tree_layer
+		from tb_auth_resource z join tb_auth_role_resource q on z.resid=q.resid where q.roleid in(
+		select c.roleid from TB_AUTH_USER t join tb_auth_org_role c on t.orgid=c.orgid where 1=1
+		 ]]>
+		<if test="loginname != null ">
+			<![CDATA[ AND T.LOGINNAME = #{loginname,jdbcType=VARCHAR}]]>
+		</if>
+		<![CDATA[
+		union select d.roleid from TB_AUTH_USER t join TB_AUTH_UNIT_role d on t.unitid=d.unitid where 1=1 
+		 ]]>
+		<if test="loginname != null ">
+			<![CDATA[ AND T.LOGINNAME = #{loginname,jdbcType=VARCHAR}]]>
+		</if>
+		<![CDATA[
+			union select e.roleid from TB_AUTH_USER t join TB_AUTH_USER_role e on t.userid=e.userid where 1=1 
+		]]>
+		<if test="loginname != null ">
+			<![CDATA[ AND T.LOGINNAME = #{loginname,jdbcType=VARCHAR}]]>
+		</if>
+		<![CDATA[
+			)
+		]]>
+	</select>
+	<select id="getResourceByOrg" resultMap="TbAuthResourceResult">
+		<![CDATA[
+		select z.resid,z.presid,z.resname,z.keyword,z.url,z.comments,z.res_level,z.tree_layer
+		 from TB_AUTH_USER t join tb_auth_org x on t.orgid = x.orgid
+		 join tb_auth_org_resource a on x.orgid = a.orgid
+		 join tb_auth_resource z on a.resid = z.resid where 1=1 
+		 ]]>
+		<if test="loginname != null ">
+			<![CDATA[ AND T.LOGINNAME =#{loginname,jdbcType=VARCHAR}]]>
+		</if>
+
+	</select>
+	<select id="getResourceByKeyword"
+		resultMap="TbAuthResourceResult">
+		<![CDATA[
+		select z.resid,z.presid,z.resname,z.keyword,z.url,z.comments,z.res_level,z.tree_layer
+		from tb_auth_resource z start with keyWORD=#{keyword,jdbcType=VARCHAR} connect by prior RESID=PRESID
+		 ]]>
+
+	</select>
+
+</mapper>

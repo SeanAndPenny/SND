@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.YwxxXzDao">
+ 
+<sql id="commonWhere">
+	<if test="sl1 != null and sl1 !='' ">
+		<![CDATA[ and  sllx =trim(#{sl1})]]>
+	</if>
+	<if test="ywbz != null and ywbz !='' ">
+		<![CDATA[ and ywbz =trim(#{ywbz})]]>
+	</if>
+	 		 
+</sql> 
+<sql id="commonWhere2">
+	<if test=" kssj != null and kssj !='' ">
+		<![CDATA[ and ${pdtj1}  >=trim(#{kssj})]]>
+	</if>
+	<if test=" jssj != null and jssj !='' ">
+		<![CDATA[ and ${pdtj2} <=trim(#{jssj})]]>
+	</if>
+	<if test="jgdm != null and jgdm !='' and jgdm!='null' ">
+		<![CDATA[ and ${pdtj3} =trim(#{jgdm})]]>
+	</if>
+	
+	
+	    <if test="mcdm != null and mcdm !='' ">
+		<![CDATA[ and ${pdtj4} like trim(#{mcdm}) ]]>
+	</if>   
+	<if test="pdtj5 != null and pdtj5 !='' ">
+		<![CDATA[ and ${pdtj5} ]]>
+	</if>
+	<if test="pdtj6 != null and pdtj6 !='' ">
+		<![CDATA[ and ${pdtj6} ]]>
+	</if>
+	<if test="pdtj7 != null and pdtj7 !='' ">
+		<![CDATA[ and ${pdtj7} ]]>
+	</if>	
+	<if test="pdtj8 != null and pdtj8 !='' ">
+		<![CDATA[ and ${pdtj8} ]]>
+	</if>
+	<if test="pdtj9 != null and pdtj9 !='' ">
+		<![CDATA[ and ${pdtj9} ]]>
+	</if>
+	<if test="pdtj10 != null and pdtj10 !='' ">
+		<![CDATA[ and ${pdtj10} ]]>
+	</if>
+</sql>  
+<sql id="commonWhere3">
+	<if test=" kssj != null and kssj !='' ">
+		<![CDATA[ and ${pdtj1}  >=trim(#{kssj})]]>
+	</if>
+	<if test=" jssj != null and jssj !='' ">
+		<![CDATA[ and ${pdtj2} <=trim(#{jssj})]]>
+	</if>
+	<if test="jgdm != null and jgdm !='' and jgdm!='null' ">
+		<![CDATA[ and ${pdtj3} =trim(#{jgdm})]]>
+	</if>
+	
+	
+	  <if test="mcdm != null and mcdm !='' ">
+		<![CDATA[ and ${pdtj4} like trim(#{mcdm}) ]]>
+	  </if>  
+	<if test="pdtj5 != null and pdtj5 !='' ">
+		<![CDATA[ and ${pdtj5} ]]>
+	</if>
+	<if test="pdtj6 != null and pdtj6 !='' ">
+		<![CDATA[ and ${pdtj6} ]]>
+	</if>
+	<if test="pdtj7 != null and pdtj7 !='' ">
+		<![CDATA[ and ${pdtj7} ]]>
+	</if>	
+	<if test="pdtj8 != null and pdtj8 !='' ">
+		<![CDATA[ and ${pdtj8} ]]>
+	</if>
+	<if test="pdtj9 != null and pdtj9 !='' ">
+		<![CDATA[ and ${pdtj9} ]]>
+	</if>
+	<if test="pdtj10 != null and pdtj10 !='' ">
+		<![CDATA[ and ${pdtj10} ]]>
+	</if>
+</sql> 
+<sql id="commonWhere33">
+	<if test=" id6 != null and id6 !='' and !id6.contains('undefined')">
+		<![CDATA[ and    ${id6} ]]>
+	</if>
+	 
+	 
+</sql> 
+   
+     
+<select id="getYwbm" resultType="com.wondersgroup.wszygl.model.YwbmModel">
+	<![CDATA[
+	  	 select t.* from  tb_zcd_sql_xxym t where 1=1
+       ]]> 
+       <include refid="commonWhere"></include> 
+</select>
+
+<select id="getYwxxzs" resultType="java.util.LinkedHashMap" >
+    <![CDATA[
+    select
+*
+from
+(
+      ${sqlnr}   where 1=1
+    ]]>
+  <include refid="commonWhere2"></include> 
+   <include refid="commonWhere33"></include> 
+  <![CDATA[
+  	  )
+  	 
+  	where   条数 >15*(${ccc}-1)  and  条数 <=15*${ccc}
+  ]]>
+  </select>
+  
+<select id="getCount" resultType="int" >
+    <![CDATA[
+    
+    select count(1) from (${sqlnr} where 1=1
+       
+    ]]>
+ <include refid="commonWhere3"></include> 
+ <include refid="commonWhere33"></include> 
+ <![CDATA[
+  )     
+    ]]>
+  </select>
+ 
+  
+ <select id="getXxymZdList" resultType="com.wondersgroup.wszygl.model.XxymZdModel" >
+    <![CDATA[
+    select t.* from TB_ZCD_SQL_XXYM_ZDCX t where 1=1
+    ]]>
+ <include refid="commonWhere4"></include> 
+  </select>
+<sql id="commonWhere4">
+	<if test="wdyw != null and wdyw !='' ">
+		<![CDATA[ and  wdyw =trim(#{wdyw})]]>
+	</if>
+	<if test="ywbz != null and ywbz !='' ">
+		<![CDATA[ and ywbz =trim(#{ywbz})]]>
+	</if>
+	 		 
+</sql> 
+
+<select id="getOption" resultType="com.wondersgroup.ggwsgl.model.OptionModel">
+	<![CDATA[
+	  	 select t.*  from TB_ZCD_SQL_XXYM_OPTION t  where 1=1
+       ]]> 
+       <include refid="commonWhereoption"></include> 
+</select>
+<sql id="commonWhereoption">
+	<if test="wdyw != null and wdyw !='' ">
+		<![CDATA[ and  wdyw =trim(#{wdyw})]]>
+	</if>
+	<if test="ywbz != null and ywbz !='' ">
+		<![CDATA[ and ywbz =trim(#{ywbz})]]>
+	</if>
+	<if test="zddm != null and zddm !='' ">
+		<![CDATA[ and zddm =trim(#{zddm})]]>
+	</if>
+	 <if test="yljgdm != null and yljgdm !='' ">
+		<![CDATA[ and dm =trim(#{yljgdm})]]>
+	</if>		 
+</sql> 
+
+
+<select id="getOptions" resultType="com.wondersgroup.ggwsgl.model.OptionModel">
+	<![CDATA[
+	  	 select t.*  from TB_ZCD_SQL_XXYM_OPTION t  where 1=1
+       ]]> 
+       <include refid="commonWhereoptions"></include> 
+</select>
+<sql id="commonWhereoptions">
+	<if test="wdyw != null and wdyw !='' ">
+		<![CDATA[ and  wdyw =trim(#{wdyw})]]>
+	</if>
+	<if test="ywbz != null and ywbz !='' ">
+		<![CDATA[ and ywbz =trim(#{ywbz})]]>
+	</if>
+	<if test="zddm != null and zddm !='' ">
+		<![CDATA[ and zddm =trim(#{zddm})]]>
+	</if>
+	 	 
+</sql> 
+
+</mapper>

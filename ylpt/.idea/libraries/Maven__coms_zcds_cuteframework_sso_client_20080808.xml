@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: coms.zcds:cuteframework-sso-client:20080808">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../../../../maven/wdMavenRes/coms/zcds/cuteframework-sso-client/20080808/cuteframework-sso-client-20080808.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../../../../../maven/wdMavenRes/coms/zcds/cuteframework-sso-client/20080808/cuteframework-sso-client-20080808-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../../../../maven/wdMavenRes/coms/zcds/cuteframework-sso-client/20080808/cuteframework-sso-client-20080808-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

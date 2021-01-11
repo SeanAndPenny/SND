@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.RkzbnldfxDao">
+<sql id="commonWhere2">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and  yljgdm= trim(#{jgdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   TO_CHAR(to_date(substr(gdsj, 0, 4) || substr(gdsj, 6, 2) || substr(gdsj, 9, 2), 'yyyy-MM-dd'),  'yyyy-MM-dd')>= 
+			       trim(#{kssj} )
+			       ]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			      <![CDATA[ and  TO_CHAR(to_date(substr(gdsj, 0, 4) || substr(gdsj, 6, 2) || substr(gdsj, 9, 2), 'yyyy-MM-dd'),  'yyyy-MM-dd')<=
+			      trim(#{jssj} )
+			       ]]>
+		   </if>
+ </sql>
+ <sql id="commonWhere3">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and  yljgdm= trim(#{jgdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and  TO_CHAR(to_date(substr(DJRQ, 0, 4) || substr(DJRQ, 6, 2) || substr(DJRQ, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd') >= 
+			       trim(#{kssj} )
+			       ]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			      <![CDATA[ and  TO_CHAR(to_date(substr(DJRQ, 0, 4) || substr(DJRQ, 6, 2) || substr(DJRQ, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd')<=
+			      trim(#{jssj} )
+			       ]]>
+		   </if>
+ </sql>
+ 
+  <select id="getnlbllist" resultType="com.wondersgroup.wszygl.model.xxxblModel">
+ <![CDATA[ 
+ select  nlhjrk, nlldrk,
+nvl(hjnldm,ldnldm) as nldm,
+case
+         when nvl(hjnldm,ldnldm) = '0~3' then
+          '婴儿期'
+         when nvl(hjnldm,ldnldm) = '3~5' then
+          '幼儿期'
+         when nvl(hjnldm,ldnldm) = '5~7' then
+          '学龄前期'
+         when nvl(hjnldm,ldnldm) = '7~18' then
+          '学龄期'
+         when nvl(hjnldm,ldnldm) = '18~28' then
+          '青春期'
+         when nvl(hjnldm,ldnldm) = '28~40' then
+          '青年期'
+         when nvl(hjnldm,ldnldm) = '40~65' then
+          '中年期'
+         when nvl(hjnldm,ldnldm) = '65~120' then
+          '老年期'
+       end nlmc
+ from
+(select count(1) as nlhjrk ,
+                case when to_char(sysdate,'yyyy')-substr(csrq,0,4)<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 3 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 5 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 7 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 18 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 28 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 40 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 65 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 120 then
+                  '65~120'
+               end as hjnldm
+          from XQ_CZRK a
+         inner join t_zd_pcs_jd b
+            on trim(a.pcsdm) = trim(b.pcsdm)
+         where glzt = 1
+ ]]> 
+  <include refid="commonWhere2"></include>  
+ <![CDATA[ 
+  group by 
+         case when to_char(sysdate,'yyyy')-substr(csrq,0,4)<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 3 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 5 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 7 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 18 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 28 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 40 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 65 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 120 then
+                  '65~120'
+               end ) a
+                full join 
+                (select count(1) as nlldrk ,
+                case when to_char(sysdate,'yyyy')-substr(csrq,0,4)<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 3 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 5 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 7 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 18 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 28 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 40 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 65 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 120 then
+                  '65~120'
+               end ldnldm
+           from XQ_ldRK a
+              inner join ld_pcs b
+                 on trim(a.pcs) = b.pcs
+              where 1 = 1
+               ]]> 
+                <include refid="commonWhere3"></include> 
+          <![CDATA[   
+           group by 
+         case when to_char(sysdate,'yyyy')-substr(csrq,0,4)<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 3 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 5 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 7 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 18 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 28 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 40 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - substr(csrq,0,4) > 65 and
+                      to_char(sysdate, 'yyyy') - substr(csrq,0,4) <= 120 then
+                  '65~120'
+               end )b
+               on a.hjnldm=b.ldnldm  ]]>   
+ </select>
+ 
+  
+ 
+</mapper>

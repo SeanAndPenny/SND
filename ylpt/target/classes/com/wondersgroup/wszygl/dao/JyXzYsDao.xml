@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JyXzYsDao">
+	<sql id="commonWhere">
+		<if test="sfws != null and sfws !='' ">
+			<![CDATA[ AND sfws =trim(#{sfws})]]>
+		</if>
+		<if test="yljgdm != null and yljgdm !='' ">
+			<![CDATA[ AND yljgdm =trim(#{yljgdm})]]>
+		</if>
+		<if test="sqks != null and sqks !='' ">
+			<![CDATA[ AND sqks =trim(#{sqks})]]>
+		</if>
+	</sql>
+	<sql id="commonWhere2">
+		<if test="bgdh != null and bgdh !='' ">
+			<![CDATA[ AND a.bgdh =trim(#{bgdh})]]>
+		</if>
+		<if test="yljgdm != null and yljgdm !='' ">
+			<![CDATA[ AND a.yljgdm =trim(#{yljgdm})]]>
+		</if>
+		<if test="bgrq != null and bgrq !='' ">
+			<![CDATA[ AND a.bgrq =trim(#{bgrq})]]>
+		</if>
+	</sql>
+
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.JyModel">
+		<![CDATA[
+	select brxm,decode(brxb,'1','男','2','女') as brxb,brnl,sqksmc,bbmc,yljgdm,b.mc as yljgmc,sfws,
+	bgdh,bgrq,bgrxm
+	 from TB_LIS_REPORT a
+left join tb_volap_yljg b
+on a.yljgdm=b.id  where 1=1 and substr(a.bgrq,0,4)=to_char(sysdate,'yyyy')
+		]]>
+		<include refid="commonWhere"></include>
+	</select>
+
+	<select id="getJyXzYs"
+		resultType="com.wondersgroup.wszygl.model.JyModel">
+	<![CDATA[
+        select count(1)as rs ,yljgdm,sqks,sfws,bgrgh,bgrxm 
+  from TB_LIS_REPORT t  where 1=1	and substr(t.bgrq,0,4)=to_char(sysdate,'yyyy')
+
+]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[  group by yljgdm,sqks,sfws,bgrgh,bgrxm   ]]>
+	</select>
+
+
+
+
+
+
+	<select id="getJybgdbh"
+		resultType="com.wondersgroup.wszygl.model.JyModel">
+	<![CDATA[
+       select sqksmc,brxm,decode(brxb,'1','男','2','女') as brxb,brnl,sqrxm,
+          a.shrxm,bbmc,jyrq,cjrq as bbcyrqsj,  jyzblsh,JCZBMC jyffmc ,
+        JCZBJG jyjg,ckz,sqrxm,sqrq,dyrq,bgrxm,a.bgdh as  jybgdbh,bq,ch 
+         from TB_LIS_REPORT a 
+       inner join TB_LIS_Indicators b
+      on a.yljgdm=b.yljgdm and a.bgdh=b.bgdh   
+      where 1=1 and rownum=1
+
+]]>
+		<include refid="commonWhere2"></include>
+
+	</select>
+
+<select id="getJybgdbhList"
+		resultType="com.wondersgroup.wszygl.model.JyModel">
+	<![CDATA[
+       select sqksmc,brxm,decode(brxb,'1','男','2','女') as brxb,brnl,sqrxm,
+          a.shrxm,bbmc,jyrq,cjrq as bbcyrqsj,  jyzblsh,JCZBMC jyffmc ,
+        JCZBJG jyjg,ckz,sqrxm,sqrq,dyrq,bgrxm,a.bgdh as  jybgdbh,bq,ch 
+         from TB_LIS_REPORT a 
+       inner join TB_LIS_Indicators b
+      on a.yljgdm=b.yljgdm and a.bgdh=b.bgdh  where 1=1  
+
+]]>
+		<include refid="commonWhere2"></include>
+
+	</select>
+
+
+</mapper>

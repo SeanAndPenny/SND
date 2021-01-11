@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.SwxxFxDao">
+ <sql id="commonWhere"> 
+		    <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy')>=substr(trim(#{ksnf}),0,4) ]]>
+		    </if>
+		    <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and to_char(DEATHDATE,'yyyy')<=substr(trim(#{jsnf}),0,4) ]]>
+		    </if> 
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined'">
+			    <![CDATA[ and   yljgdm =trim(#{jgdm})]]>
+		    </if> 
+		   
+      </sql>
+      <sql id="commonWhere2"> 
+		    <if test="nf != null and nf !='' and nf !='undefined' ">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy')=substr(trim(#{nf}),0,4) ]]>
+		    </if> 
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   yljgdm =trim(#{jgdm})]]>
+		    </if> 
+      </sql>
+      
+     <sql id="commonWhere3">  
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   yljgdm =trim(#{jgdm})]]>
+		    </if> 
+      </sql>
+      <sql id="commonWhere4"> 
+            <if test="sjlx=='year'">
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy')>=trim(#{ksnf}) ]]>
+		       </if>
+		       <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and to_char(DEATHDATE,'yyyy')<=trim(#{jsnf}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy-mm')>=trim(#{ksnf}) ]]>
+		       </if>
+		       <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and to_char(DEATHDATE,'yyyy-mm')<=trim(#{jsnf}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='day'">
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and DEATHDATE>= to_date(trim(#{ksnf}),'yyyy-mm-dd') ]]>
+		       </if>
+		       <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and DEATHDATE <to_date(trim(#{jsnf}),'yyyy-mm-dd')+1 ]]>
+		       </if> 
+		    </if>
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   yljgdm =trim(#{jgdm})]]>
+		    </if> 
+      </sql>
+      
+      <sql id="commonWherexxx"> 
+            <if test="sjlx=='year'">
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy')>=trim(#{ksnf}) ]]>
+		       </if>
+		       <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and to_char(DEATHDATE,'yyyy')<=trim(#{jsnf}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy-mm')>=trim(#{ksnf}) ]]>
+		       </if>
+		       <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and to_char(DEATHDATE,'yyyy-mm')<=trim(#{jsnf}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='day'">
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and DEATHDATE>= to_date(trim(#{ksnf}),'yyyy-mm-dd') ]]>
+		       </if>
+		       <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and DEATHDATE <to_date(trim(#{jsnf}),'yyyy-mm-dd')+1 ]]>
+		       </if> 
+		    </if>
+		    
+		    <if test="nldbm1 != null and nldbm1 !='' and nldbm1 !='undefined' ">
+			    <![CDATA[ and  to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy') >trim(#{nldbm1})]]>
+		    </if> 
+		    <if test="nldbm2 != null and nldbm2 !='' and nldbm2 !='undefined' ">
+			    <![CDATA[ and   to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy') <=trim(#{nldbm2})]]>
+		    </if> 
+		    
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   yljgdm =trim(#{jgdm})]]>
+		    </if> 
+      </sql>
+      
+      
+       <sql id="commonWhereyyyy"> 
+            <if test="sjlx=='year'">
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy')>=trim(#{ksnf}) ]]>
+		       </if>
+		       <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and to_char(DEATHDATE,'yyyy')<=trim(#{jsnf}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy-mm')>=trim(#{ksnf}) ]]>
+		       </if>
+		       <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and to_char(DEATHDATE,'yyyy-mm')<=trim(#{jsnf}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='day'">
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined'">
+			     <![CDATA[ and DEATHDATE>= to_date(trim(#{ksnf}),'yyyy-mm-dd') ]]>
+		       </if>
+		       <if test="jsnf != null and jsnf !='' and jsnf !='undefined' ">
+			     <![CDATA[  and DEATHDATE <to_date(trim(#{jsnf}),'yyyy-mm-dd')+1 ]]>
+		       </if> 
+		    </if>
+		    
+		    <if test="jbbm != null and jbbm !='' and jbbm !='undefined' ">
+			    <![CDATA[ and   JBFLBM =trim(#{jbbm})]]>
+		    </if> 
+		     
+		    
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   yljgdm =trim(#{jgdm})]]>
+		    </if> 
+      </sql>
+      
+      
+      
+     <sql id="commonWhere44"> 
+		    <if test="jbflbm != null and jbflbm !='' and jbflbm !='undefined'">
+			     <![CDATA[ and trim(jbflbm)=trim(#{jbflbm}) ]]>
+		    </if>
+		    <if test="nldbm != null and nldbm !='' and nldbm !='undefined' ">
+			     <![CDATA[  and to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy')>substr(#{nldbm},0,instr(#{nldbm},'~')-1) ]]>
+			    <![CDATA[ and  to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy')<=substr(#{nldbm},instr(#{nldbm},'~')+1,100)]]>
+		    </if> 
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined'">
+			    <![CDATA[ and  yljgdm=trim(#{jgdm})]]>
+		    </if> 
+		    
+		     
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined' and ksnf.length==4">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy')>=trim(#{ksnf}) ]]>
+			     <![CDATA[  and to_char(DEATHDATE,'yyyy')<=trim(#{jsnf}) ]]>
+		       </if> 
+		    
+		    
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined' and ksnf.length==7">
+			     <![CDATA[ and to_char(DEATHDATE,'yyyy-mm')>=trim(#{ksnf}) ]]> 
+			     <![CDATA[  and to_char(DEATHDATE,'yyyy-mm')<=trim(#{jsnf}) ]]>
+		       </if> 
+		    
+		    
+		       <if test="ksnf != null and ksnf !='' and ksnf !='undefined' and ksnf.length==10">
+			     <![CDATA[ and DEATHDATE>= to_date(trim(#{ksnf}),'yyyy-mm-dd') ]]> 
+			     <![CDATA[  and DEATHDATE <to_date(trim(#{jsnf}),'yyyy-mm-dd')+1 ]]>
+		       </if> 
+		     
+		    
+		    
+		   
+      </sql> 
+  <select id="getswxxfx" resultType="com.wondersgroup.wszygl.model.SwxxFxModel">
+	<![CDATA[ 
+	   select count(1) as swrs ,to_char(DEATHDATE,'yyyy') as swnf from T_DEAD_PERSON_INFO
+         where  1=1 and IDCARDCODE is not null]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[     
+        group by to_char(DEATHDATE,'yyyy') order by  to_char(DEATHDATE,'yyyy') 
+	]]>
+ </select>
+ 
+ <select id="getswxxnldfx" resultType="com.wondersgroup.wszygl.model.SwxxFxModel">
+	<![CDATA[ 
+	 select nvl(sum(ers),0) as ers,nvl(sum(yrs),0) yrs,
+nvl(sum(xlqqs),0) as xlqqs,
+nvl(sum(xlqs),0) as xlqs,
+nvl(sum(qcs),0) as qcs ,nvl(sum(qns),0) as qns,nvl(sum(zns),0) as zns,nvl(sum(lns),0) as lns, nldnf||'年' as nldnf from 
+(select case  when nld = '0~3' then 
+           (nldrk) end  as ers,
+        case  when nld = '3~5' then
+           (nldrk) end  as yrs , 
+        case when nld = '5~7' then
+          (nldrk) end  as xlqqs,
+        case when nld = '7~18' then
+          (nldrk) end  as xlqs,
+        case when nld = '18~28' then
+         (nldrk) end  as qcs,
+        case when nld = '28~40' then
+         (nldrk) end  as qns,
+        case when nld = '40~65' then
+          (nldrk) end  as zns,
+        case when nld = '65~120' then
+         (nldrk) end  as lns ,nldnf,nldmc  from 
+(select nldrk,nld,
+case
+         when nld = '0~3' then
+          '婴儿期'
+         when nld = '3~5' then
+          '幼儿期'
+         when nld = '5~7' then
+          '学龄前期'
+         when nld = '7~18' then
+          '学龄期'
+         when nld = '18~28' then
+          '青春期'
+         when nld = '28~40' then
+          '青年期'
+         when nld = '40~65' then
+          '中年期'
+         when nld = '65~120' then
+          '老年期'
+       end nldmc,nldnf
+ from(
+select count(1) as nldrk ,
+                case when to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy')<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 3 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 5 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 7 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 18 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 28 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 40 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 65 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 120 then
+                  '65~120'
+               end as nld,to_char(DEATHDATE,'yyyy') as nldnf
+          from T_DEAD_PERSON_INFO a
+                where 1 = 1 and IDCARDCODE is not null
+	    ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[     
+         group by 
+          case when to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy')<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 3 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 5 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 7 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 18 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 28 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 40 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 65 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 120 then
+                  '65~120'
+               end,to_char(DEATHDATE,'yyyy'))
+               
+               order by nldnf,nld)
+             )
+   group by nldnf order by nldnf
+	]]>
+ </select>
+ <select id="getSwechats" resultType="com.wondersgroup.wszygl.model.SwxxFxModel">
+	<![CDATA[ 
+	select  count(1) as xzrs,yljgdm,dqfl from T_DEAD_PERSON_INFO
+where yljgdm is not null  and IDCARDCODE is not null
+	]]>
+	 <include refid="commonWhere2"></include> 
+	 <![CDATA[ 
+	 group by yljgdm,dqfl
+	 ]]>
+ </select>
+ 
+ 
+ <select id="getSyfxnlList" resultType="com.wondersgroup.wszygl.model.SwxxFxModel">
+	<![CDATA[ 
+	 select nldrk ,nld,
+case  when nld = '0~3' then
+          '婴儿期'
+         when nld = '3~5' then
+          '幼儿期'
+         when nld = '5~7' then
+          '学龄前期'
+         when nld = '7~18' then
+          '学龄期'
+         when nld = '18~28' then
+          '青春期'
+         when nld = '28~40' then
+          '青年期'
+         when nld = '40~65' then
+          '中年期'
+         when nld = '65~120' then
+          '老年期'
+       end nldmc
+ from(select count(1) as nldrk ,
+                case when to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy')<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 3 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 5 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 7 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 18 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 28 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 40 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 65 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 120 then
+                  '65~120'
+               end as nld
+          from T_DEAD_PERSON_INFO a
+                where 1 = 1 and IDCARDCODE is not null
+              and   BIRTHDATE is not null
+	]]>
+	 <include refid="commonWhere4"></include> 
+	 <![CDATA[ 
+	  group by 
+                 case when to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy')<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 3 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 5 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 7 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 18 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 28 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 40 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 65 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 120 then
+                  '65~120'
+               end)
+	 ]]>
+ </select>
+ 
+ 
+ <select id="getechars06" resultType="com.wondersgroup.wszygl.model.SwxxFxModel">
+	<![CDATA[ 
+	 select count(1)as swrs ,dqfl from T_DEAD_PERSON_INFO
+where dqfl is not null and IDCARDCODE is not null
+	]]>
+	 <include refid="commonWherexxx"></include> 
+	 <![CDATA[ 
+	 group by dqfl
+	 ]]>
+ </select>
+  <select id="getechars07" resultType="com.wondersgroup.wszygl.model.SwxxFxModel">
+	<![CDATA[ 
+	select * from 
+(select count(1) as swrs, b.mc as jbflmc,jbflbm
+  from T_DEAD_PERSON_INFO a
+ inner join tb_swjbfl_list b
+    on a. JBFLBM = b.dm
+ where JBFLBM is not null and IDCARDCODE is not null
+	]]>
+	 <include refid="commonWherexxx"></include> 
+	 <![CDATA[ 
+	 group by b.mc,jbflbm order by count(1) desc ) where rownum<=10 order by swrs
+	 ]]>
+ </select>
+ 
+ 
+ 
+ <select id="getsyflfxList" resultType="com.wondersgroup.wszygl.model.SwxxFxModel">
+	<![CDATA[ 
+	  select count(1) as swrs, b.mc as jbflmc,jbflbm 
+  from T_DEAD_PERSON_INFO a
+ inner   join tb_swjbfl_list b
+    on a. JBFLBM = b.dm
+ where JBFLBM is not null and IDCARDCODE is not null
+	]]>
+	 <include refid="commonWhere4"></include> 
+	 <![CDATA[ 
+	  group by b.mc,jbflbm
+	 ]]>
+ </select>
+ 
+ 
+  <select id="getechars09" resultType="com.wondersgroup.wszygl.model.SwxxFxModel">
+	<![CDATA[ 
+	   select nldrk ,nld,
+case  when nld = '0~3' then
+          '婴儿期'
+         when nld = '3~5' then
+          '幼儿期'
+         when nld = '5~7' then
+          '学龄前期'
+         when nld = '7~18' then
+          '学龄期'
+         when nld = '18~28' then
+          '青春期'
+         when nld = '28~40' then
+          '青年期'
+         when nld = '40~65' then
+          '中年期'
+         when nld = '65~120' then
+          '老年期'
+       end nldmc
+ from(select count(1) as nldrk ,
+                case when to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy')<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 3 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 5 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 7 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 18 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 28 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 40 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 65 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 120 then
+                  '65~120'
+               end as nld
+          from T_DEAD_PERSON_INFO a
+                where 1 = 1
+              and   JBFLBM is not null and IDCARDCODE is not null
+	]]>
+	 <include refid="commonWhereyyyy"></include> 
+	 <![CDATA[ 
+	   group by 
+                 case when to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy')<= 3 then '0~3'
+                  when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 3 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 5 then
+                  '3~5'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 5 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 7 then
+                  '5~7'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 7 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 18 then
+                  '7~18'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 18 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 28 then
+                  '18~28'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 28 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 40 then
+                  '28~40'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 40 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 65 then
+                  '40~65'
+                 when to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') > 65 and
+                      to_char(sysdate, 'yyyy') - to_char(BIRTHDATE,'yyyy') <= 120 then
+                  '65~120'
+               end)  order  by to_number(substr(nld,0,instr(nld,'~')-1))
+	 ]]>
+ </select>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <select id="getswjdList" resultType="com.wondersgroup.wszygl.model.SwxxJgdmModel">
+	<![CDATA[ 
+	 select dqfl as jgmc ,yljgdm as jgdm from T_DEAD_PERSON_INFO
+where dqfl is not null and IDCARDCODE is not null
+	]]>
+	 <include refid="commonWhere3"></include> 
+	 <![CDATA[ 
+	 group by dqfl,yljgdm
+	 ]]>
+ </select>
+ 
+ 
+ <select id="getMinSwsj" resultType="String">
+	<![CDATA[ 
+	 select min(to_char(DEATHDATE,'yyyy-mm-dd')) from T_DEAD_PERSON_INFO where 1=1 and IDCARDCODE is not null
+	]]>
+	  
+ </select>
+ <select id="getMaxSwsj" resultType="String">
+	<![CDATA[ 
+	 select max(to_char(DEATHDATE,'yyyy-mm-dd')) from T_DEAD_PERSON_INFO where 1=1 and IDCARDCODE is not null
+	]]>
+	  
+ </select>
+ 
+ 
+ <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.SwxxFxModel">
+  <![CDATA[
+        select to_char(BIRTHDATE,'yyyy-mm-dd') as csrq, to_char(sysdate,'yyyy')-to_char(BIRTHDATE,'yyyy')age,name,decode(GENDER,'1','男','2','女') as xb,
+DOMICILEDETAIL as hjdz,to_char(DEATHDATE,'yyyy-mm-dd') as swrq,CAUSEA as  swyy,b.mc as jbflmc,dqfl
+from T_DEAD_PERSON_INFO a
+ inner join tb_swjbfl_list b
+    on a. JBFLBM = b.dm where 1=1 and IDCARDCODE is not null
+			]]>
+			
+<include refid="commonWhere44"></include> 
+<![CDATA[
+			order  by to_char(DEATHDATE,'yyyy-mm-dd') desc
+			]]>
+</select>
+ 
+
+</mapper>

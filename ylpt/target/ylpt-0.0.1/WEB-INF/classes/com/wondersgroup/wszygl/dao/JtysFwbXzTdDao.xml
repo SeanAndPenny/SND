@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JtysFwbXzTdDao">
+  <sql id="commonWhere">
+    <if test="fwbid != null and fwbid !='' ">
+      <![CDATA[ and replace(replace(C.QYFWBID, '[ { "$oid" : "', ''), '"}]', '')   =trim(#{fwbid})]]>
+    </if>
+    <if test="qyjgid != null and qyjgid !='' ">
+      <![CDATA[ and replace(replace(C.QYjgID, '[ { "$oid" : "', ''), '"}]', '')  =trim(#{qyjgid})]]>
+    </if>
+  </sql>
+
+  <select id="getJtysFwbXzTd" resultType="com.wondersgroup.wszygl.model.JtysModel">
+  <![CDATA[
+      select count(1)as rs ,replace(replace(C.QYFWBID, '[ { "$oid" : "', ''), '"}]', '') as fwbid,
+replace(replace(C.qyjgid, '[ { "$oid" : "', ''), '"}]', '') as qyjgid,
+replace(replace(C.qytdmc, '[ "', ''), '"]', '') as  qytdmc
+
+  from (select *
+          from Tb_JTYS_PATIENT_SIGN a
+         inner join Tb_JTYS_PATIENT_SIGN_DETAIL b
+            on a.GRQYLSH = b.GRQYLSH
+         where a.zhzt = 'approved'
+           AND substr(a.QYSXKSSJ, 0, 7) = to_char(sysdate, 'yyyy-mm')) c
+ inner join Tb_JTYS_SERVICE_PACKAGE d
+    on replace(replace(C.QYFWBID, '[ { "$oid" : "', ''), '"}]', '') =
+       replace(replace(d.FWBID, '{ "$oid" : "', ''), '"}', '')
+ where d.zt = 'T'
+       
+    ]]>
+  <include refid="commonWhere"></include>  
+  <![CDATA[
+       
+         group by C.QYFWBID,qyjgid,qytdmc
+    ]]>
+  </select>
+  
+  
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JtysModel">
+    <![CDATA[
+      select   replace(replace(qyrxm,'[ "',''),'"]','') as qyrxm, 
+  replace(replace(qyrsfzhm,'[ "',''),'"]','') as qyrsfzhm, 
+  replace(replace(qyfamc,'[ "',''),'"]','') as qyfamc, 
+  replace(replace(qyfwbmc,'[ "',''),'"]','') as qyfwbmc,
+  replace(replace(qytdmc,'[ "',''),'"]','') as  qytdmc,
+  replace(replace(qyysxm,'[ "',''),'"]','') as  qyysxm
+  from (select *
+          from Tb_JTYS_PATIENT_SIGN a
+         inner join Tb_JTYS_PATIENT_SIGN_DETAIL b
+            on a.GRQYLSH = b.GRQYLSH
+         where a.zhzt = 'approved'
+           AND substr(a.QYSXKSSJ, 0, 7) = to_char(sysdate, 'yyyy-mm')) c
+ inner join Tb_JTYS_SERVICE_PACKAGE d
+    on replace(replace(C.QYFWBID, '[ { "$oid" : "', ''), '"}]', '') =
+       replace(replace(d.FWBID, '{ "$oid" : "', ''), '"}', '')
+ where d.zt = 'T'
+       
+    ]]>
+    <include refid="commonWhere"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

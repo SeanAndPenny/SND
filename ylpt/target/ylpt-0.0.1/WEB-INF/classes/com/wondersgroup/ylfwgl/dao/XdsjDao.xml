@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.ylfwgl.dao.XdsjDao">
+	
+
+	<sql id="commonWhere">
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  t.yljgdm = #{yljgdm}]]>
+		</if>
+		<choose>
+           <when test="startdate != null and startdate!=''  and enddate !=null and enddate!=''">
+              <![CDATA[  and t.kdsj>= to_date( #{startdate},'yyyy-MM-DD') and  t.kdsj<=to_date( #{enddate} ,'yyyy-MM-DD' )
+          		]]>
+           </when>
+           <when test="startdate != null and startdate!=''  and ( enddate ==null or enddate =='') ">
+               <![CDATA[ and t.kdsj>= to_date( #{startdate} ,'yyyy-MM-DD') 
+           		]]>
+           </when>
+            <when test="(startdate == null or startdate=='' ) and ( enddate !=null and enddate !='') ">
+              <![CDATA[ and  t.kdsj<=to_date( #{enddate} ,'yyyy-MM-DD' )
+           		]]>
+           </when>
+           <otherwise>
+               
+           </otherwise>
+       </choose>
+	</sql>
+
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.ylfwgl.model.XdsjModel" >
+		<![CDATA[
+			select t.*,s.*,to_char(t.kdsj,'yyyy-mm-dd hh:mm') as sj from cen_core_v20.tb_emr_jcjl t,cen_core_v20.sys_jgdm_list s where t.yljgdm=s.jgdm
+			 ]]>
+		<include refid="commonWhere"></include>
+	</select>
+	
+	<select id="getAllYljg" resultType="com.wondersgroup.ylfwgl.model.YljgModel" >
+		<![CDATA[
+			select j.jgdm,j.jgmc  from  cen_core_v20.sys_jgdm_list j where length(jgdm)=10
+		]]>
+		
+	</select>
+
+	<select id="getByYljgdm" resultType="com.wondersgroup.ylfwgl.model.YljgModel" >
+		<![CDATA[
+			select *  from  cen_core_v20.sys_jgdm_list t where  t.jgdm=#{yljgdm}
+		]]>
+		
+	</select>
+</mapper>

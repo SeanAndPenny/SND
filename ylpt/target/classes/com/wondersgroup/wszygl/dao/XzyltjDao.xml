@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.XzyltjDao">
+	
+<sql id="commonWhere">
+	      <if test="xzdm != null and xzdm !='' ">
+			       <![CDATA[ and   a.jddm= trim(#{xzdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   JZKSRQ>= to_date(#{kssj},'yyyy-MM-dd')]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			       <![CDATA[ and   JZKSRQ<= to_date(#{jssj},'yyyy-MM-dd')+1]]>
+		   </if>
+ </sql>
+ <sql id="commonWhere2">
+	      <if test="xzdm != null and xzdm !='' ">
+			       <![CDATA[ and   a.jddm= trim(#{xzdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   RYSJ>= to_date(#{kssj},'yyyy-MM-dd')]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			       <![CDATA[ and   RYSJ<= to_date(#{jssj},'yyyy-MM-dd')+1]]>
+		   </if>
+ </sql>
+<select id="getXzyltj" resultType="com.wondersgroup.wszygl.model.XzyltjModel">
+	<![CDATA[
+	  	 with table1 as
+ (select a.jdmc,a.jddm,count(1) mzrs from t_zd_pcs_jd a
+left join XQ_CZRK b
+on TRIM(a.pcsdm)=TRIM(b.pcsdm)
+left join TB_YL_MZ_MEDICAL_RECORD c
+on b.sfhm=c.sfzh
+where 1=1
+       ]]> 
+        <include refid="commonWhere"></include>  
+    <![CDATA[ 
+    group by  a.jdmc,a.jddm
+),
+table2 as
+ (select a.jdmc,a.jddm,count(1) zyrs from t_zd_pcs_jd a
+left join XQ_CZRK b
+on TRIM(a.pcsdm)=TRIM(b.pcsdm)
+left join TB_YL_ZY_MEDICAL_RECORD c
+on b.sfhm=c.sfzh
+where 1=1
+    ]]>  
+     <include refid="commonWhere2"></include>  
+      <![CDATA[ 
+      group by  a.jdmc,a.jddm
+)
+select nvl(aa.jdmc,bb.jdmc)as xzmc, nvl(aa.jddm,bb.jddm)as xzdm ,mzrs/10000 as mzrs,zyrs/10000 as zyrs from table1 aa
+full join table2 bb
+on aa.jddm=bb.jddm  
+      ]]>  
+</select>
+ <select id="getxzjgList" resultType="com.wondersgroup.wszygl.model.SwxxJgdmModel">
+  <![CDATA[
+     select jdmc as jgmc,jddm as jgdm from  t_zd_pcs_jd  
+       ]]> 
+</select>
+
+
+
+
+
+
+ <select id="getchartList" resultType="com.wondersgroup.wszygl.model.XzyltjModel">
+ <if test="lx!=1 ">
+       <![CDATA[
+       select c.yljgdm,d.mc as yljgmc,count(1) rs,'门诊' as ywlx from t_zd_pcs_jd a
+left join XQ_CZRK b
+on TRIM(a.pcsdm)=TRIM(b.pcsdm)
+left join TB_YL_MZ_MEDICAL_RECORD c
+on b.sfhm=c.sfzh
+left join tb_volap_yljg d
+on c.yljgdm=d.id
+where 1=1
+]]> 
+ <include refid="commonWhere"></include>  
+ <![CDATA[
+group by  c.yljgdm,d.mc
+       ]]> 
+  </if>
+  <if test="lx==1 ">
+      <![CDATA[
+       select c.yljgdm,d.mc as yljgmc,count(1) rs,'住院' as ywlx from t_zd_pcs_jd a
+left join XQ_CZRK b
+on TRIM(a.pcsdm)=TRIM(b.pcsdm)
+left join TB_YL_ZY_MEDICAL_RECORD c
+on b.sfhm=c.sfzh
+left join tb_volap_yljg d
+on c.yljgdm=d.id
+where 1=1
+]]> 
+ <include refid="commonWhere2"></include>  
+ <![CDATA[
+group by  c.yljgdm,d.mc
+       ]]> 
+  </if>
+  
+</select>
+
+
+
+ <select id="getMinsj" resultType="String">
+ select min(to_char(JZKSRQ,'yyyy-MM-dd')) from TB_YL_MZ_MEDICAL_RECORD
+ </select>
+ <select id="getMaxsj" resultType="String">
+ select max(to_char(JZKSRQ,'yyyy-MM-dd')) from TB_YL_MZ_MEDICAL_RECORD
+ </select>
+ 
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.wszygl.dao.YwbpzDao">
+	<sql id="commonWhere">
+		<if test=" ywbm !='' and ywbm != null ">
+			<![CDATA[  and  ywbm LIKE '%'||upper(#{ywbm})||'%']]>
+		</if>
+         <if test=" zwbm !='' and zwbm != null ">
+			<![CDATA[  and  zwbm    LIKE '%'||#{zwbm}||'%']]>
+		</if>
+ 
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.YwbpzModel">
+		<![CDATA[ 
+		select t.* from TB_XQ_YWBPZ t where 1=1
+		]]>
+		<include refid="commonWhere"></include>
+		 
+	</select>
+	 
+	 
+</mapper>

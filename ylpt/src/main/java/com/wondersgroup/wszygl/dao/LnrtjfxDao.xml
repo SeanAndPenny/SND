@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.LnrtjfxDao">
+  <sql id="commonWhere">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(a.scrq,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(a.scrq,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+    <if test="yljgdm != null and yljgdm !='' ">
+      <![CDATA[ and a.yljgdm=trim(#{yljgdm})]]>
+    </if>
+  </sql>
+  
+  <sql id="commonWhere2">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(a.JKSJ,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(a.JKSJ,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+    <if test="yljgdm != null and yljgdm !='' ">
+      <![CDATA[ and a.yljgdm=trim(#{yljgdm})]]>
+    </if>
+  </sql>
+  
+  
+  <!-- 心梗高危 -->
+  <select id="getLnrtjxgfx" resultType="com.wondersgroup.wszygl.model.LnrModel">
+  <![CDATA[   
+ select sum(xxjbrs)as xxjbrs,xxjblx, xxjblxmc,round(sum(xxjbrs)/(select sum(rs)from tb_50rstj),5)*100||'%'  as xxzb  from 
+   (select  count(1)as xxjbrs,'xxjb' as xxjblx,'心血管' as xxjblxmc from TB_XXGB_531SC a
+     where 1=1
+  ]]>
+ <include refid="commonWhere"></include>
+    <![CDATA[
+     group by scrq,yljgdm) a
+        group by xxjblx ,xxjblxmc
+  ]]>    
+  </select>
+  
+  
+  
+   <!-- 卒中高危 -->
+  <select id="getLnrtjCzfx" resultType="com.wondersgroup.wszygl.model.LnrModel">
+  <![CDATA[   
+select sum(nczrs)as nczrs,nczlx,nczlxmc,round(sum(nczrs)/(select sum(rs) from tb_50rstj),5)*100||'%' as nczzb from 
+   (select  count(1)as nczrs,'xxjb' as nczlx,'脑卒中' as nczlxmc from TB_NCZ_531SC a
+     where 1=1 
+  ]]>
+ <include refid="commonWhere"></include>
+    <![CDATA[
+      
+      group by scrq,yljgdm) a
+           group by nczlx,nczlxmc 
+  ]]>    
+  </select>
+  
+  
+  <!-- 心梗卒中高危比例 -->
+   <select id="getLnrtjCzXgfx" resultType="com.wondersgroup.wszygl.model.LnrModel">
+  <![CDATA[   
+ select count(1)as gtrs,'gt' as gtlx,'心梗卒中高危' as gtmc , round(count(1)/c.zrs,5)*100||'%' as gtzb from TB_XXGB_531SC  a 
+inner join   TB_NCZ_531SC b
+on a.jkdaid=b.jkdaid  and a.yljgdm=b.yljgdm
+inner join (select sum(rs) as zrs from tb_50rstj)c
+on 1=1
+where 1=1 
+  ]]>
+ <include refid="commonWhere"></include>
+  <![CDATA[   
+  group by c.zrs
+  ]]>
+  </select>
+  
+   <!-- 高血压比例 -->
+ <select id="getLnrGxyfx" resultType="com.wondersgroup.wszygl.model.LnrModel">
+  <![CDATA[   
+select sum(gxyrs) gxyrs ,gxylxmc,  round(sum(gxyrs)/(select sum(rs) from tb_50rstj),5)*100||'%'  as gxyzb    
+from    
+(select  count(1)as gxyrs,'高血压患者' as gxylxmc from tb_gxy_hzglk a
+where to_char(sysdate,'yyyy')-to_char(csrq,'yyyy')>=50
+  ]]>
+ <include refid="commonWhere2"></include>
+  <![CDATA[   
+   )a group by gxylxmc
+  ]]>
+  </select>
+  
+  <!-- 糖尿病 -->
+  <select id="getLnrTnbfx" resultType="com.wondersgroup.wszygl.model.LnrModel">
+  <![CDATA[   
+ select sum(tnbrs) tnbrs ,tnblxmc,  round(sum(tnbrs)/(select sum(rs) from tb_50rstj),5)*100||'%'  as tnbzb    
+from    
+(select  count(1)as tnbrs,'糖尿病患者' as tnblxmc from tb_tnb_hzglk a
+where to_char(sysdate,'yyyy')-to_char(csrq,'yyyy')>=50
+  ]]>
+ <include refid="commonWhere2"></include>
+  <![CDATA[   
+  )a group by tnblxmc
+ 
+  ]]>
+  </select>
+  
+  
+  <!--同时患有高血压和糖尿病的人  -->
+  <select id="getLnrGxyTnbfx" resultType="com.wondersgroup.wszygl.model.LnrModel">
+  <![CDATA[   
+select sum(gxytnbrs)  as gxytnbrs,gxytnblx,
+round(sum(gxytnbrs)/(select sum(rs) from tb_50rstj),5)*100||'%' as gxytnbzb
+ from  
+(select count(1) as gxytnbrs ,'同时患有高血压糖尿病' as gxytnblx
+  from tb_gxy_hzglk a
+ inner join tb_tnb_hzglk b
+    on a.CXJMJKDABH = b.CXJMJKDABH
+   and a.yljgdm = b.yljgdm
+   where to_char(sysdate,'yyyy')-to_char(a.csrq,'yyyy')>=50
+  ]]>
+ <include refid="commonWhere2"></include>
+  <![CDATA[   
+   ) group by gxytnblx
+ 
+  ]]>
+  </select>
+  
+  
+</mapper>

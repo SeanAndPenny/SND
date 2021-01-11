@@ -1,0 +1,1007 @@
+html,body{
+    background: #DCE2E6;
+    min-width: 1280px;
+}
+.main .botCon{
+    padding: 0 20px;
+}
+.main .detail{
+    margin-left: -7px;
+    margin-right: -7px;
+}
+.mode{
+    float: left;
+    margin-bottom: 14px;
+    width: 50%;
+}
+.mode .modeBg{
+    margin-left: 7px;
+    margin-right: 7px;
+    background: white;
+    height: 281px;
+    box-shadow: 0 0 10px #DCE2E6;
+    border-radius: 2px;
+}
+
+.mode .modeTop{
+    padding: 15px 16px 0 16px;
+}
+.mode .modeTop .title i{
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    background: #0088CC;
+    margin-right: 3px;
+    vertical-align: -1px;
+}
+.mode .modeTop .title label{
+    font-size: 15px;
+    color: #0088CC;
+}
+.mode .modeCon .chartBox{
+    height: 245px;
+}
+
+.mode01 .modeCon .same{
+    float: left;
+}
+.mode01 .modeCon .same01{
+    width: 55%;
+}
+.mode01 .modeCon .same02{
+    width: 45%;
+    position: relative;
+}
+.mode01 .modeCon .same02 .line{
+    position: absolute;
+    top: 12px;
+    left: 0;
+    height: 214px;
+    border-left: 1px dashed #0088CC;
+}
+.mode01 .modeCon .same02 .item .icon{
+    display: inline-block;
+    width: 49px;
+    margin-left: 46px;
+    margin-right: 27px;
+    vertical-align: middle;
+}
+.mode01 .modeCon .same02 .item01{
+    margin-top: 24px;
+}
+.mode01 .modeCon .same02 .item01 .icon{
+    height: 38px;
+    background: url("../images/mode01-icon01.png") no-repeat;
+    background-size: 100% 100%;
+}
+.mode01 .modeCon .same02 .item02 .icon{
+    height: 33px;
+    background: url("../images/mode01-icon02.png") no-repeat;
+    background-size: 100% 100%;
+}
+.mode01 .modeCon .same02 .item .text{
+    display: inline-block;
+    vertical-align: middle;
+}
+.mode01 .modeCon .same02 .item .text .font{
+    font-size: 15px;
+    color: #0088CC;
+    margin-bottom: 8px;
+}
+.mode01 .modeCon .same02 .item .text .sty02{
+    margin-top: 3px;
+}
+.mode01 .modeCon .same02 .item02{
+    margin-top: 49px;
+}
+
+.modeTop{
+    padding-right: 30px;
+}
+.modeTop .title .tabTop{
+    float: right;
+}
+.modeTop .title .tabTop span{
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    padding: 0 7px;
+    color: #666666;
+    background:rgba(210,210,210,.5);
+    margin-left: 10px;
+    border-radius: 1px;
+    cursor: pointer;
+}
+.modeTop .title .tabTop span.active{
+    background: rgba(45,198,242,.3);
+    color: #0088CC;
+}
+
+.mode03 .modeCon .det .same {
+    float: left;
+}
+.mode03 .modeCon .det .same01{
+    width: 55%;
+    position: relative;
+}
+.mode03 .modeCon .det .same01 .legend{
+    position: absolute;
+    bottom: 5%;
+    width: 100%;
+}
+.mode03 .modeCon .det .same01 .legend ul{
+    padding: 0 25px;
+}
+.mode03 .modeCon .det .same01 .legend ul li{
+    float: left;
+    width: 25%;
+    font-size: 12px;
+    margin-top: 14px;
+}
+.mode03 .modeCon .det .same01 .legend ul li i{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: -1px;
+}
+.mode03 .modeCon .det .same01 .legend ul .li01 i{
+    background: #88CA6D;
+}
+.mode03 .modeCon .det .same01 .legend ul .li02 i{
+    background: #3AA873;
+}
+.mode03 .modeCon .det .same01 .legend ul .li03 i{
+    background: #2EEDE6;
+}
+.mode03 .modeCon .det .same01 .legend ul .li04 i{
+    background: #2DC6F2;
+}
+.mode03 .modeCon .det .same01 .legend ul .li05 i{
+    background: #0DAEF1;
+}
+.mode03 .modeCon .det .same01 .legend ul .li06 i{
+    background: #1572D5;
+}
+.mode03 .modeCon .det .same01 .legend ul .li07 i{
+    background:#744EBC;
+}
+.mode03 .modeCon .det .same01 .legend ul .li08 i{
+    background:#5D6DBD;
+}
+.mode03 .modeCon .det .same02{
+    width: 45%;
+}
+.mode03 .modeCon .det .same .chartBox{
+    height: 240px;
+}
+
+/* 閲嶇偣鍖婚櫌鍖讳繚鍒嗘瀽 */
+.hos-analysis .mode .modeBg{
+    height: 281px;
+}
+.hos-analysis .mode .modeCon{
+    position: relative;
+    height: 240px;
+}
+.hos-analysis .mode1-2 .modeCon .legend{
+    position: absolute;
+    right: 2%;
+    top: 21%;
+}
+.hos-analysis .mode1-2 .modeCon .legend li{
+    height: 18px;
+    line-height: 18px;
+    margin-bottom: 7px;
+}
+.hos-analysis .mode1-2 .modeCon .legend li .sty{
+    display: inline-block;
+    font-size: 12px;
+}
+.hos-analysis .mode1-2 .modeCon .legend li .sty01{
+    width: 175px;
+}
+.hos-analysis .mode1-2 .modeCon .legend li .sty i{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    margin-right: 2px;
+}
+
+.hos-analysis .mode1-2 .modeCon .legend .li01 .sty01 i{
+    background: #88CA6D;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li01 .sty01 span{
+    color: #88CA6D;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li01 .sty02 i{
+    background: #826CD1;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li01 .sty02 span{
+    color:#826CD1;
+}
+
+.hos-analysis .mode1-2 .modeCon .legend .li02 .sty01 i{
+    background: #3AA873;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li02 .sty01 span{
+    color: #3AA873;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li02 .sty02 i{
+    background: #A079E1;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li02 .sty02 span{
+    color:#A079E1;
+}
+
+.hos-analysis .mode1-2 .modeCon .legend .li03 .sty01 i{
+    background:#0DAEF1;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li03 .sty01 span{
+    color: #0DAEF1;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li03 .sty02 i{
+    background: #C779E1;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li03 .sty02 span{
+    color:#C779E1;
+}
+
+.hos-analysis .mode1-2 .modeCon .legend .li04 .sty01 i{
+    background:#3992F0;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li04 .sty01 span{
+    color: #3992F0;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li04 .sty02 i{
+    background: #E97CDB;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li04 .sty02 span{
+    color:#E97CDB;
+}
+
+.hos-analysis .mode1-2 .modeCon .legend .li05 .sty01 i{
+    background:#1572D5;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li05 .sty01 span{
+    color: #1572D5;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li05 .sty02 i{
+    background: #E97CA0;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li05 .sty02 span{
+    color:#E97CA0;
+}
+
+.hos-analysis .mode1-2 .modeCon .legend .li06 .sty01 i{
+    background:#7187F5;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li06 .sty01 span{
+    color: #7187F5;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li06 .sty02 i{
+    background: #E9987C;
+}
+.hos-analysis .mode1-2 .modeCon .legend .li06 .sty02 span{
+    color:#E9987C;
+}
+
+.hos-analysis .mode .modeCon .chartBox{
+    height: 100%;
+}
+.hos-analysis .modeSame .legend{
+    position: absolute;
+    right: 2%;
+    left: 4%;
+    top: 5%;
+}
+.hos-analysis .modeSame .legend li{
+    float: left;
+    width: 16.66%;
+    margin-bottom: 3px;
+}
+.hos-analysis .modeSame .legend li i{
+    display: inline-block;
+    width: 14px;
+    height: 9px;
+    margin-right: 1px;
+    margin-left: 4px;
+}
+.hos-analysis .modeSame .legend li label{
+    font-size: 12px;
+}
+.hos-analysis .modeSame .legend .li01 i{
+    background: url("../images/hos-analysis/modeSame-icon01.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li02 i{
+    background: url("../images/hos-analysis/modeSame-icon02.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li03 i{
+    background: url("../images/hos-analysis/modeSame-icon03.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li04 i{
+    background: url("../images/hos-analysis/modeSame-icon04.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li05 i{
+    background: url("../images/hos-analysis/modeSame-icon05.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li06 i{
+    background: url("../images/hos-analysis/modeSame-icon06.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li07 i{
+    background: url("../images/hos-analysis/modeSame-icon07.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li08 i{
+    background: url("../images/hos-analysis/modeSame-icon08.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li09 i{
+    background: url("../images/hos-analysis/modeSame-icon09.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li10 i{
+    background: url("../images/hos-analysis/modeSame-icon10.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li11 i{
+    background: url("../images/hos-analysis/modeSame-icon11.png") no-repeat;
+    background-size: 100% 100%;
+}
+.hos-analysis .modeSame .legend .li12 i{
+    background: url("../images/hos-analysis/modeSame-icon12.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+/* 鐥呮鍒嗘瀽 */
+.bafx .liIncloud{
+    height: 281px;
+    width: 100%;
+}
+.bafx .liIncloud .liIncloudBg{
+    height: 100%;
+    margin: 0 7px;
+    background: white;
+}
+.bafx .liIncloud .mode .modeBg{
+    box-shadow: none;
+}
+.bafx .mode01 .modeCon .chartBox{
+    height: 245px;
+}
+
+.bafx .mode02 .modeCon .chartBox{
+    height: 245px;
+}
+
+.bafx .mode03 .modeCon {
+    position: relative;
+    height: 246px;
+}
+.bafx .mode03 .modeCon .chartBox{
+    position: absolute !important;
+    width: 45%;
+    height: 205px;
+    right: 0;
+    top: 0;
+}
+.bafx .mode03 .modeCon .legend{
+    position: absolute;
+    bottom: 5px;
+}
+.bafx .mode03 .modeCon .legend01{
+    left: 22px;
+}
+.bafx .mode03 .modeCon .legend02{
+    left: 180px;
+}
+.bafx .mode03 .modeCon .legend03{
+    left: 380px;
+}
+.bafx .mode03 .modeCon .legend li{
+    height: 12px;
+    line-height: 12px;
+    margin-bottom: 6px;
+}
+.bafx .mode03 .modeCon .legend li i{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: red;
+    margin-right: 2px;
+    vertical-align: -1px;
+}
+.bafx .mode03 .modeCon .legend li label{
+    font-size: 12px;
+}
+
+.bafx .mode03 .modeCon .legend .li01 i{
+    background: #7EB24A;
+}
+.bafx .mode03 .modeCon .legend .li02 i{
+    background: #1CACC0;
+}
+.bafx .mode03 .modeCon .legend .li03 i{
+    background: #188AD0;
+}
+.bafx .mode03 .modeCon .legend .li04 i{
+    background: #68B6F4;
+}
+.bafx .mode03 .modeCon .legend .li05 i{
+    background: #5892F3;
+}
+.bafx .mode03 .modeCon .legend .li06 i{
+    background: #3650D0;
+}
+.bafx .mode03 .modeCon .legend .li07 i{
+    background: #4062FF;
+}
+.bafx .mode03 .modeCon .legend .li08 i{
+    background: #8C6CF3;
+}
+.bafx .mode03 .modeCon .legend .li09 i{
+    background: #5056A4;
+}
+.bafx .mode03 .modeCon .legend .li10 i{
+    background: #6872E0;
+}
+.bafx .mode03 .modeCon .legend .li11 i{
+    background: #34CAEF;
+}
+.bafx .mode03 .modeCon .legend .li12 i{
+    background: #2EACA2;
+}
+.bafx .mode03 .modeCon .legend .li13 i{
+    background: #44CA94;
+}
+.bafx .mode03 .modeCon .legend .li14 i{
+    background: #32B03E;
+}
+.bafx .mode03 .modeCon .legend .li15 i{
+    background: #9EDE5C;
+}
+.bafx .mode03 .modeCon .legend .li16 i{
+    background: #CCF04D;
+}
+.bafx .mode03 .modeCon .legend .li17 i{
+    background: #D9DB1B;
+}
+.bafx .mode03 .modeCon .legend .li18 i{
+    background: #DC9023;
+}
+
+.bafx .mode04 .modeTop .title span{
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    background: url("../images/bafx/icon01.png") no-repeat;
+    background-size: 100% 100%;
+    vertical-align: -4px;
+    margin-left: 5px;
+}
+.bafx .mode04 .modeCon .chartBox{
+    height: 245px;
+}
+.bafx .mode04 .modeCon .swiper-container .swiper-pagination-bullet{
+    width: 9px;
+    height: 9px;
+}
+.bafx .mode04 .modeCon .swiper-container .swiper-pagination-bullet-active{
+    background: #568EFB;
+    margin: 0 6.5px;
+}
+
+/* 鎵嬫湳鍒嗘瀽 */
+.ssfx .mode02 .modeCon{
+    position: relative;
+}
+.ssfx .mode02 .modeCon .legend{
+    position: absolute;
+    right: 46px;
+    top: 40px;
+}
+.ssfx .mode02 .modeCon .legend li{
+    margin-bottom: 4px;
+}
+.ssfx .mode02 .modeCon .legend li i{
+    display: inline-block;
+    width: 13px;
+    height: 12px;
+    border-radius: 2px;
+    background: red;
+    margin-right: 3px;
+}
+.ssfx .mode02 .modeCon .legend li label{
+    color: #343434;
+    font-size: 16px;
+}
+.ssfx .mode02 .modeCon .legend li span{
+    font-size: 19px;
+}
+.ssfx .mode02 .modeCon .legend .li01 i{
+    background: #88CA6E;
+}
+.ssfx .mode02 .modeCon .legend .li01 span{
+    color: #88CA6E;
+}
+.ssfx .mode02 .modeCon .legend .li02 i{
+    background: #3AA874;
+}
+.ssfx .mode02 .modeCon .legend .li02 span{
+    color: #3AA874;
+}
+.ssfx .mode02 .modeCon .legend .li03 i{
+    background: #008C72;
+}
+.ssfx .mode02 .modeCon .legend .li03 span{
+    color: #008C72;
+}
+.ssfx .mode02 .modeCon .legend .li04 i{
+    background: #2EC6F2;
+}
+.ssfx .mode02 .modeCon .legend .li04 span{
+    color: #2EC6F2;
+}
+.ssfx .mode02 .modeCon .legend .li05 i{
+    background: #0EAEF1;
+}
+.ssfx .mode02 .modeCon .legend .li05 span{
+    color: #0EAEF1;
+}
+
+.ssfx .mode03{
+    width: 100%;
+}
+
+/* 鑽搧鍑哄叆搴撳垎鏋� */
+.drugFx .leftLi{
+    width: 50%;
+    height: 281px;
+}
+.drugFx .mode01{
+    width: 100%;
+}
+.drugFx .mode02{
+    width: 100%;
+}
+
+.drugFx .mode03 .modeBg{
+    height: 576px;
+}
+
+/* 姝讳骸浜哄彛淇℃伅 */
+.swrkxx .mode02 .modeCon{
+    position: relative;
+}
+.swrkxx .mode02 .modeCon .legend{
+    position: absolute;
+    width: 175px;
+    top: 70px;
+    right: 55px;
+}
+.swrkxx .mode02 .modeCon .legend li{
+    float: left;
+    width: 50%;
+    margin-bottom: 9px;
+}
+.swrkxx .mode02 .modeCon .legend li i{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    vertical-align: -2px;
+    margin-right: 2px;
+}
+.swrkxx .mode02 .modeCon .legend li label{
+    font-size: 12px;
+}
+.swrkxx .mode02 .modeCon .legend .li01 i{
+    background: #88CA6D;
+}
+.swrkxx .mode02 .modeCon .legend .li02 i{
+    background: #3AA873;
+}
+.swrkxx .mode02 .modeCon .legend .li03 i{
+    background: #2EEDE6;
+}
+.swrkxx .mode02 .modeCon .legend .li04 i{
+    background: #F9A92B;
+}
+.swrkxx .mode02 .modeCon .legend .li05 i{
+    background: #0DAEF1;
+}
+.swrkxx .mode02 .modeCon .legend .li06 i{
+    background: #1572D5;
+}
+.swrkxx .mode02 .modeCon .legend .li07 i{
+    background: #744EBC;
+}
+.swrkxx .mode02 .modeCon .legend .li08 i{
+    background: #5D6DBD;
+}
+
+.swrkxx .mode03 .modeTop .title{
+    position: relative;
+}
+.swrkxx .mode03 .modeTop .title .legend{
+    position: absolute;
+    width: 305px;
+    left: 170px;
+    top: 0px;
+}
+.swrkxx .mode03 .modeTop .title .legend li{
+    float: left;
+    width: 25%;
+}
+.swrkxx .mode03 .modeTop .title .legend li i{
+    display: inline-block;
+    width: 14px;
+    height: 8px;
+    margin-right: 1px;
+    vertical-align: 1px;
+}
+.swrkxx .mode03 .modeTop .title .legend li label{
+    font-size: 12px;
+    color:#333;
+}
+.swrkxx .mode03 .modeTop .title .legend .li01 i{
+    background: url("../images/swrkxx/icon01.png") no-repeat;
+    background-size: 100% 100%;
+}
+.swrkxx .mode03 .modeTop .title .legend .li02 i{
+    background: url("../images/swrkxx/icon02.png") no-repeat;
+    background-size: 100% 100%;
+}
+.swrkxx .mode03 .modeTop .title .legend .li03 i{
+    background: url("../images/swrkxx/icon03.png") no-repeat;
+    background-size: 100% 100%;
+}
+.swrkxx .mode03 .modeTop .title .legend .li04 i{
+    background: url("../images/swrkxx/icon04.png") no-repeat;
+    background-size: 100% 100%;
+}
+.swrkxx .mode03 .modeTop .title .legend .li05 i{
+    background: url("../images/swrkxx/icon05.png") no-repeat;
+    background-size: 100% 100%;
+}
+.swrkxx .mode03 .modeTop .title .legend .li06 i{
+    background: url("../images/swrkxx/icon06.png") no-repeat;
+    background-size: 100% 100%;
+}
+.swrkxx .mode03 .modeTop .title .legend .li07 i{
+    background: url("../images/swrkxx/icon07.png") no-repeat;
+    background-size: 100% 100%;
+}
+.swrkxx .mode03 .modeTop .title .legend .li08 i{
+    background: url("../images/swrkxx/icon08.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+.swrkxx .mode03 .modeCon .chartBox{
+    float: left;
+    width: 79%;
+}
+.swrkxx .mode03 .modeCon .info{
+    float: left;
+    width: 21%;
+}
+.swrkxx .mode03 .modeCon .info .det{
+    font-size: 12px;
+    margin-top: 6px;
+}
+.swrkxx .mode03 .modeCon .info .det li{
+    margin-bottom: 10px;
+}
+.swrkxx .mode03 .modeCon .info .det li label{
+    display: inline-block;
+    width: 52px;
+    text-align: right;
+}
+.swrkxx .mode03 .modeCon .info .det li span{
+    display: inline-block;
+    margin-left: 4px;
+}
+
+.swrkxx .mode04 .modeCon {
+    position: relative;
+    height: 246px;
+}
+.swrkxx .mode04 .modeCon .chartBox{
+    position: absolute !important;
+    width: 45%;
+    height: 205px;
+    right: 0;
+    top: 0;
+}
+.swrkxx .mode04 .modeCon .legend{
+    position: absolute;
+    bottom: 5px;
+}
+.swrkxx .mode04 .modeCon .legend01{
+    left: 22px;
+}
+.swrkxx .mode04 .modeCon .legend02{
+    left: 180px;
+}
+.swrkxx .mode04 .modeCon .legend03{
+    left: 380px;
+}
+.swrkxx .mode04 .modeCon .legend li{
+    height: 12px;
+    line-height: 12px;
+    margin-bottom: 6px;
+}
+.swrkxx .mode04 .modeCon .legend li i{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: red;
+    margin-right: 2px;
+    vertical-align: -1px;
+}
+.swrkxx .mode04 .modeCon .legend li label{
+    font-size: 12px;
+}
+
+.swrkxx .mode04 .modeCon .legend .li01 i{
+    background: #7EB14A;
+}
+.swrkxx .mode04 .modeCon .legend .li02 i{
+    background: #1BACBF;
+}
+.swrkxx .mode04 .modeCon .legend .li03 i{
+    background: #178ACF;
+}
+.swrkxx .mode04 .modeCon .legend .li04 i{
+    background: #68B6F4;
+}
+.swrkxx .mode04 .modeCon .legend .li05 i{
+    background: #5792F3;
+}
+.swrkxx .mode04 .modeCon .legend .li06 i{
+    background: #5D6DBD;
+}
+.swrkxx .mode04 .modeCon .legend .li07 i{
+    background: #9477CA;
+}
+.swrkxx .mode04 .modeCon .legend .li08 i{
+    background: #744EBC;
+}
+.swrkxx .mode04 .modeCon .legend .li09 i{
+    background: #B96BC6;
+}
+.swrkxx .mode04 .modeCon .legend .li10 i{
+    background: #F59ADC;
+}
+.swrkxx .mode04 .modeCon .legend .li11 i{
+    background: #EC7FC4;
+}
+.swrkxx .mode04 .modeCon .legend .li12 i{
+    background: #A94CBA;
+}
+.swrkxx .mode04 .modeCon .legend .li13 i{
+    background: #BA4CAC;
+}
+.swrkxx .mode04 .modeCon .legend .li14 i{
+    background: #9DDE5B;
+}
+.swrkxx .mode04 .modeCon .legend .li15 i{
+    background: #CBF04C;
+}
+.swrkxx .mode04 .modeCon .legend .li16 i{
+    background: #D9DB1B;
+}
+.swrkxx .mode04 .modeCon .legend .li17 i{
+    background: #DC9023;
+}
+
+.ypcrk{
+    
+}
+.ypcrk .mode01 i{
+    vertical-align: 16px !important;
+}
+.ypcrk .mode01 label{
+    vertical-align:18px !important;
+}
+.ypcrk .mode01 .msg-box{
+    display: inline-block;
+    font-size:12px;
+    color:#333;
+}   
+.ypcrk .mode01 .msg-box .left-name{
+    float: left;
+    margin-left: 20px;
+}   
+.ypcrk .mode01 .msg-box .list{
+    float: left;
+    margin-left:10px;
+}   
+.ypcrk .mode01 .msg-box .list .num-sty1{
+    color:#3aa873
+}   
+.ypcrk .mode01 .msg-box .list .num-sty2{
+    color:#5792f3
+}   
+.ypcrk .mode02 .legend{
+    display: inline-block;
+    margin-left: 30px;
+}   
+.ypcrk .mode02 .title{
+    position: relative;
+}
+.ypcrk .mode02 .btn{
+    position: absolute;
+    right: 0;
+    top: 0;
+}   
+.ypcrk .mode02 .btn .text{
+    vertical-align: 2px;
+    margin-right: 5px;
+}   
+.ypcrk .mode02 .legend .name label{
+    font-size:14px;
+    color:#333;
+}  
+.ypcrk .mode02 .legend .sp01{
+    margin-right: 10px;
+} 
+.ypcrk .mode02 .legend .sp01 i{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background:#f7b764;
+    margin-right: 6px;
+    border-radius:2px;
+}   
+.ypcrk .mode02 .legend .sp02 i{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background:#88ca6d;
+    margin-right: 6px;
+    border-radius:2px;
+}   
+.ypcrk .mode02 .left-list{
+    float:left;
+    width:40%;
+    margin-top:19px;
+}  
+.ypcrk .mode02 .left-list li{
+    position: relative;
+    height: 19px;
+} 
+.ypcrk .mode02 .left-list li .line{
+    position: absolute;
+    height: 10px;
+    border-bottom:1px dashed #D6D6D6;
+    left: 40px;
+    right: 8px;
+} 
+.ypcrk .mode02 .left-list .icon{
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background:#88ca6d;
+    border-radius:50%;
+    margin-left: 25px;
+}   
+.ypcrk .mode02 .left-list .name{
+    display: inline-block;
+    padding-left: 6px;
+    padding-right: 6px;
+    background:#fff;
+    position: relative;
+    z-index:2;
+}   
+.ypcrk .mode02 .chartBox{
+    float:left;
+    width:60%;
+}   
+
+
+.ypcrk .mode03 .left-list{
+    float:left;
+    width:40%;
+    margin-top:13px;
+}  
+.ypcrk .mode03 .left-list li{
+    position: relative;
+    height: 25px;
+} 
+.ypcrk .mode03 .chartBox{
+    float:left;
+    width:60%;
+} 
+.ypcrk .mode03 .left-list .icon{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color:#fff;
+    background:url("../images/rankBg.png") no-repeat;
+    background-size:100% 100%;
+    margin-left: 19px;
+}  
+.ypcrk .mode03 .left-list .name{
+    display: inline-block;
+    padding-left: 6px;
+    padding-right: 6px;
+    background:#fff;
+    position: relative;
+    z-index:2;
+    font-size:13px;
+    margin-left: -5px;
+}
+.ypcrk .mode03 .left-list li .line{
+    position: absolute;
+    height: 15px;
+    border-bottom:1px dashed #4085C6;
+    left: 100px;
+    right: 8px;
+} 
+.ypcrk .mode03 .chartBox{
+    float:left;
+    width:60%;
+    height: 560px;
+}  
+.ypcrk .mode03 .legend{
+    display: inline-block;
+    margin-left: 30px;
+}   
+.ypcrk .mode03 .title{
+    position: relative;
+}
+.ypcrk .mode03 .legend .name label{
+    font-size:14px;
+    color:#333;
+}  
+.ypcrk .mode03 .legend .sp01 i{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background:#469FE2;
+    margin-right: 6px;
+    border-radius:2px;
+}  
+
+.jdfx .mode01{
+    width:100%;
+    margin-bottom: 0;
+    height: 316px;
+}
+.jdfx .mode01 .modeBg{
+    height: 316px;
+}
+.jdfx .mode02{
+    margin-bottom: 0;
+}
+.jdfx .mode02 .modeBg{
+    height: 316px;
+}
+.jdfx .mode02 .chartBox{
+   height: 280px;
+}
+.jdfx .mode01 .chartBox{
+   height: 280px;
+}
+.jdfx .mode03 .chartBox{
+    height: 280px;
+ }
+.jdfx .mode03{
+    width:100%;
+}
+.jdfx .mode03 .modeBg{
+    height: 316px;
+}

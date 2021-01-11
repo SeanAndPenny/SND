@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JkdaglfxDao">       
+
+
+<sql id="commonWhere">
+	     <if test="sjlx=='day' ">
+	       <if test="kssj != null and kssj !='' ">
+			     <![CDATA[  and JDRQ>= to_date(trim(#{kssj}),'yyyy-mm-dd')]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' ">
+			     <![CDATA[  and JDRQ <= to_date(trim(#{jssj}),'yyyy-mm-dd')+1]]>
+		    </if> 
+	     </if>
+	     
+		 <if test="sjlx=='month' ">
+	       <if test="kssj != null and kssj !='' ">
+			     <![CDATA[   and to_char(JDRQ,'yyyy-mm')>= trim(#{kssj})]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' ">
+			     <![CDATA[   and to_char(JDRQ,'yyyy-mm')<= trim(#{jssj})]]>
+		    </if> 
+	    </if>  
+	     
+	   <if test="sjlx=='year' ">
+	       <if test="kssj != null and kssj !='' ">
+			     <![CDATA[   and to_char(JDRQ,'yyyy')>= trim(#{kssj})]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' ">
+			     <![CDATA[   and to_char(JDRQ,'yyyy')<= trim(#{jssj})]]>
+		    </if> 
+	   </if> 
+	   <if test="jgdm != null and jgdm !='' ">
+			    <![CDATA[  and b.yljgdm= trim(#{jgdm})]]>
+	   </if>
+      </sql>
+
+ <sql id="commonWhere2">
+ 
+	  <if test="jgdm != null and jgdm !='' ">
+			    <![CDATA[  and  yljgdm= trim(#{jgdm})]]>
+	   </if>
+</sql>
+<select id="getyjdfx" resultType="com.wondersgroup.wszygl.model.jkdaglfxModel">
+	<![CDATA[
+	  	  select yljgmc,
+       sum(LDRKJDS) as yjdldrk,
+       sum(HJRKJDS) as yjdhjrk,
+       sum(QTRKJDS) as yjdqtrk
+  from TB_TABLE1  b
+  where 1=1 
+       ]]>
+       <include refid="commonWhere"></include>  
+       <![CDATA[  group by yljgmc ]]> 
+         
+       
+</select>
+
+<select id="getczrkzs" resultType="String">
+	<![CDATA[
+	  	 select count(1)
+    from XQ_CZRK a
+   inner join t_zd_pcs_jd b
+on trim(a.pcsdm) = trim(b.pcsdm)   
+where 1=1  
+       ]]> 
+        <include refid="commonWhere2"></include> 
+</select>
+<select id="getldrkzs" resultType="String">
+	<![CDATA[
+	  	  select count(1)  
+    from XQ_ldRK a
+   inner join ld_pcs b
+      on trim(a.pcs) = b.pcs
+      where 1=1
+       ]]> 
+        <include refid="commonWhere2"></include> 
+</select>
+
+
+<select id="getMinJdsj" resultType="String">
+	<![CDATA[
+	  	  select  min(to_char(JDRQ,'yyyy-MM')) from  tb_chss_grjkda
+       ]]> 
+</select>
+<select id="getMaxJdsj" resultType="String">
+	<![CDATA[
+	  	  select  max(to_char(JDRQ,'yyyy-MM')) from  tb_chss_grjkda
+       ]]> 
+</select>
+<select id="getMaxJdsjs" resultType="String">
+	<![CDATA[
+	  	  select  max(to_char(JDRQ,'yyyy-MM-dd')) from  tb_chss_grjkda
+       ]]> 
+</select>
+
+<select id="getjdjgList" resultType="com.wondersgroup.wszygl.model.SwxxJgdmModel">
+	<![CDATA[
+	  	 select yljgdm as jgdm,pcsmc as jgmc  from LD_PCS t
+where 1=1
+       ]]> 
+        <include refid="commonWhere2"></include> 
+</select>
+
+
+<select id="getdjdfx" resultType="com.wondersgroup.wszygl.model.jkdaglfxModel">
+	<![CDATA[
+	  	  select djdczrk,djdldrk,yljgdm,yljgmc as pcsmc from tb_table2 where 1=1
+       ]]> 
+        <include refid="commonWhere2"></include> 
+       
+</select>
+
+<select id="getjdqsfx" resultType="com.wondersgroup.wszygl.model.jkdaglfxModel">
+	<![CDATA[
+  select count(1) as jdrs,${jdrqgs} as jdrq from tb_chss_grjkda b where 1=1  and dazt=1
+         ]]> 
+          <include refid="commonWhere"></include> 
+          <![CDATA[
+  group by ${jdrqgs}   order by  jdrq 
+         ]]> 
+</select> 
+
+
+
+
+
+
+
+<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.jkdaglfxModel">
+	  <if test="xlh==1 ">
+	        <![CDATA[
+		 select  '户籍待建档' as lxmc,xm,xb as xbmc, substr(csrq,0,4)||'-'||substr(csrq,6,2)||'-'|| substr(csrq,9,2) as csrq,a.sfhm as zjhm,
+mz,hjdz as hjdz,gdsj as djrq,c.jdmc as ssxz
+ from XQ_czRK  a 
+inner join    
+    (select sfhm from 
+(select sfhm,yljgdm from XQ_czRK a
+   inner join t_zd_pcs_jd b
+      on trim(a.pcsdm) = trim(b.pcsdm)
+      where glzt = 1
+       
+        MINUS
+     select zjhm,yljgdm  from tb_chss_grjkda 
+     where dazt=1)
+      where 1=1 
+		    ]]>
+		    <include refid="djdxz"></include>
+		    <![CDATA[
+		 )b
+      on a.sfhm=b.sfhm  
+       inner  join  t_zd_pcs_jd c
+     on trim(a.pcsdm) = c.pcsdm where 1=1
+		    ]]>
+		    <include refid="djdxz2"></include>
+		</if> 
+		<if test="xlh==0 ">
+	        <![CDATA[
+	        select '流动待建档' as lxmc,xm,xb as xbmc, substr(csrq,0,4)||'-'||substr(csrq,6,2)||'-'|| substr(csrq,9,2) as csrq,a.sfzh as zjhm,
+mz,hjdzxz as hjdz,djrq as djrq,c.pcsmc as ssxz
+ from XQ_ldRK  a 
+inner join    
+    (select sfzh from 
+(select sfzh,yljgdm from XQ_ldRK a
+   inner join ld_pcs b
+       on trim(a.pcs) = b.pcs
+      where 1=1
+       
+        MINUS
+     select zjhm,yljgdm  from tb_chss_grjkda 
+     where dazt=1)
+      where 1=1    	 
+		    ]]>
+		     <include refid="djdxz"></include>
+		   <![CDATA[ 
+		)b
+      on a.sfzh=b.sfzh  
+       inner  join  ld_pcs c
+     on trim(a.pcs) = c.pcs	 where 1=1
+		   ]]>
+		  <include refid="djdxz2"></include>
+		</if> 
+		
+		
+
+	</select>
+
+
+
+<sql id="djdxz">
+	  <if test="yljgdm != null and yljgdm !='' ">
+			    <![CDATA[  and   yljgdm= trim(#{yljgdm})]]>
+	   </if>
+</sql>
+<sql id="djdxz2">
+	  <if test="xb != null and xb !='' ">
+			    <![CDATA[  and   xb= trim(#{xb})]]>
+	   </if>
+	   <if test="csrq != null and csrq !='' ">
+			    <![CDATA[  and    substr(csrq,0,4)||'-'||substr(csrq,6,2)||'-'|| substr(csrq,9,2)= trim(#{csrq})]]>
+	   </if>
+</sql>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.YjclDao">
+  <select id="getYjclList" resultType="com.wondersgroup.wszygl.model.YjclModel">
+	<![CDATA[
+	      select count(1) as sl
+  from (select count(1), cph from tb_yj_cljk group by cph)
+		]]>
+ </select>
+<select id="getYjcl" resultType="com.wondersgroup.wszygl.model.YjclModel" >
+		<![CDATA[
+ 	select count(1) as dyccl,
+       yljgdm,
+       yljgmc,
+        round((sum(CEIL((ddxcsj - pcsj) * 24 * 60)) / count(1)),2) as ccpjxjsj
+  from tb_yj_cljk
+where to_char(ccsj,'yyyymm')=to_char(sysdate,'yyyymm') and cph is not null
+group by yljgdm,yljgmc 
+			 ]]>
+		
+	</select>
+
+</mapper>

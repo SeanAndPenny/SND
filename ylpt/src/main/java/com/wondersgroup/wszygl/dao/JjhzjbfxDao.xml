@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JjhzjbfxDao">
+  <sql id="commonWhere">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(CREATE_TIME,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(CREATE_TIME,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+  </sql>
+  
+  <sql id="commonWhere2">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(CREATE_TIME,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(CREATE_TIME,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+    <if test="fzjb != null and fzjb !='' ">
+      <![CDATA[ and RESET_LEVEL=trim(#{fzjb})]]>
+    </if>
+  </sql>
+  
+  
+  
+  <select id="getJjhzjbfxListList" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+  <![CDATA[
+         select count(1)as sl,RESET_LEVEL as fzjb,
+         decode(RESET_LEVEL,'01','一级','02','二级','03','三级','04','四级','未知级别')as fzjbmc
+           from TB_FZ_MXB   where 1=1
+    ]]>
+       <include refid="commonWhere"></include>
+    <![CDATA[   group by RESET_LEVEL   ]]>
+              
+  </select>
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JjsjFxModel">
+    <![CDATA[
+      select name,GENDER_CAPTION as xbmc,REG_AGE_CAPTION as nl,PATIENT_SAY as zs,CREATE_TIME as fzsj,
+NURSE_NAME as fzhs, DEPT_NAME as fzks,TO_WHERE as fzjg,decode(RESET_LEVEL,'01','1级','02','2级','03','3级','04','4级','未知级别')as fzjb
+ from TB_FZ_MXB  
+ where 1=1  
+     
+    ]]>
+    <include refid="commonWhere2"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

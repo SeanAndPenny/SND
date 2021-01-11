@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.IAEDDao">
+    <!--统一where条件-->
+      <sql id="commonWhere">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and a.iaedate>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and a.iaedate<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1 ]]>
+		       </if>
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and a.iaeunitcode =trim(#{jgdm})]]>
+		    </if>
+            <if test="objectCode != null and objectCode !='' and objectCode !='undefined' ">
+                  <![CDATA[ and a.iaesubjectcode like (trim(#{objectCode}) || '%')]]>
+            </if>
+      </sql>
+    <!--根据类型趋势分析-->
+     <sql id="commonWhereObjectCode">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and a.iaedate>=to_date(trim(#{kssj}),'yyyy-MM-dd')-366]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and a.iaedate<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1]]>
+		       </if>
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined'">
+			    <![CDATA[ and a.iaeunitcode =trim(#{jgdm})]]>
+		    </if> 
+		    <if test="objectCode != null and objectCode !='' and objectCode !='undefined'">
+			    <![CDATA[ and a.iaesubjectcode like (trim(#{objectCode}) || '%')]]>
+		    </if> 
+      </sql>
+       
+  <select id="getChart01" resultType="com.wondersgroup.wszygl.model.IAEDModel">
+    <![CDATA[
+  select substr(iaesubjectcode,0,1) objectCode,sum(iaefee)/10000 fee,iaeunitcode unitCode,iaeunit unitName from t_fa_iaed a
+     where 1=1
+	   ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+      group by substr(iaesubjectcode,0,1),iaeunitcode,iaeunit
+      order by iaeunitcode,substr(iaesubjectcode,0,1)
+	]]>
+</select>
+
+<!--获取收入支出/各个项目对应和的费用 #编译的时候会有占位符 故不能通过 但是$是纯字符串但是有被注入的风险-->
+    <select id="getCicleChart01" resultType="com.wondersgroup.wszygl.model.IAEDModel">
+        <if test="objectLen != null and objectLen !='' and objectLen !='undefined'">
+             <![CDATA[
+                  select substr(a.iaesubjectcode,0,${objectLen}) objectCode,b.iaesubject objectName,sum(a.iaefee)/1000 fee from t_fa_iaed a left join tb_dic_iaed b
+                    on substr(a.iaesubjectcode,0,${objectLen}) = b.iaesubjectcode
+                      where 1=1
+             ]]>
+        </if>
+        <include refid="commonWhere"></include>
+        <if test="objectLen != null and objectLen !='' and objectLen !='undefined'">
+            <![CDATA[
+                  group by substr(a.iaesubjectcode,0,${objectLen}),b.iaesubject
+                  order by substr(a.iaesubjectcode,0,${objectLen}),b.iaesubject
+            ]]>
+        </if>
+    </select>
+
+<!--获取收入支出/各个特定项目对应的月度趋势-->
+    <select id="getAreaChart01" resultType="com.wondersgroup.wszygl.model.IAEDModel">
+        <if test="objectLen != null and objectLen !='' and objectLen !='undefined'">
+	        <![CDATA[
+              select substr(a.iaesubjectcode,0,${objectLen}) objectCode,b.iaesubject objectName,sum(a.iaefee)/1000 fee,to_char(a.iaedate,'yyyy-mm') searchDate from t_fa_iaed a left join tb_dic_iaed b
+                on substr(a.iaesubjectcode,0,${objectLen}) = b.iaesubjectcode
+                  where 1=1
+	        ]]>
+        </if>
+     <include refid="commonWhereObjectCode"></include>
+        <if test="objectLen != null and objectLen !='' and objectLen !='undefined'">
+           <![CDATA[
+               group by substr(a.iaesubjectcode,0,${objectLen}),b.iaesubject,to_char(a.iaedate,'yyyy-mm')
+               order by substr(a.iaesubjectcode,0,${objectLen}),b.iaesubject,to_char(a.iaedate,'yyyy-mm')
+           ]]>
+        </if>
+    </select>
+
+  <select id="getMinSwsj" resultType="String">
+	select min(to_char(OPER_DATE,'yyyy-MM-dd')) from T_MR_OPERATIONRECORD t
+ </select>
+  <select id="getMaxSwsj" resultType="String">
+	 select max(to_char(OPER_DATE,'yyyy-MM-dd')) from T_MR_OPERATIONRECORD t
+  </select>
+</mapper>

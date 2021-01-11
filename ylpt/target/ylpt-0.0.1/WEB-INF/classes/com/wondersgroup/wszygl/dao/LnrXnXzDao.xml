@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.LnrXnXzDao">
+   
+  <sql id="commonWhere">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[   and to_char(a.scrq,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[  and to_char(a.scrq,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if> 
+    <if test="yljgdm != null and yljgdm !='' and yljgdm!='undefined'">
+      <![CDATA[ and yljgdm=trim(#{yljgdm})]]>
+    </if>
+  </sql> 
+  <select id="getLnrXnXz" resultType="com.wondersgroup.wszygl.model.LnrModel">
+  <![CDATA[
+             select sum(xxjbrs) as xxjbrs,
+       xxjblxmc,
+       yljgdm,
+       b.mc as yljgmc,
+      
+      round(sum(xxjbrs) /  c.rs, 5) * 100  as xxzb
+  from (select count(1) as xxjbrs, 'xxjb' as xxjblx, '心血管' as xxjblxmc,yljgdm
+          from TB_XXGB_531SC a
+         where 1 = 1
+    ]]>
+       <include refid="commonWhere"></include>
+    <![CDATA[   
+      group by scrq, yljgdm) a
+      left join tb_volap_yljg b
+      on a.yljgdm=b.id 
+      left join tb_50rstj c
+      on a.yljgdm=c.yljgdm
+ group by xxjblxmc,yljgdm ,b.mc,c.rs
+     ]]>
+              
+  </select>
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.LnrModel">
+    <![CDATA[
+     select xm,decode(xb,'1','男','2','女') as xb,
+ nl,to_char(scrq,'yyyy-mm-dd') as scrq,scysxm,decode(SNHBFX,'1','是','0','否') as SNHBFX,
+ decode(scjg,'1','低危','2','中危','3','高危') scjg, b.mc as yljgmc
+          from TB_XXGB_531SC a
+          left join tb_volap_yljg b
+    on a.yljgdm = b.id
+         where 1 = 1
+     
+    ]]>
+    <include refid="commonWhere"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

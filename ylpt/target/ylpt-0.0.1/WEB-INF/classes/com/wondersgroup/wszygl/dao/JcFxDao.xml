@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JcFxDao">
+	
+<select id="getjcjgList" resultType="com.wondersgroup.wszygl.model.SwxxJgdmModel">
+ <![CDATA[
+ select id as jgdm,mc as jgmc from tb_volap_yljg where yylb is not null
+ ]]>
+  <include refid="commonWhere"></include>  
+ </select>
+ 
+ <select id="getjcfxList" resultType="com.wondersgroup.wszygl.model.JcFxModel">
+	<![CDATA[
+	  	select  (count(1)/10000) as jcrs,b.yylb,yljgdm,
+	  	case when yljgdm!='46695190832050512C2201' then replace(b.mc,'苏州高新区','') 
+else b.mc end  as yljgmc
+	  	from TB_RIS_Report a 
+inner join tb_volap_yljg b
+on a.yljgdm=b.id 
+where b.yylb='A1'
+       ]]> 
+        <include refid="commonWhere2"></include>  
+        <![CDATA[
+        group by yljgdm,b.mc,b.yylb
+        ]]>
+ </select> 
+ 
+ <select id="getjcjcfxList" resultType="com.wondersgroup.wszygl.model.JcFxModel">
+	<![CDATA[
+	  	select  (count(1)/10000) as jcrs,b.yylb,yljgdm,replace(b.mc,'苏州高新区','') as yljgmc from TB_RIS_Report a 
+inner join tb_volap_yljg b
+on a.yljgdm=b.id 
+where b.yylb='AA'
+       ]]> 
+        <include refid="commonWhere2"></include>  
+        <![CDATA[
+        group by yljgdm,b.mc,b.yylb
+        ]]>
+ </select>
+
+ <select id="getMinSwsj" resultType="String">
+ select min(to_char(JYSJ,'yyyy-MM-dd')) from TB_RIS_Report
+ </select>
+ <select id="getMaxSwsj" resultType="String">
+ select max(to_char(JYSJ,'yyyy-MM-dd')) from TB_RIS_Report
+ </select>
+ 
+ 
+ 
+ <select id="getechars" resultType="com.wondersgroup.wszygl.model.JcFxModel">
+	<![CDATA[
+	  	 select  count(1) as jcrs,decode(ExamType,'01','计算机X线断层摄影','02','核磁共振成像','03','整数减影血管造影',
+'04','普通X光摄影','05','特殊X光摄影','06','超声检查','07','病理检查','08','內镜检查','09','核医学检查','10','其他检查') as jclx from TB_RIS_Report a 
+inner join tb_volap_yljg b
+on a.yljgdm=b.id where 1=1
+       ]]> 
+        <include refid="commonWhere3"></include>  
+        <![CDATA[
+           group by ExamType
+        ]]>
+ </select>
+ 
+ 
+ 
+ 
+ <sql id="commonWhere">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and   id= trim(#{jgdm})]]>
+		   </if> 
+ </sql>
+ <sql id="commonWhere2">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and   a.yljgdm= trim(#{jgdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   JYSJ>= to_date(#{kssj},'yyyy-MM-dd')]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			       <![CDATA[ and   JYSJ<= to_date(#{jssj},'yyyy-MM-dd')+1]]>
+		   </if>
+ </sql>
+ <sql id="commonWhere3">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and   a.yljgdm= trim(#{jgdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   JYSJ>= to_date(#{kssj},'yyyy-MM-dd')]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			       <![CDATA[ and   JYSJ<= to_date(#{jssj},'yyyy-MM-dd')+1]]>
+		   </if> 
+		   <if test="yylb != null and yylb !='' ">
+			       <![CDATA[ and   b.yylb= trim(#{yylb})]]>
+		   </if>
+ </sql>
+</mapper>

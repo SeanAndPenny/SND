@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JtysJgxzDao">
+   <sql id="commonWhere">
+    <if test="qyjgid != null and qyjgid !='' ">
+      <![CDATA[and  qyjgid  =trim(#{qyjgid})]]>
+    </if>
+     
+  </sql>
+ 
+   
+   <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JtysModel">
+    <![CDATA[
+       select * from (
+ select c.tdmc,qyfamc,qysxkssj, d.mc as qyjgmc, tdzxm, 
+ c.ssjg as qyjgid,qytdmc
+ from 
+    (select replace(replace(b.QYTDID, '[ { "$oid" : "', ''),'"}]','') as QYTDID,
+    qyfamc,qysxkssj,a.qyrxm,b.QYTDMC
+          from Tb_JTYS_PATIENT_SIGN a
+         inner join Tb_JTYS_PATIENT_SIGN_DETAIL b
+            on a.GRQYLSH = b.GRQYLSH
+              where a.zhzt = 'approved'
+           AND substr(a.QYSXKSSJ, 0, 7) = to_char(sysdate, 'yyyy-mm')
+           group  by b.QYTDMC,a.qyrxm,qysxkssj,qyfamc, a.grqylsh,replace(replace(b.QYTDID, '[ { "$oid" : "', ''),'"}]',''))aa
+           inner join Tb_JTYS_TEAM c
+           on aa.QYTDID=c.tdbh
+           inner join tb_volap_yljg d 
+           on c.SSJG=d.id
+          
+          )
+           where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+  </select>
+  
+  <select id="getJtysFwbXz" resultType="com.wondersgroup.wszygl.model.JtysModel">
+   <![CDATA[
+  select * from (select count(1)rs,c.TDBH, c.ssjg as qyjgid,d.mc as qyjgmc ,c.tdmc from 
+    (select replace(replace(b.QYTDID, '[ { "$oid" : "', ''),'"}]','') as QYTDID
+          from Tb_JTYS_PATIENT_SIGN a
+         inner join Tb_JTYS_PATIENT_SIGN_DETAIL b
+            on a.GRQYLSH = b.GRQYLSH
+              where a.zhzt = 'approved'
+           AND substr(a.QYSXKSSJ, 0, 7) = to_char(sysdate, 'yyyy-mm')
+           group  by a.grqylsh,replace(replace(b.QYTDID, '[ { "$oid" : "', ''),'"}]',''))aa
+           inner join Tb_JTYS_TEAM c
+           on aa.QYTDID=c.tdbh
+           inner join tb_volap_yljg d 
+           on c.SSJG=d.id
+           group by c.SSJG,d.mc,c.tdmc,c.TDBH  
+           order by count(1) desc) where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+     
+   </select>
+  
+   
+
+
+</mapper>

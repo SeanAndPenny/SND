@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.CsrsDao">
+	 	
+       <sql id="commonWhere">
+            <if test="yylx != null and yylx !='' and yylx=='QN' ">
+               <![CDATA[ and yljgdm in('46699327832050511A1001',  '46699062432050511A1001', '46695190832050512C2201',  '76150479932050523A1002') ]]>
+            </if>  
+             <if test="yylx != null and yylx !='' and yylx=='QW' ">
+               <![CDATA[ and yljgdm NOT in('46699327832050511A1001',  '46699062432050511A1001', '46695190832050512C2201',  '76150479932050523A1002') ]]>
+            </if>
+       </sql>
+       <sql id="commonWhere2">
+            
+            <if test="yljgdm != null and yljgdm !='' ">
+               <![CDATA[ AND  yljgdm =trim(#{yljgdm})]]>
+            </if>   
+       </sql>
+	 <select id="getCsrstj" resultType="com.wondersgroup.wszygl.model.CsrsModel">
+	  <![CDATA[
+		   select sum(sl) as csrs,yylx,decode(yylx,'QN','区内医院','QW','区外医院') as yylxmc from 
+(select count(1) as  sl,
+       yljgdm,
+       b.mc as yljgmc,
+       case when yljgdm in('46699327832050511A1001',
+                           '46699062432050511A1001',
+                           '46695190832050512C2201',
+                           '76150479932050523A1002')
+             then 'QN'
+               ELSE 'QW' END yylx
+  from tb_eb_csyxzm a
+ inner join tb_volap_yljg b
+    on a.yljgdm = b.id
+ where to_char(xsecsrqsj, 'yyyy') = to_char(sysdate, 'yyyy')
+ group by yljgdm, mc)
+ group by yylx
+
+		  ]]>
+	</select>
+	
+	
+	
+	
+	
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.CsrsModel">
+		<![CDATA[
+	    select xm,
+       decode(xb, '1', '男', '2', '女') as xbmc,
+       XSECSRQSJ as csrq,
+       mqxm,
+       csyxzmbh as cszm,
+       replace(CSD,'              ','') as  CSD,
+       jsjgmc,jsryxm
+
+  from tb_eb_csyxzm a
+ inner join tb_volap_yljg b
+    on a.yljgdm = b.id
+ where to_char(XSECSRQSJ, 'yyyy') = to_char(sysdate, 'yyyy')
+		]]>
+		<include refid="commonWhere2"></include>
+	</select>
+	
+	
+	
+	 <select id="getCsrsXzjgechartsList" resultType="com.wondersgroup.wszygl.model.CsrsModel">
+	  <![CDATA[
+	  select count(1) as  csrs,
+       yljgdm,
+       b.mc as yljgmc
+       
+        from tb_eb_csyxzm a
+ inner join tb_volap_yljg b
+    on a.yljgdm = b.id
+ where to_char(xsecsrqsj, 'yyyy') = to_char(sysdate, 'yyyy')
+		     
+		  ]]>
+	 <include refid="commonWhere"></include>
+	 <![CDATA[
+	     group by yljgdm, mc
+		]]>
+	</select>
+	
+	 <select id="getCxlb" resultType="com.wondersgroup.wszygl.model.CsrscxlbModel">
+	  <![CDATA[
+	    select lbdm,lbmc  from TB_CSLB     
+		  ]]>
+	</select>
+	
+	<select id="getFmrstj" resultType="com.wondersgroup.wszygl.model.CsrsModel">
+	  <![CDATA[
+	  SELECT COUNT(1) AS csrs ,hjbz,DECODE(HJBZ,'1','户籍','0','非户籍') AS hjbzmc FROM   tb_fb_fmjl
+where    to_char(fmrqsj, 'yyyy') = to_char(sysdate, 'yyyy')
+ GROUP BY HJBZ
+
+		     
+		  ]]>
+	  
+	</select>
+	
+</mapper>

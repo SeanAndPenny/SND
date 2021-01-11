@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.GwdazbDao">
+	
+
+	<sql id="commonWhere">
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ and tjrq=substr(#{enddate},0,4)]]>
+		</if>
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	<sql id="commonWhere2">
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ and to_char(jdrq,'yyyy-mm-dd')<=#{enddate}]]>
+		</if>
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	<sql id="commonWhere3">
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ and DTRQ<=#{enddate}]]>
+			
+			<!-- <![CDATA[ and to_char(add_months(to_date(DTRQ,'yyyy-mm-dd'),-12),'yyyy-mm-dd') >=#{enddate}]]> -->
+			<![CDATA[ 
+			and DTRQ>=
+			to_char(add_months(to_date(#{enddate},'yyyy-mm-dd'),-12),'yyyy-mm-dd')
+			]]>
+			
+		</if>
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.jmjkdagltjbbModel" >
+	  <![CDATA[
+select * from 
+(select d.mc as yljgmc ,czrks,  jdrs,  round(jdrs / nvl(czrks, 1), 5) * 100 || '%' as jkdajdl, jdrs as dzjds,
+   round(jdrs / nvl(czrks, 1), 5) * 100 || '%' as dzjdl,   dtdas as dtjds, round(dtdas / jdrs, 5) * 100 || '%' as jkdasyl    from 
+(select rksl as czrks ,yljgdm from tb_xq_czrk 
+where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     )a left join  (select count(1)as jdrs,yljgdm from Tb_Chss_Grjkda where 1=1
+    ]]>
+    <include refid="commonWhere2"></include>
+    <![CDATA[ 
+    group by yljgdm)b   on a.yljgdm=b.yljgdm left join  (select count(1) dtdas,yljgdm from  ( select DTJKDAID,yljgdm from TB_JKDADTSYL where 1=1
+    ]]>
+ <include refid="commonWhere3"></include>
+ <![CDATA[ 
+   group by DTJKDAID,yljgdm ) group by yljgdm)c  on a.yljgdm=c.yljgdm
+    left join tb_volap_yljg d  on a.yljgdm=d.id
+  ]]>
+   
+  <![CDATA[ 
+   union
+  ]]>  
+  <![CDATA[
+   select '合计'as yljgmc,sum(czrks) as czrks,sum(jdrs) as jdrs,
+ round(sum(jdrs)/sum(czrks), 5) * 100 || '%' as jkdajdl,sum(jdrs) as dtjds,
+ round(sum(jdrs)/sum(czrks), 5) * 100 || '%' as dzjdl,sum(dtjds) as dtdas,
+ round(sum(dtjds) / sum(jdrs), 5) * 100 || '%' as jkdasyl
+  from
+(select d.mc as yljgmc ,czrks,  jdrs,  round(jdrs / nvl(czrks, 1), 5) * 100 || '%' as jkdajdl, jdrs as dzjds,
+   round(jdrs / nvl(czrks, 1), 5) * 100 || '%' as dzjdl,   dtdas as dtjds, round(dtdas / jdrs, 5) * 100 || '%' as jkdasyl    from 
+(select rksl as czrks ,yljgdm from tb_xq_czrk 
+where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     )a left join  (select count(1)as jdrs,yljgdm from Tb_Chss_Grjkda where 1=1
+    ]]>
+    <include refid="commonWhere2"></include>
+    <![CDATA[ 
+    group by yljgdm)b   on a.yljgdm=b.yljgdm left join  (select count(1) dtdas,yljgdm from  ( select DTJKDAID,yljgdm from TB_JKDADTSYL where 1=1
+    ]]>
+ <include refid="commonWhere3"></include>
+ <![CDATA[ 
+   group by DTJKDAID,yljgdm ) group by yljgdm)c  on a.yljgdm=c.yljgdm
+    left join tb_volap_yljg d  on a.yljgdm=d.id))order by yljgmc desc
+  ]]>
+</select>
+
+
+<select id="findAll" resultType="com.wondersgroup.wszygl.model.jmjkdagltjbbModel" >
+<![CDATA[
+select * from 
+(select d.mc as yljgmc ,czrks,  jdrs,  round(jdrs / nvl(czrks, 1), 5) * 100 || '%' as jkdajdl, jdrs as dzjds,
+   round(jdrs / nvl(czrks, 1), 5) * 100 || '%' as dzjdl,   dtdas as dtjds, round(dtdas / jdrs, 5) * 100 || '%' as jkdasyl    from 
+(select rksl as czrks ,yljgdm from tb_xq_czrk 
+where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     )a left join  (select count(1)as jdrs,yljgdm from Tb_Chss_Grjkda where 1=1
+    ]]>
+    <include refid="commonWhere2"></include>
+    <![CDATA[ 
+    group by yljgdm)b   on a.yljgdm=b.yljgdm left join  (select count(1) dtdas,yljgdm from  ( select DTJKDAID,yljgdm from TB_JKDADTSYL where 1=1
+    ]]>
+ <include refid="commonWhere3"></include>
+ <![CDATA[ 
+   group by DTJKDAID,yljgdm ) group by yljgdm)c  on a.yljgdm=c.yljgdm
+    left join tb_volap_yljg d  on a.yljgdm=d.id
+  ]]>
+   
+  <![CDATA[ 
+   union
+  ]]>  
+  <![CDATA[
+   select '合计'as yljgmc,sum(czrks) as czrks,sum(jdrs) as jdrs,
+ round(sum(jdrs)/sum(czrks), 5) * 100 || '%' as jkdajdl,sum(jdrs) as dtjds,
+ round(sum(jdrs)/sum(czrks), 5) * 100 || '%' as dzjdl,sum(dtjds) as dtdas,
+ round(sum(dtjds) / sum(jdrs), 5) * 100 || '%' as jkdasyl
+  from
+(select d.mc as yljgmc ,czrks,  jdrs,  round(jdrs / nvl(czrks, 1), 5) * 100 || '%' as jkdajdl, jdrs as dzjds,
+   round(jdrs / nvl(czrks, 1), 5) * 100 || '%' as dzjdl,   dtdas as dtjds, round(dtdas / jdrs, 5) * 100 || '%' as jkdasyl    from 
+(select rksl as czrks ,yljgdm from tb_xq_czrk 
+where 1=1
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     )a left join  (select count(1)as jdrs,yljgdm from Tb_Chss_Grjkda where 1=1
+    ]]>
+    <include refid="commonWhere2"></include>
+    <![CDATA[ 
+    group by yljgdm)b   on a.yljgdm=b.yljgdm left join  (select count(1) dtdas,yljgdm from  ( select DTJKDAID,yljgdm from TB_JKDADTSYL where 1=1
+    ]]>
+ <include refid="commonWhere3"></include>
+ <![CDATA[ 
+   group by DTJKDAID,yljgdm ) group by yljgdm)c  on a.yljgdm=c.yljgdm
+    left join tb_volap_yljg d  on a.yljgdm=d.id))order by yljgmc desc
+  ]]>
+</select>
+
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.wszygl.model.YljgModel">
+    <![CDATA[
+      select id as jgdm,mc as jgmc  from tb_volap_yljg where 1=1  and yyjb is not null
+    ]]>
+		<include refid="commonWhere30"></include>
+	</select>
+	
+	<sql id="commonWhere30"> 
+       <if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and   id = #{yljgdm}]]>
+        </if>
+  </sql>
+  
+  
+  
+	 
+	  <insert id="saveHt" parameterType="com.wondersgroup.wszygl.model.jmjkdagltjbbModel">
+		<![CDATA[ INSERT INTO  tb_xq_czrk (
+			YLJGDM, 
+			RKSL, 
+			TJRQ 
+		) VALUES (
+			#{yljgdm},   
+			#{rksl}, 
+			to_date(#{enddate},'YYYY-MM-DD')
+			 
+		)]]>
+	</insert>  
+	
+	
+	<select id="getCkrksl"  resultType="int">
+    <![CDATA[
+      select count(1) from TB_XQ_CZRK where 1=1 and yljgdm=#{yljgdm} 
+       and to_char(tjrq,'yyyy')=substr(#{enddate},0,4)
+      
+    ]]>
+		 
+	</select>
+	<update id="updateRksl"
+		parameterType="com.wondersgroup.wszygl.model.jmjkdagltjbbModel">
+		<![CDATA[  
+		update TB_XQ_CZRK set rksl=#{rksl}
+		where 1=1 and yljgdm= #{yljgdm}  and  to_char(tjrq,'yyyy')=substr(#{enddate},0,4)]]>
+	</update>
+	
+	
+	
+ 
+</mapper>

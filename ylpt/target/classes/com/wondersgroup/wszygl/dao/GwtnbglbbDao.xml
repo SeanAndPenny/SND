@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.GwtnbglbbDao">
+	<sql id="commonWhere">
+		<if test="enddate2 != null and enddate2 !='' ">
+			<![CDATA[ and to_char(SFRQ,'yyyy')=substr(#{enddate2},0,4)]]>
+			<![CDATA[ and to_char(SFRQ,'mm')<=substr(#{enddate2},5,2)*3 ]]>
+		</if>
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND a.yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	  <sql id="commonWhere2">
+		<if test="enddate2 != null and enddate2 !='' ">
+			<![CDATA[ and to_char(SFRQ,'yyyy')=substr(#{enddate2},0,4)]]>
+			<![CDATA[ and to_char(SFRQ,'mm')>=substr(#{enddate2},5, 2) * 3 - 2]]>
+			<![CDATA[ and to_char(SFRQ,'mm')<=substr(#{enddate2},5,2)*3 ]]>
+		</if>
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND a.yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	     
+     <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.GwtnbglbbModel" >
+	    <![CDATA[
+	  select * from (select e.mc as yljgmc,a.rs1,b.rs2, round(b.rs2/a.rs1,5)*100||'%' as bl1,
+rs3, round(rs3/d.rksl,5)*100||'%' as bl2 from 
+(select count(1)as rs1 ,yljgdm from 
+(select  count(1),b.yljgdm,b.glkbh  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'   
+        ]]>
+            <include refid="commonWhere"></include>
+        <![CDATA[
+     group by  b.yljgdm,b.glkbh)
+group by yljgdm )a
+left join
+ 
+(select count(1) as rs2 ,yljgdm from 
+(select  count(1) ,b.yljgdm,b.glkbh,SFJLID  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'  
+        ]]>
+     <include refid="commonWhere"></include>
+   <![CDATA[ 
+   group by  b.yljgdm,b.glkbh,SFJLID
+having count(1)>=substr(#{enddate2},6,1)
+)group  by yljgdm)b
+on a.yljgdm=b.yljgdm 
+ left join 
+ (select count(1)as rs3,yljgdm  
+  from (select t.*,               
+               row_number() over(partition by t.yljgdm,t.glkbh order by t.sfrq desc) rn
+          from (select b.*  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'   and b.FPG<7 
+    ]]>  
+       <include refid="commonWhere2"></include>
+      <![CDATA[ 
+      ) t) c
+ where rn = 1
+ group by yljgdm)c
+on a.yljgdm=c.yljgdm
+left join TB_XQ_tnbHZSL d
+on a.yljgdm=d.yljgdm
+left join tb_volap_yljg e
+on a.yljgdm=e.id
+       ]]>  
+       
+       <![CDATA[ 
+       union
+       ]]> 
+       
+       <![CDATA[
+	  (select '合计' as yljgmc,sum(a.rs1) as rs1,sum(b.rs2) rs2, round(sum(b.rs2)/sum(a.rs1),5)*100||'%' as bl1,
+sum(rs3) as rs3, round(sum(rs3)/sum(d.rksl),5)*100||'%' as bl2 from 
+(select count(1)as rs1 ,yljgdm from 
+(select  count(1),b.yljgdm,b.glkbh  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'   
+        ]]>
+            <include refid="commonWhere"></include>
+        <![CDATA[
+     group by  b.yljgdm,b.glkbh)
+group by yljgdm )a
+left join
+ 
+(select count(1) as rs2 ,yljgdm from 
+(select  count(1) ,b.yljgdm,b.glkbh,SFJLID  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'  
+        ]]>
+     <include refid="commonWhere"></include>
+   <![CDATA[ 
+   group by  b.yljgdm,b.glkbh,SFJLID
+having count(1)>=substr(#{enddate2},6,1)
+)group  by yljgdm)b
+on a.yljgdm=b.yljgdm 
+ left join 
+ (select count(1)as rs3,yljgdm  
+  from (select t.*,               
+               row_number() over(partition by t.yljgdm,t.glkbh order by t.sfrq desc) rn
+          from (select b.*  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'   and b.FPG<7 
+    ]]>  
+       <include refid="commonWhere2"></include>
+      <![CDATA[ 
+      ) t) c
+ where rn = 1
+ group by yljgdm)c
+on a.yljgdm=c.yljgdm
+left join TB_XQ_tnbHZSL d
+on a.yljgdm=d.yljgdm)) order by yljgmc desc 
+       ]]> 
+     </select> 
+	
+ <select id="findAll" resultType="com.wondersgroup.wszygl.model.GwtnbglbbModel" >
+	    <![CDATA[
+	  select * from (select e.mc as yljgmc,a.rs1,b.rs2, round(b.rs2/a.rs1,5)*100||'%' as bl1,
+rs3, round(rs3/d.rksl,5)*100||'%' as bl2 from 
+(select count(1)as rs1 ,yljgdm from 
+(select  count(1),b.yljgdm,b.glkbh  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'   
+        ]]>
+            <include refid="commonWhere"></include>
+        <![CDATA[
+     group by  b.yljgdm,b.glkbh)
+group by yljgdm )a
+left join
+ 
+(select count(1) as rs2 ,yljgdm from 
+(select  count(1) ,b.yljgdm,b.glkbh,SFJLID  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'  
+        ]]>
+     <include refid="commonWhere"></include>
+   <![CDATA[ 
+   group by  b.yljgdm,b.glkbh,SFJLID
+having count(1)>=substr('201902',6,1)
+)group  by yljgdm)b
+on a.yljgdm=b.yljgdm 
+ left join 
+ (select count(1)as rs3,yljgdm  
+  from (select t.*,               
+               row_number() over(partition by t.yljgdm,t.glkbh order by t.sfrq desc) rn
+          from (select b.*  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'   and b.FPG<7 
+    ]]>  
+       <include refid="commonWhere2"></include>
+      <![CDATA[ 
+      ) t) c
+ where rn = 1
+ group by yljgdm)c
+on a.yljgdm=c.yljgdm
+left join TB_XQ_tnbHZSL d
+on a.yljgdm=d.yljgdm
+left join tb_volap_yljg e
+on a.yljgdm=e.id
+       ]]>  
+       
+       <![CDATA[ 
+       union
+       ]]> 
+       
+       <![CDATA[
+	  (select '合计' as yljgmc,sum(a.rs1) as rs1,sum(b.rs2) rs2, round(sum(b.rs2)/sum(a.rs1),5)*100||'%' as bl1,
+sum(rs3) as rs3, round(sum(rs3)/sum(d.rksl),5)*100||'%' as bl2 from 
+(select count(1)as rs1 ,yljgdm from 
+(select  count(1),b.yljgdm,b.glkbh  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'   
+        ]]>
+            <include refid="commonWhere"></include>
+        <![CDATA[
+     group by  b.yljgdm,b.glkbh)
+group by yljgdm )a
+left join
+ 
+(select count(1) as rs2 ,yljgdm from 
+(select  count(1) ,b.yljgdm,b.glkbh,SFJLID  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'  
+        ]]>
+     <include refid="commonWhere"></include>
+   <![CDATA[ 
+   group by  b.yljgdm,b.glkbh,SFJLID
+having count(1)>=substr('201902',6,1)
+)group  by yljgdm)b
+on a.yljgdm=b.yljgdm 
+ left join 
+ (select count(1)as rs3,yljgdm  
+  from (select t.*,               
+               row_number() over(partition by t.yljgdm,t.glkbh order by t.sfrq desc) rn
+          from (select b.*  from TB_TNB_HZglk a
+inner join TB_TNB_HZSFK b
+on a.yljgdm=b.yljgdm and a.glkbh=b.glkbh
+where TNBFXBM='2'   and b.FPG<7 
+    ]]>  
+       <include refid="commonWhere2"></include>
+      <![CDATA[ 
+      ) t) c
+ where rn = 1
+ group by yljgdm)c
+on a.yljgdm=c.yljgdm
+left join TB_XQ_tnbHZSL d
+on a.yljgdm=d.yljgdm)) order by yljgmc desc 
+       ]]> 
+     </select>
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.wszygl.model.YljgModel">
+    <![CDATA[
+      select id as jgdm,mc as jgmc  from tb_volap_yljg where 1=1  and yyjb is not null
+    ]]>
+		<include refid="commonWhere30"></include>
+	</select> 
+  <sql id="commonWhere30">
+		 <if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND id  =#{yljgdm}]]>
+		</if>
+	</sql>
+	
+   <select id="getAllJd"
+		resultType="com.wondersgroup.wszygl.model.TbjdpzModel">
+    <![CDATA[
+      select id,mc from TB_JDPZ t
+    ]]>
+		 
+	</select>
+  <select id="getCkrksl" resultType="int" >
+	    <![CDATA[
+     select count(1) from TB_XQ_TNBHZSL where 1=1 and yljgdm=#{yljgdm} and to_char(TJRQ,'yyyy')=substr(#{enddate},0,4)
+     ]]>
+	</select>
+	
+	
+	<update id="updateRksl"
+		parameterType="com.wondersgroup.wszygl.model.GwtnbglbbModel">
+		<![CDATA[  
+		update TB_XQ_TNBHZSL set rksl=#{rksl}
+		where 1=1 and yljgdm= #{yljgdm}  and  to_char(tjrq,'yyyy')=substr(#{enddate},0,4)]]>
+	</update>
+	
+	<insert id="saveHt" parameterType="com.wondersgroup.wszygl.model.GwtnbglbbModel">
+		<![CDATA[ INSERT INTO  TB_XQ_TNBHZSL (
+			YLJGDM, 
+			RKSL, 
+			TJRQ 
+		) VALUES (
+			#{yljgdm},   
+			#{rksl}, 
+			to_date(#{enddate},'YYYY-MM-DD')
+			 
+		)]]>
+	</insert> 
+     
+	
+</mapper>

@@ -1,0 +1,281 @@
+html,body{
+    background: #DCE2E6;
+    min-width: 1280px;
+}
+.main .botCon{
+    padding: 0 20px;
+}
+.main .detail{
+    margin-left: -7px;
+    margin-right: -7px;
+}
+.mode{
+    float: left;
+    margin-bottom: 14px;
+    width: 50%;
+}
+.mode .modeBg{
+    margin-left: 7px;
+    margin-right: 7px;
+    background: white;
+    height: 281px;
+    box-shadow: 0 0 10px #DCE2E6;
+    border-radius: 2px;
+}
+
+.mode .modeTop{
+    padding: 15px 16px 0 16px;
+}
+.mode .modeTop .title i{
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    background: #0088CC;
+    margin-right: 3px;
+    vertical-align: -1px;
+}
+.mode .modeTop .title label{
+    font-size: 15px;
+    color: #0088CC;
+}
+.mode .modeCon .chartBox{
+    height: 245px;
+}
+
+.mode01 .modeCon .same{
+    float: left;
+}
+.mode01 .modeCon .same01{
+    width: 55%;
+}
+.mode01 .modeCon .same02{
+    width: 45%;
+    position: relative;
+}
+.mode01 .modeCon .same02 .line{
+    position: absolute;
+    top: 12px;
+    left: 0;
+    height: 214px;
+    border-left: 1px dashed #0088CC;
+}
+.mode01 .modeCon .same02 .item .icon{
+    display: inline-block;
+    width: 49px;
+    margin-left: 46px;
+    margin-right: 27px;
+    vertical-align: middle;
+}
+.mode01 .modeCon .same02 .item01{
+    margin-top: 24px;
+}
+.mode01 .modeCon .same02 .item01 .icon{
+    height: 38px;
+     
+     background: url("../images/mode01-icon01.png") no-repeat;
+    background-size: 100% 100%;
+}
+.mode01 .modeCon .same02 .item02 .icon{
+    height: 33px;
+    background: url("../images/mode01-icon02.png") no-repeat;
+    background-size: 100% 100%;
+}
+.mode01 .modeCon .same02 .item .text{
+    display: inline-block;
+    vertical-align: middle;
+}
+.mode01 .modeCon .same02 .item .text .font{
+    font-size: 15px;
+    color: #0088CC;
+    margin-bottom: 8px;
+}
+.mode01 .modeCon .same02 .item .text .sty02{
+    margin-top: 3px;
+}
+.mode01 .modeCon .same02 .item02{
+    margin-top: 49px;
+}
+
+.mode03 .modeTop{
+    padding-right: 30px;
+}
+.mode03 .modeTop .title .tabTop{
+    float: right;
+}
+.mode03 .modeTop .title .tabTop span{
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    padding: 0 7px;
+    color: #666666;
+    background:rgba(210,210,210,.5);
+    margin-left: 10px;
+    border-radius: 1px;
+    cursor: pointer;
+}
+.mode03 .modeTop .title .tabTop span.active{
+    background: rgba(45,198,242,.3);
+    color: #0088CC;
+}
+
+.mode03 .modeCon .det .same {
+    float: left;
+}
+.mode03 .modeCon .det .same01{
+    width: 55%;
+    position: relative;
+}
+.mode03 .modeCon .det .same01 .legend{
+    position: absolute;
+    bottom: 5%;
+    width: 100%;
+}
+.mode03 .modeCon .det .same01 .legend ul{
+    padding: 0 25px;
+}
+.mode03 .modeCon .det .same01 .legend ul li{
+    float: left;
+    width: 25%;
+    font-size: 12px;
+    margin-top: 14px;
+}
+.mode03 .modeCon .det .same01 .legend ul li i{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: -1px;
+}
+.mode03 .modeCon .det .same01 .legend ul .li01 i{
+    background: #88CA6D;
+}
+.mode03 .modeCon .det .same01 .legend ul .li02 i{
+    background: #3AA873;
+}
+.mode03 .modeCon .det .same01 .legend ul .li03 i{
+    background: #2EEDE6;
+}
+.mode03 .modeCon .det .same01 .legend ul .li04 i{
+    background: #2DC6F2;
+}
+.mode03 .modeCon .det .same01 .legend ul .li05 i{
+    background: #0DAEF1;
+}
+.mode03 .modeCon .det .same01 .legend ul .li06 i{
+    background: #1572D5;
+}
+.mode03 .modeCon .det .same01 .legend ul .li07 i{
+    background:#744EBC;
+}
+.mode03 .modeCon .det .same01 .legend ul .li08 i{
+    background:#5D6DBD;
+}
+.mode03 .modeCon .det .same02{
+    width: 45%;
+}
+.mode03 .modeCon .det .same .chartBox{
+    height: 240px;
+}
+
+ .main{
+  margin:5px;
+  background: white;
+}
+
+.main .top .topLeft{
+	 
+  float: left;
+}
+.main .top .topLeft .det{
+  display: inline-block;
+  position: relative;
+  margin-right: 20px;
+}
+.main .top .topLeft .detLast{
+  margin-right: 0;
+}
+.main .top .topLeft .det .sj{
+  display: inline-block;
+  border: 1px solid #B3B3C0;
+  text-align: center;
+  border-radius: 3px;
+  margin-right: 5px;
+  background: #E5E6EC;
+  font-size: 0;
+  margin-left: 21px;
+}
+.main .top .topLeft .det .sj i{
+  font-style: normal;
+  padding: 0 5px;
+  margin: 0;
+  background: #E5E6EC;
+  color: #88888A;
+  font-size: 14px;
+  cursor: pointer;
+}
+.main .top .topLeft .det .sj i.active{
+  color: black;
+  background: white;
+}
+.main .top .topLeft .det .sj .y,.main .top .topLeft .det .sj .r{
+  border-left: 1px solid #B3B3C0;
+}
+.main .top .topLeft .det label{
+  vertical-align: 1px;
+}
+.main .top .topLeft .det input{
+  width: 120px;
+  height: 28px;
+  background: #ebedf1;
+  border-radius: 14px;
+  text-indent: 12px;
+  outline: none;
+  border: none;
+  line-height: 28px;
+}
+.main .top .topLeft .det img{
+  position: absolute;
+  right: 8px;
+  top: 7px;
+}
+.main .top .topLeft .det select{
+  border: none;
+  outline: none;
+  height: 28px;
+  line-height: 30px;
+  background: #ebedf1;
+  padding: 0 10px 0 7px;
+  border-radius: 14px;
+}
+.main .top .topRight{
+	margin-right: 220px;
+  float: right;
+}
+.main .top .topRight button{
+  width: 87px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  margin: 0 3px;
+  color: white;
+}
+.main .top .topRight .btn1{
+  background: #308deb;
+}
+.main .top .topRight .btn2{
+  background: #10ac77;
+}
+
+
+
+
+
+
+
+
+
+
+

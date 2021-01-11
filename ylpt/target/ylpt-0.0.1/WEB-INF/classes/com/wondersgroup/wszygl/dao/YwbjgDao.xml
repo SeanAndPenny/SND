@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wondersgroup.wszygl.dao.YwbjgDao">
+	<sql id="commonWhere">
+		<if test=" ywbm !='' and ywbm != null ">
+			<![CDATA[    AND T1.TABLE_NAME =  #{ywbm}]]>
+		</if>
+	</sql>
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.YwbpzModel">
+		<![CDATA[ 
+		   SELECT  
+       T1.COLUMN_NAME  as zdm,
+     
+       decode(T1.DATA_TYPE,'DATE','时间类型','VARCHAR2','字符串类型','CHAR','字符类型','NUMBER','数字类型',T1.DATA_TYPE)  as zdlx,
+        T1.DATA_LENGTH as zdcd,
+       T2.COMMENTS as zdjs
+  FROM USER_TAB_COLS T1, USER_COL_COMMENTS T2
+ WHERE T1.TABLE_NAME = T2.TABLE_NAME
+   AND T1.COLUMN_NAME = T2.COLUMN_NAME
+     
+		]]>
+		<include refid="commonWhere"></include>
+		 
+	</select>
+	 
+	 
+</mapper>

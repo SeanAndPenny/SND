@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JkdaTjDao">
+	
+
+		<sql id="commonWhere">
+		<if test="yljgdm != null  and yljgdm !=''">
+			<![CDATA[ AND  f.orgcode=#{yljgdm}]]>
+		</if>
+		<choose>
+           <when test="startdate != null and startdate!=''  and enddate !=null and enddate!=''">
+              <![CDATA[  and l.dysj>= to_date( #{startdate},'yyyy-MM') and  l.dysj<=to_date( #{enddate} ,'yyyy-MM' )
+          		]]>
+           </when>
+           <when test="startdate != null and startdate!=''  and ( enddate ==null or enddate =='') ">
+               <![CDATA[ and l.dysj>= to_date( #{startdate} ,'yyyy-MM') 
+           		]]>
+           </when>
+            <when test="(startdate == null or startdate=='' ) and ( enddate !=null and enddate !='') ">
+              <![CDATA[ and  l.dysj<=to_date( #{enddate} ,'yyyy-MM' )
+           		]]>
+           </when>
+           <otherwise>
+               
+           </otherwise>
+           
+       </choose>
+       <if test="ywlx != null  and ywlx !=''">
+			<![CDATA[ AND  l.ywlx=#{ywlx}]]>
+		</if>
+	</sql>
+
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JkdaTjModel" >
+	<![CDATA[
+		select to_char(g.dysj, 'YYYY-MM') as days,
+			count(0) as  zsum,
+	       sum(decode(g.ywlx, 1, 1, 0)) as dy,
+	       sum(decode(g.ywlx, 2, 1, 0)) as ck
+	  from (
+	]]>
+		<![CDATA[
+		select *
+          from cendoc.TB_JKDA_LOG l,
+               
+               (select u.loginname as lnam, o.orgname, o.orgcode
+                  from cen_etl_v20.tb_auth_org o, cen_etl_v20.tb_auth_user u
+                 where u.orgid = o.orgid) f
+         where l.dyz = f.lnam
+			]]>
+			<include refid="commonWhere"></include>
+		
+		<![CDATA[
+					) g
+			 group by to_char(g.dysj, 'YYYY-MM')
+		]]>
+	</select>
+
+	
+</mapper>

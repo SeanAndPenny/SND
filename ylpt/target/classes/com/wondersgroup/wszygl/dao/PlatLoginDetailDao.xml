@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.PlatLoginDetailDao">
+	<resultMap type="com.wondersgroup.wszygl.model.PlatLoginDetailModel" id="PlatLoginDetailResult">
+		<result column="platloginname" property="platloginname" />
+		<result column="logintime" property="logintime" />
+	</resultMap>
+
+	<sql id="commonWhere">
+		<if test="platloginname != null and platloginname != ''">
+			<![CDATA[ AND t.loginname like '%'||#{platloginname}||'%']]>
+		</if>
+		<if test="platname != null and platname != ''">
+			<![CDATA[ AND x.projectname = #{platname}]]>
+		</if>
+	</sql>	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.PlatLoginDetailModel" >
+		<![CDATA[
+			 select t.loginname as platloginname,y.platfromname,to_char(x.operationsj,'yyyy-MM-hh hh24:mi:ss') as logintime   from tb_platform_user n
+                  join tb_auth_user t
+                    on n.userid = t.userid
+                  join tb_platform_sys y
+                    on n.otherplatkey = y.platfromkey
+                  join tb_pt_log x
+                    on t.username || '(' || t.loginname || ')' = x.operator
+                       and y.platfromname=x.projectname
+                       where 1=1
+		 ]]>
+		<include refid="commonWhere"></include>
+	</select>
+	
+	<update id="updatePlatLogin">
+		<![CDATA[ UPDATE TB_PLATFORM_USER]]>
+		<set>
+			<![CDATA[ REMOVED='1' ,removedtime=sysdate]]>
+		</set>
+		<![CDATA[ WHERE ID = #{tabid}]]>
+	</update>
+</mapper>

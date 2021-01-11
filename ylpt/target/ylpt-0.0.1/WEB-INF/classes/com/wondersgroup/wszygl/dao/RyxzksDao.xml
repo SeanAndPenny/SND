@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.RyxzksDao">
+	<sql id="commonWhere">
+		 <if test=" zc !='' and zc != null and zc == '在编' ">
+			<![CDATA[  and    contract_type like '%编制%']]>
+		</if>
+		 <if test=" zc !='' and zc != null and zc == '在职' ">
+			<![CDATA[  
+		and  ryzt = '在职'
+       ]]>
+		</if>
+		<if test=" jb !='' and jb != null ">
+			<![CDATA[  
+	  and  TITLE_LEVEL like '%'||substr(#{jb} ,0,1)||'%'  
+		 
+       ]]>
+		</if>
+		
+		<if test=" jgdm !='' and jgdm != null ">
+			<![CDATA[  
+	    and  org_code =#{jgdm} 
+		 
+       ]]>
+		</if>
+
+	</sql>
+
+	 
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.RyzxtModel">
+	  <![CDATA[
+		 select org_name,name,dept_name,sex_name,sfzh,nation,highstudy,title from  Tb_DM_HUMAN_INFO t where 1=1
+			 ]]>
+ 		<include refid="commonWhere"></include>
+	</select>
+	
+	<select id="getRyjg" resultType="com.wondersgroup.wszygl.model.RyzxtModel">
+		<![CDATA[
+			select dept_code, dept_name,org_name ,org_code,count(1) as rs
+  from Tb_DM_HUMAN_INFO t where 1 = 1
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[     group by dept_code, dept_name,org_name,org_code  ]]>
+	</select>
+
+
+</mapper>

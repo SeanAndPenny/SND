@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.YbfytjDao"> 
+      <sql id="commonWhere"> 
+            <if test="sjlx=='year'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY||'-'||MM>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY||'-'||MM<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		     
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   YLJGQNDM =trim(#{jgdm})]]>
+		    </if> 
+      </sql> 
+      
+      
+      
+      <sql id="commonWhere2"> 
+            <if test="sjlx=='year'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY||'-'||MM>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY||'-'||MM<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		     
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   YLJGQNDM =trim(#{jgdm})]]>
+		    </if>
+		     
+		     <if test="qylx != null and qylx !='' and qylx !='undefined' ">
+			    <![CDATA[ and   QYGL =trim(#{qylx})]]>
+		    </if> 
+      </sql> 
+      
+      <sql id="commonWhere3"> 
+            <if test="sjlx=='year'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY||'-'||MM>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY||'-'||MM<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		     
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   YLJGQNDM =trim(#{jgdm})]]>
+		    </if>
+		     
+		     <if test="qylx != null and qylx !='' and qylx !='undefined' ">
+			    <![CDATA[ and   QYGL =trim(#{qylx})]]>
+		    </if> 
+		    <if test="jglx != null and jglx !='' and jglx !='undefined' ">
+			    <![CDATA[ and   jglx =trim(#{jglx})]]>
+		    </if> 
+		    <if test="jgjb != null and jgjb !='' and jgjb !='undefined' ">
+			    <![CDATA[ and   yljgjbdm =trim(#{jgjb})]]>
+		    </if>
+      </sql> 
+      <sql id="commonWhere4"> 
+            
+		       <if test="kssj != null and kssj !='' and kssj !='undefined' and kssj.length==4">
+			     <![CDATA[ and YYYY>=trim(#{kssj}) ]]> 
+			     <![CDATA[  and YYYY<=trim(#{jssj}) ]]>
+		       </if> 
+		     
+		     
+		       <if test="kssj != null and kssj !='' and kssj !='undefined' and kssj.length==7">
+			     <![CDATA[ and YYYY||'-'||MM>=trim(#{kssj}) ]]> 
+			     <![CDATA[  and YYYY||'-'||MM<=trim(#{jssj}) ]]>
+		       </if> 
+		     
+		     
+		     <if test="yljgdm != null and yljgdm !='' and yljgdm !='undefined' ">
+			    <![CDATA[ and   YLJGQNDM =trim(#{yljgdm})]]>
+		    </if>
+		     
+		     <if test="qylx != null and qylx !='' and qylx !='undefined' ">
+			    <![CDATA[ and   QYGL =trim(#{qylx})]]>
+		    </if> 
+		    <if test="jglx != null and jglx !='' and jglx !='undefined' ">
+			    <![CDATA[ and   jglx =trim(#{jglx})]]>
+		    </if> 
+      </sql>  
+  <select id="getybfytj" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	select count(1)AS RS,qygl as qylx,decode(QYGL,'0','区内参保','1','区外参保','2','异地参保') as qylxmc from T_YB_FYTJ t 
+WHERE 1=1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+   group by qygl order by qygl
+	]]>
+ </select>
+ 
+ 
+ <select id="getechars02" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select sum(rchj) as rs,sum(YLFYHJ) as ylje,jglx,decode(jglx,'0','医院','1','药店','2','其他') as  jglxmc from T_YB_FYTJ t
+where  1=1
+	   ]]>
+     <include refid="commonWhere2"></include> 
+   <![CDATA[  
+     group  by jglx order by jglx
+	]]>
+ </select>
+ 
+ 
+ <select id="getechars03" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select * from ( select sum(rchj)/10000 rs ,YLJGQNDM as yljgdm ,nvl(b.mc,a.yljgmc) yljgmc
+	  from T_YB_FYTJ a
+left join tb_volap_yljg b
+on a.YLJGQNDM=b.id
+
+where  1=1 
+	   ]]>
+     <include refid="commonWhere3"></include> 
+   <![CDATA[  
+     
+group  by YLJGQNDM,nvl(b.mc,a.yljgmc)  order by rs desc)where rownum<=15
+	]]>
+ </select>
+ 
+ 
+ 
+ <select id="getecharsjb" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select sum(rchj)as rs ,sum(YLFYHJ) as ylje,yljgjb,yljgjbdm from T_YB_FYTJ t 
+	 where 1=1
+	   ]]>
+     <include refid="commonWhere33"></include> 
+   <![CDATA[  
+      group by yljgjb,yljgjbdm
+	]]>
+ </select>
+ 
+  <select id="getecharsList" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+	<![CDATA[ 
+	 select * from ( select sum(YLFYHJ)/10000 as ylje ,YLJGQNDM as yljgdm ,nvl(b.mc,a.yljgmc) yljgmc
+	  from T_YB_FYTJ a
+left join tb_volap_yljg b
+on a.YLJGQNDM=b.id
+
+where  1=1 
+	   ]]>
+     <include refid="commonWhere3"></include> 
+   <![CDATA[  
+     
+group  by YLJGQNDM,nvl(b.mc,a.yljgmc) order by ylje desc  )where rownum<=15
+	]]>
+ </select>
+ 
+ <select id="getMinSwsj" resultType="String">
+	select min(yyyy) from T_YB_FYTJ t 
+ </select> 
+  <select id="getMaxSwsj" resultType="String">
+	 select max(yyyy) from T_YB_FYTJ t
+  </select> 
+<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.YbFytjModel">
+  <![CDATA[
+        select yyyy||mm as cbsj,cblx,yljgmc,yljgjb,ylfyhj,mzylfy,zyylfy,rchj,zyrc,
+        decode(jglx, '0', '医院', '1', '药店', '2', '其他') as jglxmc from T_YB_FYTJ t
+    where 1=1
+			]]>
+<include refid="commonWhere4"></include> 
+</select>
+ <sql id="commonWhere33"> 
+            <if test="sjlx=='year'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		    <if test="sjlx=='month'">
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and YYYY||'-'||MM>=trim(#{kssj}) ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and YYYY||'-'||MM<=trim(#{jssj}) ]]>
+		       </if> 
+		    </if>
+		     
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   YLJGQNDM =trim(#{jgdm})]]>
+		    </if>
+		     
+		     <if test="qylx != null and qylx !='' and qylx !='undefined' ">
+			    <![CDATA[ and   QYGL =trim(#{qylx})]]>
+		    </if> 
+		    <if test="jglx != null and jglx !='' and jglx !='undefined' ">
+			    <![CDATA[ and   jglx =trim(#{jglx})]]>
+		    </if> 
+      </sql> 
+</mapper>

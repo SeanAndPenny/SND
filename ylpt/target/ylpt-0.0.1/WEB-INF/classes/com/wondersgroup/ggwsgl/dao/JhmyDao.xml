@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.ggwsgl.dao.JhmyDao">
+
+	<sql id="commonWhere">
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[  and  d.organ_code = #{yljgdm}]]>
+		</if>
+		<choose>
+			<when
+				test="startdate != null and startdate!=''  and enddate !=null and enddate!=''">
+              <![CDATA[  and  to_char(b.fshotdated,'yyyy-mm-dd')>= #{startdate} and to_char(b.fshotdated,'yyyy-mm-dd')<= #{enddate} 
+          		]]>
+			</when>
+			<when
+				test="startdate != null and startdate!=''  and ( enddate ==null or enddate =='') ">
+               <![CDATA[ and to_char(b.fshotdated,'yyyy-mm-dd')>= #{startdate}
+           		]]>
+			</when>
+			<when
+				test="(startdate == null or startdate=='' ) and ( enddate !=null and enddate !='') ">
+              <![CDATA[ and  to_char(b.fshotdated,'yyyy-mm-dd')<= #{enddate}
+           		]]>
+			</when>
+			<otherwise>
+
+			</otherwise>
+		</choose>
+		<if test="mid != null and mid !=''">
+			<![CDATA[  and  a.motherid = #{mid}]]>
+		</if>
+	</sql>
+
+
+	<select id="pageSelect"
+		resultType="com.wondersgroup.ggwsgl.model.JhmyModel">
+		<![CDATA[
+			select e.jgmc, a.name name,a.sex sex ,to_char(a.birth,'yyyy-mm-dd') as birth, a.fathername fname,
+			a.mothername mname,a.motherid mid,a.mobphone phone,to_char(b.fshotdated,'yyyy-MM-dd') jzsj, g.side_efect_name fy,
+			g.side_efect_date fysj,c."FBactShortName" ym ,f."FEnterpShortName" cj from cen_core_v20.epi_childinfo 
+			a inner join cen_core_v20.epi_jzjl_bf b on a.fchildno = b.fchildno inner join cen_core_v20.sys_fbactid c  
+			on b.fbactid=c."FBactID"  inner join cen_core_v20.sys_organcode d on b.ustationcode = d.new_basecode 
+ 			inner join cen_etl_V20.sys_jgdm_list e on d.organ_code=e.jgdm  inner join cen_core_v20.sys_fenterpno f on
+  			b.fenterpno = f."FEnterpNo"  left join cen_core_v20.epi_side_effect g on b.fchildno=g.fchildno  where 1=1
+			and b.fshotdated is not null
+		]]>
+		<include refid="commonWhere"></include>
+
+	</select>
+
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.ggwsgl.model.YljgModel">
+		<![CDATA[
+			select j.jgdm,j.jgmc  from  cen_core_v20.sys_jgdm_list j where length(jgdm)=10
+		]]>
+
+	</select>
+	<select id="getAllTb"
+		resultType="com.wondersgroup.ggwsgl.model.TbModel">
+		<![CDATA[
+			select d.organ_code jgdm, d.organ_name jgmc, count(distinct b.fchildno) rs from cen_core_v20.epi_jzjl_bf b, 
+			cen_core_v20.sys_organcode d where b.ustationcode = d.new_basecode and length(d.organ_code) = 10 
+		]]>
+		<include refid="commonWhere"></include>
+		<![CDATA[ group by  d.organ_code, d.organ_name]]>
+	</select>
+
+</mapper>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.YqjgzsDao">
+	<sql id="commonWhere">
+		<if test="startdate != null and startdate !='' ">
+			<![CDATA[ AND to_char(b.COL_CREATE_TIME,'yyyy-mm-dd') >=trim(#{startdate})]]>
+		</if>
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ AND to_char(b.COL_CREATE_TIME,'yyyy-mm-dd') <=trim(#{enddate})]]>
+		</if>
+
+	</sql>
+	
+	<sql id="commonWhere2">
+		 
+	<if test="pid != null and pid !='' ">
+			<![CDATA[ AND parent_code =trim(#{pid})]]>
+	</if>
+	<if test="startdate != null and startdate !='' ">
+			<![CDATA[ AND to_char(b.COL_CREATE_TIME,'yyyy-mm-dd') >=trim(#{startdate})]]>
+		</if>
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ AND to_char(b.COL_CREATE_TIME,'yyyy-mm-dd') <=trim(#{enddate})]]>
+		</if>
+	</sql>
+	<sql id="commonWhere3">
+		<if test="startdate != null and startdate !='' ">
+			<![CDATA[ AND to_char(COL_CREATE_TIME,'yyyy-mm-dd') >=trim(#{startdate})]]>
+		</if>
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ AND to_char(COL_CREATE_TIME,'yyyy-mm-dd') <=trim(#{enddate})]]>
+		</if>
+
+	</sql>
+	
+     <!-- 基层医院 -->
+	<select id="getAllTb"
+		resultType="com.wondersgroup.wszygl.model.YqjgzsDaoModel">
+	  <![CDATA[
+	 select count(1) as rs,
+       substr(a.HOSPITAL_TYPE,0,3) as pid,
+       case when  substr(a.HOSPITAL_TYPE,0,3)='3-2' then '基层社会办'
+        when  substr(a.HOSPITAL_TYPE,0,3) ='3-1' then '基层政府办'
+        end  as jcfl
+  from  Tb_DM_UNIT_DICT a
+ 
+ where a.HOSPITAL_TYPE like '3-%'
+ ]]>
+<include refid="commonWhere3"></include>
+
+ <![CDATA[ 
+   group by  substr(a.HOSPITAL_TYPE,0,3) 
+  ]]>
+	</select>
+
+
+	<select id="getAllTb2"
+		resultType="com.wondersgroup.wszygl.model.YqjgzsDaoModel">
+	  <![CDATA[
+		select count(1) as rs,
+case  when CODE_VALUE like '3-1%' then '政府办'||CODE_MEANINGS
+  when CODE_VALUE like '3-2%' then '社会办'||CODE_MEANINGS
+     end   as id_name ,
+ CODE_VALUE as pid
+
+ from  (select CODE_VALUE,CODE_MEANINGS
+  from tb_dm_zd_hospital_type
+ where 1=1
+   and parent_code in ('3-1', '3-2'))a
+   inner join Tb_DM_UNIT_DICT b
+   on  substr(a.CODE_VALUE,0,5)=substr(b.HOSPITAL_TYPE,0,5)
+   
+ 
+ ]]>
+ <include refid="commonWhere"></include>
+   <![CDATA[
+ group by CODE_MEANINGS  , CODE_VALUE
+  order by CODE_VALUE 
+]]>
+	</select>
+	<!-- 基层医院统计 -->
+	<select id="getBlList" resultType="com.wondersgroup.wszygl.model.YqjgzsDaoModel">
+	  <![CDATA[
+		select sum(a.jcsl) as zl,
+       (round((sum(a.jcsl) / sum(b.zsl)) * 100, 2) ) as bl
+  from (select count(1) as jcsl, id
+          from Tb_DM_UNIT_DICT
+         where HOSPITAL_TYPE like '3-%'
+         GROUP BY ID) a
+ right join (select count(1) as zsl, id from Tb_DM_UNIT_DICT a group by id) b
+    on a.id = b.id
+
+
+ 
+ ]]>
+  
+   
+	</select>
+	<!-- 综合医院 -->
+	<select id="getAllTbZhyy"
+		resultType="com.wondersgroup.wszygl.model.YqjgzsDaoModel">
+	  <![CDATA[
+	select count(1) as rs ,a.parent_code as pid,
+case  when parent_code='1-1' then '综合政府办'
+   when parent_code='1-2' then '综合社会办'
+end as jcfl
+  from  tb_dm_zd_hospital_type a
+ inner join  Tb_DM_UNIT_DICT b
+    on a.CODE_VALUE = b.HOSPITAL_TYPE
+ where parent_code like '1-%'
+ ]]>
+<include refid="commonWhere"></include>
+
+ <![CDATA[ 
+   group by a.parent_code  
+  ]]>
+	</select>
+
+
+	<select id="getAllTbZhyy2"
+		resultType="com.wondersgroup.wszygl.model.YqjgzsDaoModel">
+	  <![CDATA[
+	 select count(1) as rs, CODE_MEANINGS,HOSPITAL_TYPE  as pid  from  Tb_DM_UNIT_DICT a 
+  left join   tb_dm_zd_hospital_type t
+ on substr(HOSPITAL_TYPE,4,8)=t.CODE_VALUE
+ where HOSPITAL_TYPE like '100%'  
+ 
+ ]]>
+ <!-- <include refid="commonWhere"></include> -->
+   <![CDATA[
+  
+   group by  CODE_MEANINGS,HOSPITAL_TYPE
+]]>
+	</select>
+	
+	<!-- 综合医院统计 -->
+	<select id="getZhyyBlList" resultType="com.wondersgroup.wszygl.model.YqjgzsDaoModel">
+	  <![CDATA[
+		select sum(a.jcsl) as zl,
+       (round((sum(a.jcsl) / sum(b.zsl)) * 100, 2) ) as bl
+  from (select count(1) AS jcsl, B.ID
+          from  tb_dm_zd_hospital_type a
+         inner join  Tb_DM_UNIT_DICT b
+            on a.CODE_VALUE = b.HOSPITAL_TYPE
+         where parent_code like '1-%'
+         GROUP BY ID) a
+
+ right join (select count(1) as zsl, id
+               from  Tb_DM_UNIT_DICT a
+              group by id) b
+    on a.id = b.id
+ 
+ ]]>
+	
+</select>	
+	<select id="pageSelect"
+		resultType="com.wondersgroup.wszygl.model.YqjgzsDaoModel">
+	  <![CDATA[
+			  select  b.unitname,b.col_create_time,b.bus_address,
+          b.link_person,b.jyxz
+      from    tb_dm_zd_hospital_type a
+     inner join  Tb_DM_UNIT_DICT b on substr(a.CODE_VALUE ,0,5)= substr(b.HOSPITAL_TYPE,0,5)
+      where   1=1
+  
+			 ]]>
+
+		<include refid="commonWhere2"></include>
+
+	</select>
+
+<!-- 人员职称柱形图 -->
+<select id="getRyxx" resultType="com.wondersgroup.wszygl.model.RyzxtModel">
+	  <![CDATA[
+	 select decode(lx,'zz','政府办在职人员','zb','政府办在编人员') as lx ,
+ case when lx='zz' then '在职' 
+  when lx='zb' then '在编' end as lx2,
+ sum(grs) as grs,sum(zrs) as zrs,sum(crs) as crs from 
+(select case  when jb='中'  then rs end as zrs,
+       case  when jb='高'  then rs end as grs,
+         case  when jb='初'  then rs end as crs,
+         lx
+from  
+(select count(1) as rs, 'zz' as lx, 
+case  
+when TITLE_LEVEL like '%初%' then '初'
+when TITLE_LEVEL like '%高%' then '高'
+when TITLE_LEVEL like '%中%' then '中'
+end jb
+  from  Tb_DM_HUMAN_INFO t
+ where ryzt = '在职'
+   and (TITLE_LEVEL like '%初%' or TITLE_LEVEL like '%高%' or
+        TITLE_LEVEL like '%中%')
+    group by case  
+when TITLE_LEVEL like '%初%' then '初'
+when TITLE_LEVEL like '%高%' then '高'
+when TITLE_LEVEL like '%中%' then '中'
+end 
+ 
+ 
+ union all
+ select count(1) as rs, 'zb' as lx, 
+case  
+when TITLE_LEVEL like '%初%' then '初'
+when TITLE_LEVEL like '%高%' then '高'
+when TITLE_LEVEL like '%中%' then '中'
+end jb
+ from  Tb_DM_HUMAN_INFO t where contract_type like '%编制%'
+and (TITLE_LEVEL like '%初%' or TITLE_LEVEL like '%高%' or  TITLE_LEVEL like '%中%')
+ group by case  
+when TITLE_LEVEL like '%初%' then '初'
+when TITLE_LEVEL like '%高%' then '高'
+when TITLE_LEVEL like '%中%' then '中'
+end ))a group by lx 
+			 
+	]]>
+
+	</select>
+
+
+
+<!-- 人员学历柱形图 -->
+<select id="getRyxl" resultType="com.wondersgroup.wszygl.model.RyzxtModel">
+	  <![CDATA[
+	 select  count(1) as xlrs ,highstudy as xllx from   tb_dm_human_info  
+where highstudy is not null
+group by highstudy
+		 
+	]]>
+	</select>
+	
+	
+	<select id="getJy" resultType="com.wondersgroup.wszygl.model.JyModel">
+	  <![CDATA[
+	select count(1) as rs, sfws, 
+case when sfws = '1' then '外送检验' 
+  when sfws = '0' then '本院检验' 
+  end as lbmc
+  from TB_LIS_REPORT t
+  where substr(BGRQ,0,4)=to_char(sysdate,'yyyy')
+ group by sfws
+		 
+	]]>
+	</select>
+	
+	
+	<select id="getJc" resultType="com.wondersgroup.wszygl.model.JcModel">
+	  <![CDATA[
+	select count(1) as rs, sfws, 
+case when sfws = '1' then '外送检查' 
+  when sfws = '0' then '本院检查' 
+  end as lbmc
+  from TB_RIS_REPORT t
+  where substr(BGRQ,0,4)=to_char(sysdate,'yyyy')
+ group by sfws
+		 
+	]]>
+	</select>
+	
+	
+	<select id="getStartdate" resultType="String">
+	  <![CDATA[
+	select  min(to_char(COL_CREATE_TIME,'yyyy-MM-dd')) 
+ 
+  from TB_DM_UNIT_DICT
+  
+	]]>
+	</select>
+	
+	<select id="getname" resultType="String">
+	  <![CDATA[
+		 
+ select username from CEN_AUTH.V_TB_AUTH_USER t where 1=1 
+ ]]>
+<include refid="username"></include>
+	</select>
+	<sql id="username">
+		<if test="ssoUsername != null and ssoUsername !='' ">
+			<![CDATA[ AND LOGINNAME=trim(#{ssoUsername})]]>
+		</if>
+		 
+
+	</sql>
+</mapper>

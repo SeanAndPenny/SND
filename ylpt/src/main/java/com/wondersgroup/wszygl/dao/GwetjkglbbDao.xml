@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.GwetjkglbbDao">
+	
+
+	<sql id="commonWhere">
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ and to_char(XSECSRQSJ,'yyyy')=substr(#{enddate},0,4)]]>
+		</if>
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	 <sql id="commonWhere2">
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ and to_char(SFRQ,'yyyy')=substr(#{enddate},0,4)]]>
+		</if>
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	<sql id="commonWhere3">
+		<if test="enddate != null and enddate !='' ">
+			<![CDATA[ and to_char(XSECSRQSJ,'yyyy-mm-dd')<=#{enddate}]]>
+		</if>
+		 
+		<if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND yljgdm  =#{yljgdm}]]>
+		</if>
+	</sql>
+	
+	
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.GwetjkglbbModel" >
+	  <![CDATA[
+	  select * from 
+	  (select d.mc as yljgmc,a.rs1,b.rs2,ROUND(B.RS2/A.RS1,5)*100||'%' as bl1,c.rs3 from (
+select COUNT(1)AS rs1 ,YLJGDM from tb_eb_csyxzm
+WHERE 1=1 AND(CSYZ>=28 OR CSTZ>=1000)
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     GROUP BY YLJGDM)a
+ left join
+(select count(1) as rs2,yljgdm from 
+(select count(1)  ,YLJGDM,YCFID,XM from TB_FB_XSRFS
+where 1=1
+    ]]>
+    <include refid="commonWhere2"></include>  
+      
+     <![CDATA[  
+     group by YLJGDM,YCFID,XM )
+group by  yljgdm)b
+on a.yljgdm=b.yljgdm
+left join 
+(select COUNT(1)AS rs3 ,YLJGDM from tb_eb_csyxzm
+WHERE 1=1 and  to_char(sysdate,'yyyy')-to_char(XSECSRQSJ,'yyyy')<=6 
+     ]]>
+     <include refid="commonWhere3"></include>  
+     <![CDATA[  
+     GROUP BY YLJGDM)c
+on a.yljgdm=c.yljgdm
+left join tb_volap_yljg d
+on a.yljgdm=d.id
+      ]]>
+      <![CDATA[ 
+      union
+      ]]>
+      <![CDATA[
+    select '合计' as yljgmc,sum(a.rs1) rs1 ,sum(b.rs2) as rs2,ROUND(sum(B.RS2)/sum(A.RS1),5)*100||'%' as bl1,sum(c.rs3) as rs3 from (
+select COUNT(1)AS rs1 ,YLJGDM from tb_eb_csyxzm
+WHERE 1=1 AND(CSYZ>=28 OR CSTZ>=1000)
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     GROUP BY YLJGDM)a
+ left join
+(select count(1) as rs2,yljgdm from 
+(select count(1)  ,YLJGDM,YCFID,XM from TB_FB_XSRFS
+where 1=1
+    ]]>
+    <include refid="commonWhere2"></include>  
+      
+     <![CDATA[  
+     group by YLJGDM,YCFID,XM )
+group by  yljgdm)b
+on a.yljgdm=b.yljgdm
+left join 
+(select COUNT(1)AS rs3 ,YLJGDM from tb_eb_csyxzm
+WHERE 1=1 and  to_char(sysdate,'yyyy')-to_char(XSECSRQSJ,'yyyy')<=6 
+     ]]>
+     <include refid="commonWhere3"></include>  
+     <![CDATA[  
+     GROUP BY YLJGDM)c
+on a.yljgdm=c.yljgdm
+left join tb_volap_yljg d
+on a.yljgdm=d.id) order by yljgmc desc 
+      ]]>
+     </select>
+	
+	
+	
+  
+	 
+	  <select id="findAll" resultType="com.wondersgroup.wszygl.model.GwetjkglbbModel" >
+	    <![CDATA[
+	  select * from 
+	  (select d.mc as yljgmc,a.rs1,b.rs2,ROUND(B.RS2/A.RS1,5)*100||'%' as bl1,c.rs3 from (
+select COUNT(1)AS rs1 ,YLJGDM from tb_eb_csyxzm
+WHERE 1=1 AND(CSYZ>=28 OR CSTZ>=1000)
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     GROUP BY YLJGDM)a
+ left join
+(select count(1) as rs2,yljgdm from 
+(select count(1)  ,YLJGDM,YCFID,XM from TB_FB_XSRFS
+where 1=1
+    ]]>
+    <include refid="commonWhere2"></include>  
+      
+     <![CDATA[  
+     group by YLJGDM,YCFID,XM )
+group by  yljgdm)b
+on a.yljgdm=b.yljgdm
+left join 
+(select COUNT(1)AS rs3 ,YLJGDM from tb_eb_csyxzm
+WHERE 1=1 and  to_char(sysdate,'yyyy')-to_char(XSECSRQSJ,'yyyy')<=6 
+     ]]>
+     <include refid="commonWhere3"></include>  
+     <![CDATA[  
+     GROUP BY YLJGDM)c
+on a.yljgdm=c.yljgdm
+left join tb_volap_yljg d
+on a.yljgdm=d.id
+      ]]>
+      <![CDATA[ 
+      union
+      ]]>
+      <![CDATA[
+    select '合计' as yljgmc,sum(a.rs1) rs1 ,sum(b.rs2) as rs2,ROUND(sum(B.RS2)/sum(A.RS1),5)*100||'%' as bl1,sum(c.rs3) as rs3 from (
+select COUNT(1)AS rs1 ,YLJGDM from tb_eb_csyxzm
+WHERE 1=1 AND(CSYZ>=28 OR CSTZ>=1000)
+    ]]>
+    <include refid="commonWhere"></include>
+    <![CDATA[
+     GROUP BY YLJGDM)a
+ left join
+(select count(1) as rs2,yljgdm from 
+(select count(1)  ,YLJGDM,YCFID,XM from TB_FB_XSRFS
+where 1=1
+    ]]>
+    <include refid="commonWhere2"></include>  
+      
+     <![CDATA[  
+     group by YLJGDM,YCFID,XM )
+group by  yljgdm)b
+on a.yljgdm=b.yljgdm
+left join 
+(select COUNT(1)AS rs3 ,YLJGDM from tb_eb_csyxzm
+WHERE 1=1 and  to_char(sysdate,'yyyy')-to_char(XSECSRQSJ,'yyyy')<=6 
+     ]]>
+     <include refid="commonWhere3"></include>  
+     <![CDATA[  
+     GROUP BY YLJGDM)c
+on a.yljgdm=c.yljgdm
+left join tb_volap_yljg d
+on a.yljgdm=d.id) order by yljgmc desc 
+      ]]>
+     </select> 
+	
+ 
+	<select id="getAllYljg"
+		resultType="com.wondersgroup.wszygl.model.YljgModel">
+    <![CDATA[
+      select id as jgdm,mc as jgmc  from tb_volap_yljg where 1=1  and yyjb is not null
+    ]]>
+		<include refid="commonWhere30"></include>
+	</select> 
+  <sql id="commonWhere30">
+		 <if test="yljgdm != null and yljgdm !=''">
+			<![CDATA[ AND id  =#{yljgdm}]]>
+		</if>
+	</sql>
+	
+  <select id="getAllJd"
+		resultType="com.wondersgroup.wszygl.model.TbjdpzModel">
+    <![CDATA[
+      select id,mc from TB_JDPZ t
+    ]]>
+		 
+	</select> 
+     
+</mapper>

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.xxxblDao">
+ 
+
+<select id="getxxxBllist" resultType="com.wondersgroup.wszygl.model.xxxblModel">
+	<![CDATA[ select a.sl,round(a.sl/b.sl,5)*100 as bl,mcdm,MC from  (select sum(sl)as sl,mcdm,MC from V_GXQRKS  where 1=1]]> 
+        <include refid="commonWhere"></include>  
+        <![CDATA[ group by mcdm,MC) a left  join  ]]> 
+        <![CDATA[  (select sum(sl)as sl from V_GXQRKS   where 1=1   ]]> 
+        <include refid="commonWhere"></include>  
+        <![CDATA[ )b on 1=1  ]]> 
+</select>
+<sql id="commonWhere">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and  yljgdm= trim(#{jgdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   rq>= 
+			       trim(#{kssj} )
+			       ]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			      <![CDATA[ and  rq<=
+			      trim(#{jssj} )
+			       ]]>
+		   </if>
+ </sql>
+ 
+ 
+ 
+  <sql id="commonWhere2">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and  yljgdm= trim(#{jgdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   TO_CHAR(to_date(substr(gdsj, 0, 4) || substr(gdsj, 6, 2) || substr(gdsj, 9, 2), 'yyyy-MM-dd'),  'yyyy-MM-dd')>= 
+			       trim(#{kssj} )
+			       ]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			      <![CDATA[ and  TO_CHAR(to_date(substr(gdsj, 0, 4) || substr(gdsj, 6, 2) || substr(gdsj, 9, 2), 'yyyy-MM-dd'),  'yyyy-MM-dd')<=
+			      trim(#{jssj} )
+			       ]]>
+		   </if>
+ </sql>
+ <sql id="commonWhere3">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and  yljgdm= trim(#{jgdm})]]>
+		   </if>
+		    <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and  TO_CHAR(to_date(substr(DJRQ, 0, 4) || substr(DJRQ, 6, 2) || substr(DJRQ, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd') >= 
+			       trim(#{kssj} )
+			       ]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			      <![CDATA[ and  TO_CHAR(to_date(substr(DJRQ, 0, 4) || substr(DJRQ, 6, 2) || substr(DJRQ, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd')<=
+			      trim(#{jssj} )
+			       ]]>
+		   </if>
+ </sql>
+  
+ <select id="getrkbllist" resultType="com.wondersgroup.wszygl.model.xxxblModel">
+	<![CDATA[ 
+	   select  sum(hjrk) as hjrk,
+       sum(ldrk) as ldrk,
+         yljgmc,
+        yljgdm from v_gxqrks2 where 1=1
+	]]> 
+        <include refid="commonWhere"></include>  
+    <![CDATA[ 
+	    group by yljgmc,
+        yljgdm
+	    
+	]]> 
+</select>
+  
+  
+ <select id="getJdlist" resultType="com.wondersgroup.wszygl.model.YljgMcModel">
+ <![CDATA[
+ select distinct yljgdm as jgdm ,jdmc as jgmc  from t_zd_pcs_jd where 1=1 
+  ]]> 
+  <include refid="commonWhere1"></include> 
+ </select>
+ <sql id="commonWhere1">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and   yljgdm= trim(#{jgdm})]]>
+		   </if>	    
+ </sql>
+ 
+  <select id="getnlbllist" resultType="com.wondersgroup.wszygl.model.xxxblModel">
+ <![CDATA[ 
+ select
+      nlhjrk,
+         nlldrk,
+       nvl(hjnldm,ldnldm) as nldm,
+        case
+          when nvl(hjnldm,ldnldm) = '0~3' then
+           '婴儿期'
+          when nvl(hjnldm,ldnldm) = '3~5' then
+           '幼儿期'
+          when nvl(hjnldm,ldnldm) = '5~7' then
+           '学龄前期'
+          when nvl(hjnldm,ldnldm) = '7~18' then
+           '学龄期'
+          when nvl(hjnldm,ldnldm) = '18~28' then
+           '青春期'
+          when nvl(hjnldm,ldnldm) = '28~40' then
+           '青年期'
+          when nvl(hjnldm,ldnldm) = '40~65' then
+           '中年期'
+          when nvl(hjnldm,ldnldm) = '65~120' then
+           '老年期'
+       end nlmc  from
+(  select sum(nlhjrk) as nlhjrk,hjnldm from v_gxqhjnl  where 1 = 1
+ ]]> 
+  <include refid="commonWhere"></include>  
+ <![CDATA[ 
+    group by hjnldm) a
+ full   join (select sum(nlldrk )as nlldrk,ldnldm from v_gxqldnl where 1 = 1
+  ]]> 
+      <include refid="commonWhere"></include> 
+          <![CDATA[ group  by ldnldm )b  on a.hjnldm=b.ldnldm  ]]>   
+ </select>
+
+ 
+ 
+ <select id="getnllist" resultType="com.wondersgroup.wszygl.model.xxxblModel">
+ <![CDATA[ 
+ select nvl(a.hjnlsl,0) as hjnlsl,nvl(b.ldnlsl,0) as ldnlsl,nvl(a.hjnl,b.ldnl)as nl from 
+(select count(1) as hjnlsl,
+               to_char(sysdate, 'yyyy') - substr(csrq, 0, 4) as hjnl
+          from XQ_CZRK a
+         inner join t_zd_pcs_jd b
+            on trim(a.pcsdm) = trim(b.pcsdm)
+         where glzt = 1
+ ]]> 
+  <include refid="commonWhere2"></include>  
+  <![CDATA[ 
+   group by  to_char(sysdate, 'yyyy') - substr(csrq, 0, 4))a
+         full  join
+         (select count(1) as ldnlsl,to_char(sysdate, 'yyyy') - substr(csrq, 0, 4) as ldnl
+          from XQ_ldRK a
+              inner join ld_pcs b
+                 on trim(a.pcs) = b.pcs
+              where 1 = 1
+  ]]> 
+   <include refid="commonWhere3"></include>
+   <![CDATA[ 
+   group by  to_char(sysdate, 'yyyy') - substr(csrq, 0, 4))b
+               on a.hjnl=b.ldnl  order by nl
+   ]]>
+ </select>
+ 
+ 
+ <select id="hjrkzsl" resultType="String">
+ <![CDATA[
+ select count(1) as hjrk
+          from XQ_CZRK a
+         inner join t_zd_pcs_jd b
+            on trim(a.pcsdm) = trim(b.pcsdm)
+         where glzt = 1
+  ]]> 
+   <include refid="commonWhereCZRK"></include>
+ </select>
+ 
+  <sql id="commonWhereCZRK">
+        <if test="jgdm != null and jgdm !='' ">
+             <![CDATA[ and  yljgdm= trim(#{jgdm})]]>
+       </if>
+        <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   TO_CHAR(to_date(substr(gdsj, 0, 4) || substr(gdsj, 6, 2) || substr(gdsj, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd') >= 
+			       trim(#{kssj} )
+			       ]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			      <![CDATA[ and  TO_CHAR(to_date(substr(gdsj, 0, 4) || substr(gdsj, 6, 2) || substr(gdsj, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd') <=
+			      trim(#{jssj} )
+			       ]]>
+		   </if>
+ </sql>
+ 
+ 
+       
+       
+       
+ 
+ 
+ <select id="getldzsl" resultType="String">
+ <![CDATA[
+ select count(1) as ldrk 
+               from XQ_ldRK a
+              inner join ld_pcs b
+                 on trim(a.pcs) = b.pcs
+              where 1 = 1
+              
+  ]]> 
+   <include refid="commonWhereldRK"></include>
+ </select>
+ <sql id="commonWhereldRK">
+        <if test="jgdm != null and jgdm !='' ">
+             <![CDATA[ and  yljgdm= trim(#{jgdm})]]>
+       </if>
+        <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   TO_CHAR(to_date(substr(DJRQ, 0, 4) || substr(DJRQ, 6, 2) || substr(DJRQ, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd') >= 
+			       trim(#{kssj} )
+			       ]]>
+		   </if>
+		    <if test="jssj != null and jssj !='' ">
+			      <![CDATA[ and  TO_CHAR(to_date(substr(DJRQ, 0, 4) || substr(DJRQ, 6, 2) || substr(DJRQ, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd') <=
+			      trim(#{jssj} )
+			       ]]>
+		   </if>
+ </sql>
+ 
+ 
+ 
+ <select id="getHjechats" resultType="com.wondersgroup.wszygl.model.xxxblModel">
+ <![CDATA[ 
+select '户籍人口' as name,nvl(a.sl1,0) as sl1,a.jdmc pcsmc,round( nvl(a.sl1,0)/nvl(b.sl1,0),3)*100 as bl1 from 
+(select  count(1) as sl1,jdmc  
+from XQ_CZRK a
+         inner join t_zd_pcs_jd b
+         on  trim(a.pcsdm) = trim(b.pcsdm)
+         where glzt = 1 and 1=1
+ ]]> 
+  <include refid="Hjechats"></include> 
+  <![CDATA[
+    group by jdmc)a
+ inner join        
+ (select  count(1) as sl1
+from XQ_CZRK a
+         inner join t_zd_pcs_jd b
+         on  trim(a.pcsdm) = trim(b.pcsdm)
+         where glzt = 1 and 1=1
+   ]]>
+   <include refid="Hjechats"></include> 
+     <![CDATA[
+      )b on 1=1
+    ]]>
+ </select>
+ 
+ 
+ 
+ 
+ <select id="getLdechats" resultType="com.wondersgroup.wszygl.model.xxxblModel">
+  <![CDATA[
+     select '流动人口' as name,nvl(a.sl1,0) as sl1 ,a.pcsmc ,round( nvl(a.sl1,0)/nvl(b.sl1,0),3)*100 as bl1 from 
+(select  count(1) as sl1,pcsmc  
+ from XQ_ldRK a
+              inner join ld_pcs b
+                 on trim(a.pcs) = b.pcs
+         where 1=1
+   ]]>
+   <include refid="Ldechats"></include> 
+   <![CDATA[
+      group by pcsmc)a
+ inner join        
+ (select  count(1) as sl1
+from   XQ_ldRK a
+              inner join ld_pcs b
+                 on trim(a.pcs) = b.pcs where 1=1
+    ]]>
+    <include refid="Ldechats"></include> 
+     <![CDATA[
+      )b on 1=1
+    ]]>
+ </select>
+ 
+ 
+ <select id="getZrkechats" resultType="com.wondersgroup.wszygl.model.xxxblModel">
+  <![CDATA[
+     select '总人口' as name,
+     (nvl(sl1,0) + nvl(sl2,0)) as sl1,
+ round((nvl(sl1,0) + nvl(sl2,0)) / (nvl(czsl,0) + nvl(ldsl,0)), 5) * 100 as bl1,
+nvl(jdmc,ldpcsmc) as pcsmc
+ from 
+(select a.sl1,b.sl1 as czsl,a.jdmc,yljgdm from 
+(select  count(1) as sl1,jdmc  ,yljgdm
+from XQ_CZRK a
+         inner join t_zd_pcs_jd b
+         on  trim(a.pcsdm) = trim(b.pcsdm)
+      where glzt = 1 and 1=1
+    ]]>
+     <include refid="Hjechats"></include> 
+    <![CDATA[
+    group by jdmc,yljgdm)a
+ inner join        
+ (select  count(1) as sl1
+from XQ_CZRK a
+         inner join t_zd_pcs_jd b
+         on  trim(a.pcsdm) = trim(b.pcsdm)
+         where glzt = 1 and 1=1
+       ]]>
+        <include refid="Hjechats"></include> 
+        <![CDATA[
+         )b on 1=1) aa
+      
+      full join 
+      
+      (select a.sl1 as sl2,b.sl1 as  ldsl,a.pcsmc as ldpcsmc,yljgdm  from 
+(select  count(1) as sl1,pcsmc  ,yljgdm
+ from XQ_ldRK a
+              inner join ld_pcs b
+                 on trim(a.pcs) = b.pcs
+         where 1=1
+        ]]>
+         <include refid="Ldechats"></include> 
+          <![CDATA[
+           group by pcsmc,yljgdm)a
+ inner join        
+ (select  count(1) as sl1
+from   XQ_ldRK a
+              inner join ld_pcs b
+                 on trim(a.pcs) = b.pcs
+         where 1=1
+          ]]>
+           <include refid="Ldechats"></include> 
+           <![CDATA[)b
+         on 1=1)bb
+         on aa.yljgdm=bb.yljgdm   ]]>
+ </select>
+ 
+ 
+ <sql id="Hjechats">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and   yljgdm= trim(#{jgdm})]]>
+		   </if>
+		   <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   TO_CHAR(to_date(substr(gdsj, 0, 4) || substr(gdsj, 6, 2) || substr(gdsj, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd')>= trim(#{kssj})]]>
+		   </if>
+		   <if test="jssj != null and jssj !='' ">
+			       <![CDATA[ and   TO_CHAR(to_date(substr(gdsj, 0, 4) || substr(gdsj, 6, 2) || substr(gdsj, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd')<= trim(#{jssj})]]>
+		   </if>
+		    <if test="nldbm1 != null and nldbm1 !='' ">
+			       <![CDATA[ and    to_char(sysdate, 'yyyy') - substr(csrq, 0, 4)> trim(#{nldbm1})]]>
+		   </if>
+		   <if test="nldbm2 != null and nldbm2 !='' ">
+			       <![CDATA[ and    to_char(sysdate, 'yyyy') - substr(csrq, 0, 4)<= trim(#{nldbm2})]]>
+		   </if>		    
+ </sql>
+ 
+ <sql id="Ldechats">
+	      <if test="jgdm != null and jgdm !='' ">
+			       <![CDATA[ and   yljgdm= trim(#{jgdm})]]>
+		   </if>
+		   <if test="kssj != null and kssj !='' ">
+			       <![CDATA[ and   TO_CHAR(to_date(substr(DJRQ, 0, 4) || substr(DJRQ, 6, 2) || substr(DJRQ, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd')>= trim(#{kssj})]]>
+		   </if>
+		   <if test="jssj != null and jssj !='' ">
+			       <![CDATA[ and  TO_CHAR(to_date(substr(DJRQ, 0, 4) || substr(DJRQ, 6, 2) || substr(DJRQ, 9, 2),'yyyy-MM-dd'),'yyyy-MM-dd')<= trim(#{jssj})]]>
+		   </if>
+		    <if test="nldbm1 != null and nldbm1 !='' ">
+			       <![CDATA[ and    to_char(sysdate, 'yyyy') - substr(csrq, 0, 4)> trim(#{nldbm1})]]>
+		   </if>
+		   <if test="nldbm2 != null and nldbm2 !='' ">
+			       <![CDATA[ and    to_char(sysdate, 'yyyy') - substr(csrq, 0, 4)<= trim(#{nldbm2})]]>
+		   </if>		    
+ </sql>
+ 
+</mapper>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.YpcrkDao"> 
+      <sql id="commonWhere"> 
+		    <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and INSTORE_DATE>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and INSTORE_DATE<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1]]>
+		    </if> 
+		      
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   organ_code =trim(#{jgdm})]]>
+		    </if> 
+      </sql>
+      <sql id="commonWhere3"> 
+		    <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and INSTORE_DATE>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and INSTORE_DATE<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1]]>
+		    </if> 
+		   
+		    <if test="ypbm != null and ypbm !='' and ypbm !='undefined' ">
+			     <![CDATA[  and CN_CODE=trim(#{ypbm})]]>
+		    </if> 
+		      
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   organ_code =trim(#{jgdm})]]>
+		    </if> 
+      </sql> 
+      <sql id="commonWhere2"> 
+		    <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and OUTSTORE_DATE>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		    </if>
+		    <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and OUTSTORE_DATE<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1]]>
+		    </if> 
+		      
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   organ_code =trim(#{jgdm})]]>
+		    </if> 
+      </sql> 
+  
+ <select id="getypzh" resultType="com.wondersgroup.wszygl.model.YpcrkModel">
+	<![CDATA[ 
+	 with table1 as
+ (select organ_code as yljgdm,sum(INSTORE_MONEY) as rkypje from T_Drug_In_Store_Infor_Record a
+ where 1=1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by organ_code),
+ table2 as
+ (select organ_code as yljgdm,sum(OUTSTORE_MONEY) as ckypje from T_Drug_Out_Store_Infor_Record t
+ where 1=1
+	]]>
+	<include refid="commonWhere2"></include> 
+	   <![CDATA[ 
+	   group by organ_code )
+select nvl(rkypje,0)/10000 as rkypje,nvl(ckypje,0)/10000 as ckypje,nvl(a.yljgdm,b.yljgdm) as yljgdm ,
+c.mc as yljgmc 
+from table1 a full join table2 b on a.yljgdm = b.yljgdm
+inner join tb_volap_yljg c
+on nvl(a.yljgdm,b.yljgdm)=c.id
+where c.yylb='A1'
+	   ]]>
+ </select>
+ 
+ <select id="getypjc" resultType="com.wondersgroup.wszygl.model.YpcrkModel">
+	<![CDATA[ 
+	 with table1 as
+ (select organ_code as yljgdm,sum(INSTORE_MONEY) as rkypje from T_Drug_In_Store_Infor_Record a
+ where 1=1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+  group by organ_code),
+ table2 as
+ (select organ_code as yljgdm,sum(OUTSTORE_MONEY) as ckypje from T_Drug_Out_Store_Infor_Record t
+ where 1=1
+	]]>
+	<include refid="commonWhere2"></include> 
+	   <![CDATA[ 
+	   group by organ_code )
+select nvl(rkypje,0)/10000 as rkypje,nvl(ckypje,0)/10000 as ckypje,nvl(a.yljgdm,b.yljgdm) as yljgdm,
+ replace(replace(c.mc, '苏州高新区', ''), '社区卫生服务中心', '') as yljgmc 
+from table1 a full join table2 b on a.yljgdm = b.yljgdm
+inner join tb_volap_yljg c
+on nvl(a.yljgdm,b.yljgdm)=c.id
+where c.yylb='AA'
+	   ]]>
+ </select>
+ 
+  <select id="getechars03List" resultType="com.wondersgroup.wszygl.model.YpcrkModel">
+	<![CDATA[ 
+	 select * from (select * from 
+(select  round(sum(INSTORE_MONEY)/10000,2) as rkypje ,case when DRUG_NAME like '%[%' then  SUBSTR(DRUG_NAME,0,INStr(DRUG_NAME,'[')-1) 
+else  DRUG_NAME  end   as  rkypmc,CN_CODE as ypbm from T_Drug_In_Store_Infor_Record
+where 1=1 
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+   
+group by DRUG_NAME ,CN_CODE
+order by rkypje desc)
+where rownum<=20) order by rkypje desc
+	]]>
+	 
+ </select>
+ <select id="getechars04List" resultType="com.wondersgroup.wszygl.model.YpcrkModel">
+	<![CDATA[ 
+	 select * from (select * from 
+(select round(sum(OUTSTORE_MONEY)/10000,2) as ckypje ,
+case when DRUG_NAME like '%[%' then  SUBSTR(DRUG_NAME,0,INStr(DRUG_NAME,'[')-1) 
+else  DRUG_NAME  end as  ckypmc,
+
+CN_CODE as ypbm from T_Drug_Out_Store_Infor_Record
+where 1=1 
+	   ]]>
+     <include refid="commonWhere2"></include> 
+   <![CDATA[  
+   
+group by DRUG_NAME ,CN_CODE
+order by ckypje desc)
+where rownum<=20) order by ckypje desc
+	]]>
+	 
+ </select>
+ 
+ <select id="getechars05List" resultType="com.wondersgroup.wszygl.model.YpcrkModel">
+	<![CDATA[ 
+	   select * from 
+(select * from 
+(select ypbm,ypmc, dw,sum(zs) as zs from 
+(select * from 
+(select CN_CODE as ypbm,
+       DRUG_NAME || CN_CODE as ypmc,
+       DRUG_UNIT as dw,
+       sum(INSTORE_NUMB) as zs
+  from T_Drug_In_Store_Infor_Record
+ where 1 = 1 
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+     group by CN_CODE, DRUG_NAME, DRUG_UNIT
+ order by sum(INSTORE_NUMB) desc)
+ union all
+select *from 
+(select CN_CODE as ypbm,
+       DRUG_NAME || CN_CODE as ypmc,
+       DRUG_UNIT as dw,
+      -sum(OUTSTORE_NUMB) as zs
+  from T_Drug_Out_Store_Infor_Record
+ where 1 = 1   
+	]]>
+	<include refid="commonWhere2"></include>  
+	  <![CDATA[ 
+	   group by CN_CODE, DRUG_NAME, DRUG_UNIT
+ order by sum(OUTSTORE_NUMB) desc))
+ group by ypbm,ypmc, dw)
+ order by abs(zs)desc)
+ where rownum<=10
+	  ]]>
+ </select>
+ 
+ 
+ 
+ <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.YpcrkModel">
+  <![CDATA[ 
+ select ORGAN_NAME      as yljgmc,
+       DRUG_NAME       as ypmc,
+       DRUG_SPEC       as ypgg,
+       DRUG_DOSAGE     as yplx,
+       PROD_ENTER_NAME as cj,
+       INSTORE_NUMB as rkl,
+       INSTORE_MONEY as rkypje,
+       to_char(INSTORE_DATE,'yyyyMMdd') as rksj
+  from T_DRUG_IN_STORE_INFOR_RECORD t
+ where 1=1
+ ]]>  
+ <include refid="commonWhere3"></include>  
+ </select>
+ 
+ 
+   
+ 
+ 
+    <select id="getypcrjglxk" resultType="String">
+  <![CDATA[ 
+select yylb  from tb_volap_yljg  where 1=1
+ ]]>  
+ <include refid="jglxWhere"></include>  
+ </select>
+ 
+ <sql id="jglxWhere">     
+		    <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   id =trim(#{jgdm})]]>
+		    </if> 
+      </sql>
+ 
+</mapper>

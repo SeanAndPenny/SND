@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.JtysJgXzysDao">
+   <sql id="commonWhere">
+    <if test="tdbh != null and tdbh !='' ">
+      <![CDATA[ and TDBH  =trim(#{tdbh})]]>
+    </if>
+    <if test="qyjgid != null and qyjgid !='' ">
+      <![CDATA[ and qyjgid =trim(#{qyjgid})]]>
+    </if>
+  </sql>
+  <sql id="commonWhere2">
+    <if test="qyjgid != null and qyjgid !='' ">
+      <![CDATA[ and qyjgid  =trim(#{qyjgid})]]>
+    </if>
+    <if test="tdbh != null and tdbh !='' ">
+      <![CDATA[ and tdbh =trim(#{tdbh})]]>
+    </if>
+    <if test="ysid != null and ysid !='' ">
+      <![CDATA[ and ysid =trim(#{ysid})]]>
+    </if>
+  </sql>
+
+  <select id="getJtysJgXzys" resultType="com.wondersgroup.wszygl.model.JtysModel">
+  <![CDATA[
+      
+        select * from (
+select count(1)rs, c.ssjg as qyjgid,d.mc as qyjgmc ,c.TDBH,c.tdmc,ysid,ysxm from 
+    (select replace(replace(b.QYTDID, '[ { "$oid" : "', ''),'"}]','') as QYTDID,
+      qyysid as ysid,
+       qyysxm as ysxm
+          from Tb_JTYS_PATIENT_SIGN a
+         inner join Tb_JTYS_PATIENT_SIGN_DETAIL b
+            on a.GRQYLSH = b.GRQYLSH
+              where a.zhzt = 'approved'
+           AND substr(a.QYSXKSSJ, 0, 7) = to_char(sysdate, 'yyyy-mm')
+           group  by qyysid,qyysxm,a.grqylsh,replace(replace(b.QYTDID, '[ { "$oid" : "', ''),'"}]',''))aa
+           inner join Tb_JTYS_TEAM c
+           on aa.QYTDID=c.tdbh
+           inner join tb_volap_yljg d 
+           on c.SSJG=d.id
+           group by c.SSJG,d.mc,c.tdmc,c.TDBH  ,ysid,ysxm
+           order by count(1) desc) where 1=1
+    ]]>
+  <include refid="commonWhere"></include>  
+   
+  </select>
+  
+  
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.JtysModel">
+	  <![CDATA[
+			  select *
+  from (select  c.tdmc,QYFAMC,QYSXKSSJ,d.mc as qyjgmc,c.tdzxm,QYRXM,qytdmc,
+               c.ssjg as qyjgid,
+               c.TDBH,
+               ysid,
+               ysxm
+          from (select replace(replace(b.QYTDID, '[ { "$oid" : "', ''),
+                               '"}]',
+                               '') as QYTDID,QYSXKSSJ,
+                       qyysid as ysid,qytdmc,
+                       qyysxm as ysxm,
+                       QYRXM,QYFAMC
+                  from Tb_JTYS_PATIENT_SIGN a
+                 inner join Tb_JTYS_PATIENT_SIGN_DETAIL b
+                    on a.GRQYLSH = b.GRQYLSH
+                 where a.zhzt = 'approved'
+                   AND substr(a.QYSXKSSJ, 0, 7) = to_char(sysdate, 'yyyy-mm')
+                 group by qyysid,QYRXM,QYFAMC,QYSXKSSJ,qytdmc,
+                          qyysxm,
+                          a.grqylsh,
+                          replace(replace(b.QYTDID, '[ { "$oid" : "', ''),
+                                  '"}]',
+                                  '')) aa
+         inner join Tb_JTYS_TEAM c
+            on aa.QYTDID = c.tdbh
+         inner join tb_volap_yljg d
+            on c.SSJG = d.id )
+ where 1 = 1
+
+			 
+		]]>
+		<include refid="commonWhere2"></include>
+
+	</select>
+  
+  
+  
+  
+  
+ 
+</mapper>

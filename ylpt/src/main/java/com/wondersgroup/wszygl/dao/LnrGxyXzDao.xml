@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.LnrGxyXzDao">
+   
+  <sql id="commonWhere">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[   and to_char(a.jksj,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[  and to_char(a.jksj,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if> 
+    <if test="yljgdm != null and yljgdm !='' and yljgdm!='undefined'">
+      <![CDATA[ and yljgdm=trim(#{yljgdm})]]>
+    </if>
+  </sql> 
+  <select id="getLnrGxyXz" resultType="com.wondersgroup.wszygl.model.LnrModel">
+  <![CDATA[
+          select sum(gxyrs) as gxyrs, 
+       gxylxmc,
+       yljgdm,
+       b.mc as yljgmc,
+        
+       round(sum(gxyrs) /c.rs, 5) * 100  as gxyzb
+  from (  select count(1) as gxyrs,  '高血压患者' as gxylxmc,yljgdm
+          from tb_gxy_hzglk a
+        where to_char(sysdate,'yyyy')-to_char(csrq,'yyyy')>=50
+         
+    ]]>
+       <include refid="commonWhere"></include>
+    <![CDATA[   
+      group by   yljgdm ) a
+         left join tb_volap_yljg b
+         on a.yljgdm=b.id
+         left join tb_50rstj c
+         on c.yljgdm=a.yljgdm
+ group by gxylxmc,yljgdm,b.mc,c.rs
+     ]]>
+              
+  </select>
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.LnrModel">
+    <![CDATA[
+        select xm,
+   decode(xb,'1','男','2','女') as xb,
+   to_char(jksj,'yyyy-mm-dd') as jksj,
+   jkysxm,
+   shzlnlmc,
+   b.mc as yljgmc,
+   to_char(sysdate,'yyyy')-to_char(csrq,'yyyy') as nl
+          from tb_gxy_hzglk a
+          left join tb_volap_yljg b
+          on a.yljgdm=b.id
+         where to_char(sysdate,'yyyy')-to_char(csrq,'yyyy')>=50
+     
+    ]]>
+    <include refid="commonWhere"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

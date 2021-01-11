@@ -1,0 +1,171 @@
+
+body{
+  min-width: 1200px;
+}
+.main{
+  margin:19px;
+  padding: 40px 80px;
+  background: white;
+}
+.main .top .topLeft{
+  float: left;
+}
+.main .top .topLeft .det{
+  display: inline-block;
+  position: relative;
+  margin-right: 45px;
+}
+.main .top .topLeft .detLast{
+  margin-right: 0;
+}
+.main .top .topLeft .det label{
+  vertical-align: 1px;
+}
+.main .top .topLeft .det input{
+  width: 100px;
+  height: 28px;
+  background: #ebedf1;
+  border-radius: 14px;
+  text-indent: 12px;
+  outline: none;
+  border: none;
+  line-height: 28px;
+}
+.main .top .topLeft .det img{
+  position: absolute;
+  right: 8px;
+  top: 7px;
+}
+.main .top .topLeft .det select{
+  border: none;
+  outline: none;
+  height: 28px;
+  line-height: 30px;
+  background: #ebedf1;
+  padding: 0 10px 0 7px;
+  border-radius: 14px;
+}
+.main .top .topRight{
+  float: right;
+}
+.main .top .topRight button{
+  width: 87px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  margin: 0 3px;
+  color: white;
+}
+.main .top .topRight .btn1{
+  background: #308deb;
+}
+.main .top .topRight .btn2{
+  background: #10ac77;
+}
+
+.main .bot{
+  padding-top: 40px;
+  margin-top: 27px;
+  border-top: 1px solid #ededed;
+}
+.main .bot .title .titLeft{
+  float: left;
+}
+.main .bot .title .titLeft label{
+  font-size: 18px;
+  vertical-align: 5px;
+  margin-left: 3px;
+}
+.main .bot .title .titRight{
+  float: right;
+}
+.main .bot .title .titRight .det{
+  display: inline-block;
+  width: 75px;
+  height: 26px;
+  line-height: 28px;
+  text-align: center;
+  border: 1px solid #308deb;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+.main .bot .title .titRight .detLast{
+  margin-right: 0;
+}
+.main .bot .title .titRight .det img{
+  vertical-align: -2px;
+}
+.main .bot .title .titRight .det label{
+  color: #308deb;
+}
+.main .bot .botCon .chart01{
+  width: 100%;
+  height: 340px;
+}
+
+.mainTwo > .bot .botCon .chart02{
+  width: 100%;
+  height: 430px;
+}
+
+
+.mainThree > .top .topLeft .detLast select{
+  width: 100px;
+}
+.mainThree > .bot .botLeft{
+  float: left;
+  width: 50%;
+}
+.mainThree > .bot .botLeft .chart03{
+  width: 100%;
+  height: 390px;
+}
+.mainThree > .bot .botRight{
+  float: left;
+  width: 50%;
+}
+.mainThree > .bot .botRight .same{
+  margin-left: 150px;
+  width: 292px;
+  height: 153px;
+  background: #fbfbfb;
+  border: 1px solid #f1f1f1;
+  text-align: center;
+  border-radius: 6px;
+  margin-top: 26px;
+}
+.mainThree > .bot .botRight .same img{
+  margin-top: 43px;
+  vertical-align: -22px;
+  margin-right: 15px;
+}
+.mainThree > .bot .botRight .sameDiff img{
+  margin-top: 47px;
+  vertical-align: -12px;
+}
+.mainThree > .bot .botRight .same .sameFont{
+  display: inline-block;
+  text-align: left;
+  margin-top: 0;
+}
+.mainThree > .bot .botRight .same .title i{
+  display: inline-block;
+  width: 4px;
+  height: 15px;
+  background: #2f90e9;
+  vertical-align: -1.5px;
+  margin-right: 5px;
+}
+.mainThree > .bot .botRight .same .con{
+  margin-left: 14px;
+  margin-top: 10px;
+}
+.mainThree > .bot .botRight .same .con p{
+  color: #666666;
+  margin-bottom: 5px;
+}
+.mainThree > .bot .botRight .same .con p span{
+  color: #21a1fa;
+}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.CszmDao">
+  <sql id="commonWhere">
+    <if test="cszm != null and cszm !='' ">
+      <![CDATA[  and trim(CSYXZMBH)=trim(#{cszm})]]>
+    </if>
+    
+  </sql>
+  
+  
+  
+  <select id="getCszm" resultType="com.wondersgroup.wszygl.model.CszmModel">
+  <![CDATA[
+         select XM,
+       DECODE(xb, '1', '男', '2', '女','未知') AS XB,
+       to_char(XSECSRQSJ, 'yyyy') as NN,
+       to_char(XSECSRQSJ, 'mm') as YY,
+       to_char(XSECSRQSJ, 'dd') as RR,
+       to_char(XSECSRQSJ, 'hh') as SS,
+       to_char(XSECSRQSJ, 'mi') as FF,
+       CSYZ as CSYZ,
+       cstz AS TZ,
+       CSSC AS SG,
+       CSd_shen  AS SHENG,
+       CSd_shi AS SHI,
+       CSD_QU AS QU,
+       jsjgmc as JSJG,
+       MQXM,
+       case when REGEXP_LIKE(MQ_ZJHM,'^[1-9]{1}[0-9]{16}[0-9Xx]{1}$')
+       then 
+      cast( TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(MQ_ZJHM, 7, 4)as varchar(12)) 
+      else '未知' end as MQNL,
+      '中国'  MQGJ,
+       '汉族' MQMZ,
+       '' AS MQJZDZ,
+       mQ_ZJHM as MQSFZH,
+       FQXM,
+      case when REGEXP_LIKE(fQ_ZJHM,'^[1-9]{1}[0-9]{16}[0-9Xx]{1}$')
+       then 
+      cast( TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(fQ_ZJHM, 7, 4)as varchar(12)) 
+      else '未知' end  as FQNL,
+       '中国' as FQGJ,
+       '汉族' AS FQMZ,
+       '' AS FQJZDZ,
+       FQ_ZJHM AS FQSFZH,
+       JSJGMC AS QFJG,
+       TO_CHAR(QFRQ, 'YYYY') AS NNN,
+       TO_CHAR(QFRQ, 'MM') AS YYY,
+       TO_CHAR(QFRQ, 'DD') AS RRR,
+       CSYXZMBH as CSZ
+  from  tb_eb_csyxzm
+ where 1 = 1
+   
+    ]]>
+       <include refid="commonWhere"></include>
+   
+              
+  </select>
+  
+  
+ 
+</mapper>

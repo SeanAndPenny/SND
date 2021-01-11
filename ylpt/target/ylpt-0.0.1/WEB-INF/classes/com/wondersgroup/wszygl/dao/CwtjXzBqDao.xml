@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.CwtjXzBqDao">
+  <sql id="commonWhere">
+    <if test="ids != null and ids !='' ">
+      <![CDATA[  and c.id =trim(#{ids})]]>
+    </if>
+    <if test="yljgdm != null and yljgdm !='' ">
+      <![CDATA[ and  a.org_code=trim(#{yljgdm})]]>
+    </if>
+  </sql>
+  
+  
+  <sql id="commonWhere2">
+     <if test="index==0 ">
+       <if test="yljgdm != null and yljgdm !='' ">
+          <![CDATA[  and a.org_code=trim(#{yljgdm})]]>
+      </if>
+          <if test="bqcode != null and bqcode !='' ">
+      <![CDATA[ and  a.bq_code =trim(#{bqcode})]]>
+        </if>
+    </if>
+    
+     <if test="index==1 ">
+       <if test="yljgdm != null and yljgdm !='' ">
+          <![CDATA[  and a.org_code=trim(#{yljgdm})]]>
+      </if>
+       <if test="bqcode != null and bqcode !='' ">
+           <![CDATA[ and  a.bq_code =trim(#{bqcode})]]>
+        </if>
+         <![CDATA[ and a. STOP_FLAG='1']]>
+    </if>
+    
+    
+     <if test="index==2 ">
+       <if test="yljgdm != null and yljgdm !='' ">
+          <![CDATA[  and a.org_code=trim(#{yljgdm})]]>
+      </if>
+     <if test="bqcode != null and bqcode !='' ">
+          <![CDATA[ and  a.bq_code =trim(#{bqcode})]]>
+      </if>
+         <![CDATA[ and a. STOP_FLAG='1' and a.zyh is not null]]>
+    </if>
+    
+     <if test="index==3 ">
+       <if test="yljgdm != null and yljgdm !='' ">
+          <![CDATA[  and a.org_code=trim(#{yljgdm})]]>
+      </if>
+       <if test="bqcode != null and bqcode !='' ">
+      <![CDATA[ and  a.bq_code =trim(#{bqcode})]]>
+        </if>
+         <![CDATA[ and a. STOP_FLAG='1' and a.zyh is  null]]>
+    </if>
+    
+  </sql>
+
+
+
+
+  <select id="getCwHdtjXzBqList" resultType="com.wondersgroup.wszygl.model.CwtjModel">
+  <![CDATA[
+       select count(1) as sl, bq_code,bq_name,org_code as yljgdm ,c.id,b.mc  as yljgmc,'核定床位' as cwlxmc from TB_BED_INFO a 
+ inner join tb_volap_yljg b
+    on a.org_code = b.id
+ inner join tb_volap_yylb c
+    on b.yylb = c.id
+    where 1=1
+       
+    ]]>
+  <include refid="commonWhere"></include>  
+  <![CDATA[
+       group by  bq_code,bq_name,org_code  ,c.id,b.mc
+          
+    ]]>
+  </select>
+  
+  
+  <select id="getCwKftjXzBqList" resultType="com.wondersgroup.wszygl.model.CwtjModel">
+  <![CDATA[
+       select count(1) as sl, bq_code,bq_name,org_code as yljgdm ,c.id,b.mc as yljgmc,'开放床位' as cwlxmc from TB_BED_INFO a 
+ inner join tb_volap_yljg b
+    on a.org_code = b.id
+ inner join tb_volap_yylb c
+    on b.yylb = c.id
+    where 1=1 and  STOP_FLAG='1'
+       
+    ]]>
+  <include refid="commonWhere"></include>  
+  <![CDATA[
+       group by  bq_code,bq_name,org_code  ,c.id,b.mc
+          
+    ]]>
+  </select>
+  
+  
+  
+  <select id="getCwDqtjXzBqList" resultType="com.wondersgroup.wszygl.model.CwtjModel">
+  <![CDATA[
+       select count(1) as sl, bq_code,bq_name,org_code as yljgdm ,c.id,b.mc  as yljgmc,'当前使用床位' as cwlxmc from TB_BED_INFO a 
+ inner join tb_volap_yljg b
+    on a.org_code = b.id
+ inner join tb_volap_yylb c
+    on b.yylb = c.id
+    where 1=1 and  STOP_FLAG='1' and zyh is not null
+       
+    ]]>
+  <include refid="commonWhere"></include>  
+  <![CDATA[
+       group by  bq_code,bq_name,org_code  ,c.id,b.mc
+          
+    ]]>
+  </select>
+  
+  
+  <select id="getCwSytjXzBqList" resultType="com.wondersgroup.wszygl.model.CwtjModel">
+  <![CDATA[
+       select count(1) as sl, bq_code,bq_name,org_code as yljgdm ,c.id,b.mc  as yljgmc,'剩余床位' as cwlxmc from TB_BED_INFO a 
+ inner join tb_volap_yljg b
+    on a.org_code = b.id
+ inner join tb_volap_yylb c
+    on b.yylb = c.id
+    where 1=1 and  STOP_FLAG='1' and zyh is  null
+       
+    ]]>
+  <include refid="commonWhere"></include>  
+  <![CDATA[
+       group by  bq_code,bq_name,org_code  ,c.id,b.mc
+          
+    ]]>
+  </select>
+  
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.CwtjModel">
+    <![CDATA[
+       select b.mc as yljgmc ,a.bed_name,a.bq_name,d.hzxm,d.jzksmc,d.rysj
+from TB_BED_INFO a 
+ inner join tb_volap_yljg b
+    on a.org_code = b.id
+ inner join tb_volap_yylb c
+    on b.yylb = c.id
+left join TB_YL_ZY_Medical_Record d
+on a.org_code=d.yljgdm and a.ZYH=d.CISID
+      where 1=1 
+    ]]>
+    <include refid="commonWhere2"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

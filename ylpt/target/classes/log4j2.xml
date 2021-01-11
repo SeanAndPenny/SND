@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" strict="true" name="XMLConfigTest">
+	<Properties>
+		<Property name="filename">logs/ylpt.log2</Property>
+	</Properties>
+	<Filter type="ThresholdFilter" level="debug" />
+
+	<Appenders>
+		<Appender type="Console" name="stdout">
+			<Layout type="PatternLayout" pattern="%d{HH:mm:ss.SSS} [%t] [%-5level] %logger{36} - %msg%n" />
+		</Appender>
+		<Appender type="File" name="File" fileName="${filename}">
+			<Layout type="PatternLayout" pattern="%d{HH:mm:ss.SSS} [%t] [%-5level] %logger{36} - %msg%n"/>
+		</Appender>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="java.sql" level="debug">
+			<AppenderRef ref="stdout" />
+			<AppenderRef ref="File" />
+		</Logger>
+		<Logger name="org.mybatis" level="debug">
+			<AppenderRef ref="stdout" />
+			<AppenderRef ref="File" />
+		</Logger>
+		<Logger name="org.springframework" level="info">
+			<AppenderRef ref="stdout" />
+			<AppenderRef ref="File" />
+		</Logger>
+		<Logger name="org.apache.commons" level="debug">
+			<AppenderRef ref="stdout" />
+			<AppenderRef ref="File" />
+		</Logger>
+		<Logger name="com.wondersgroup" level="debug">
+			<AppenderRef ref="stdout" />
+			<AppenderRef ref="File" />
+		</Logger>
+
+		<Root level="info">
+			<AppenderRef ref="stdout" />
+			<AppenderRef ref="File" />
+		</Root>
+	</Loggers>
+</Configuration>

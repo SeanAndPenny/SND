@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.BassDao"> 
+      <sql id="commonWhere"> 
+             
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and OPER_DATE>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and OPER_DATE<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1 ]]>
+		       </if> 
+		     
+		     <if test="jgdm != null and jgdm !='' and jgdm !='undefined' ">
+			    <![CDATA[ and   a.ORGAN_CODE =trim(#{jgdm})]]>
+		    </if> 
+      </sql> 
+     <sql id="commonWhere22"> 
+             
+		       <if test="kssj != null and kssj !='' and kssj !='undefined'">
+			     <![CDATA[ and OPER_DATE>=to_date(trim(#{kssj}),'yyyy-MM-dd') ]]>
+		       </if>
+		       <if test="jssj != null and jssj !='' and jssj !='undefined' ">
+			     <![CDATA[  and OPER_DATE<=to_date(trim(#{jssj}),'yyyy-MM-dd')+1 ]]>
+		       </if> 
+		     
+		     <if test="yljgdm != null and yljgdm !=''   ">
+			    <![CDATA[ and   a.ORGAN_CODE =trim(#{yljgdm})]]>
+		    </if> 
+		    <if test="ksbm != null and ksbm !=''   ">
+			    <![CDATA[ and   a.DPT_CODE =trim(#{ksbm})]]>
+		    </if> 
+      </sql>  
+      
+      
+       
+      
+       
+       
+  <select id="getBajgFx" resultType="com.wondersgroup.wszygl.model.BassModel">
+	<![CDATA[ 
+	 select ORGAN_CODE as yljgdm ,b.mc as yljgmc,count(1) as rs  from
+(select *
+  from (select t.*,               
+               row_number() over(partition by t.HP_S_NO,t.ORGAN_CODE,to_char(OPER_DATE,'yyyy-MM-dd') order by nnis desc) rn
+          from T_MR_OPERATIONRECORD t) c
+ where rn = 1)a 
+ inner join tb_volap_yljg b
+ on a.ORGAN_CODE=b.id
+ where 1=1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+   group by  ORGAN_CODE  ,b.mc
+	]]>
+ </select>
+ 
+  <select id="getechars02" resultType="com.wondersgroup.wszygl.model.BassModel">
+	<![CDATA[ 
+	  select nnis,decode(nnis,'1','1级手术','2','2级手术','3','3级手术','4','4级手术','0','0级手术','未知') as jbmc ,count(1) as rs  from
+(select *
+  from (select t.*,               
+               row_number() over(partition by t.HP_S_NO,t.ORGAN_CODE,to_char(OPER_DATE,'yyyy-MM-dd') order by nnis desc) rn
+          from T_MR_OPERATIONRECORD t) c
+ where rn = 1)a 
+ inner join tb_volap_yljg b
+ on a.ORGAN_CODE=b.id
+ where 1=1
+	   ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+   group by  nnis order by nnis
+	]]>
+ </select>
+ 
+ <select id="getechrs03List" resultType="com.wondersgroup.wszygl.model.BassModel">
+  <![CDATA[ 
+      with a as
+ ( 
+  
+select count(1) as rs,to_char(OPER_DATE,'yyyyMMdd') as rq
+  from
+(select *
+  from (select t.*,               
+               row_number() over(partition by t.HP_S_NO,t.ORGAN_CODE order by nnis desc) rn
+          from T_MR_OPERATIONRECORD t ) c
+ where rn = 1)a
+ inner  join t_firstpagemedicalrecord b 
+  on a.HP_S_NO = b.HP_S_NO
+  INNER JOIN TB_VOLAP_YLJG DD
+  ON A.ORGAN_CODE=DD.ID
+ where 1=1  and nnis=1
+     ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+    group by to_char(OPER_DATE,'yyyyMMdd')
+), 
+b as
+ ( 
+select count(1) as rs,to_char(OPER_DATE,'yyyyMMdd') as rq
+  from
+(select *
+  from (select t.*,               
+               row_number() over(partition by t.HP_S_NO,t.ORGAN_CODE order by nnis desc) rn
+          from T_MR_OPERATIONRECORD t ) c
+ where rn = 1)a
+ inner  join t_firstpagemedicalrecord b 
+  on a.HP_S_NO = b.HP_S_NO
+  INNER JOIN TB_VOLAP_YLJG DD
+  ON A.ORGAN_CODE=DD.ID
+ where 1=1 and nnis=2
+  ]]>
+  <include refid="commonWhere"></include> 
+  <![CDATA[ 
+     group by to_char(OPER_DATE,'yyyyMMdd')),
+ 
+ c as
+ ( 
+select count(1) as rs,to_char(OPER_DATE,'yyyyMMdd') as rq
+  from
+(select *
+  from (select t.*,               
+               row_number() over(partition by t.HP_S_NO,t.ORGAN_CODE order by nnis desc) rn
+          from T_MR_OPERATIONRECORD t ) c
+ where rn = 1)a
+ inner  join t_firstpagemedicalrecord b 
+ on a.HP_S_NO = b.HP_S_NO
+ INNER JOIN TB_VOLAP_YLJG DD
+  ON A.ORGAN_CODE=DD.ID
+ where 1=1 and nnis=3
+     ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+    group by to_char(OPER_DATE,'yyyyMMdd')),
+ d as
+ ( 
+select count(1) as rs,to_char(OPER_DATE,'yyyyMMdd') as rq
+  from
+(select *
+  from (select t.*,               
+               row_number() over(partition by t.HP_S_NO,t.ORGAN_CODE order by nnis desc) rn
+          from T_MR_OPERATIONRECORD t  ) c
+ where rn = 1)a
+ inner  join t_firstpagemedicalrecord b 
+  on a.HP_S_NO = b.HP_S_NO
+  INNER JOIN TB_VOLAP_YLJG DD
+  ON A.ORGAN_CODE=DD.ID
+ where 1=1 and nnis=4
+  ]]>
+  <include refid="commonWhere"></include> 
+  <![CDATA[ 
+    group by to_char(OPER_DATE,'yyyyMMdd')),
+ e as
+ ( 
+select count(1) as rs,to_char(OPER_DATE,'yyyyMMdd') as rq
+  from
+(select *
+  from (select t.*,               
+               row_number() over(partition by t.HP_S_NO,t.ORGAN_CODE order by nnis desc) rn
+          from T_MR_OPERATIONRECORD t ) c
+ where rn = 1)a
+ inner  join t_firstpagemedicalrecord b 
+  on a.HP_S_NO = b.HP_S_NO
+  INNER JOIN TB_VOLAP_YLJG DD
+  ON A.ORGAN_CODE=DD.ID
+ where 1=1  and nnis=0
+     ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[  
+    group by to_char(OPER_DATE,'yyyyMMdd'))
+         
+select NVL(SUM(a.rs),0) as yjrs,
+       NVL(SUM(b.rs),0) as ejrs,
+       NVL(SUM(c.rs),0) as sjrs,
+       NVL(SUM(d.rs),0) as sijrs,
+       NVL(SUM(e.rs),0) as ljrs,
+       nvl(nvl(nvl(nvl(a.rq, b.rq), c.rq), d.rq), e.rq) as rq
+  from a
+  full join b
+    on a.rq = b.rq
+  full join c
+    on a.rq = c.rq
+  full join d
+    on a.rq = d.rq
+  full join e
+    on a.rq = e.rq
+    GROUP BY nvl(nvl(nvl(nvl(a.rq, b.rq), c.rq), d.rq), e.rq)
+ order by nvl(nvl(nvl(nvl(a.rq, b.rq), c.rq), d.rq), e.rq)
+
+  ]]>
+   
+ </select>
+ <select id="getbassKsxz" resultType="com.wondersgroup.wszygl.model.BassModel">
+  
+   
+  <![CDATA[ 
+     select count(1) as rs,DPT_NAME as ksmc,DPT_CODE as ksbm,ORGAN_CODE as yljgdm 
+      from T_MR_OPERATIONRECORD a
+     where 1=1
+     ]]>
+     <include refid="commonWhere"></include> 
+   <![CDATA[   
+group by DPT_NAME,DPT_CODE,ORGAN_CODE
+  ]]>
+   
+ </select>
+ 
+ 
+ 
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.BassModel">
+	  <![CDATA[
+	select count(1) as rs ,decode(nnis,'1','1级手术','2','2级手术','3','3级手术','4','4级手术','0','0级手术','未知') as jbmc,DPT_NAME as ksmc from  T_MR_OPERATIONRECORD  a		  
+ where 1 = 1
+    ]]>
+		<include refid="commonWhere22"></include>
+<![CDATA[
+group by decode(nnis,'1','1级手术','2','2级手术','3','3级手术','4','4级手术','0','0级手术','未知') ,DPT_NAME
+]]>
+	</select>
+ 
+ 
+ 
+ 
+  <select id="getMinSwsj" resultType="String">
+	select min(to_char(OPER_DATE,'yyyy-MM-dd')) from T_MR_OPERATIONRECORD t 
+ </select> 
+  <select id="getMaxSwsj" resultType="String">
+	 select max(to_char(OPER_DATE,'yyyy-MM-dd')) from T_MR_OPERATIONRECORD t
+  </select> 
+</mapper>

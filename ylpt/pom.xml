@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.wondersgroup</groupId>
+	<artifactId>ylpt</artifactId>
+	<version>0.0.1</version>
+	<packaging>war</packaging>
+	<name>ylpt</name>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+		<maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
+		<maven.war.plugin.version>3.2.2</maven.war.plugin.version>
+		<maven.resources.plugin.version>3.1.0</maven.resources.plugin.version>
+
+		<project.web.directory>src/main/webapp</project.web.directory>
+		<junit.version>3.8.1</junit.version>
+		<java.version>1.7</java.version>
+		<wondersgroup.version>0.0.5-RELEASE</wondersgroup.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.wondersgroup</groupId>
+			<artifactId>api</artifactId>
+			<version>${wondersgroup.version}</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>com.wondersgroup.api</groupId>
+			<artifactId>wdinf-mybatis</artifactId>
+			<version>${wondersgroup.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.wondersgroup.api</groupId>
+			<artifactId>wdinf-spring</artifactId>
+			<version>${wondersgroup.version}</version>
+			<type>pom</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.wondersgroup.api.spring</groupId>
+			<artifactId>wdinf-spring-web</artifactId>
+			<version>${wondersgroup.version}</version>
+		</dependency>
+		
+		<!-- 
+		  <dependency>
+			<groupId>org.wltea.ik-analyzer</groupId>
+			<artifactId>commons-auth</artifactId>
+			<version>1.1.17</version>
+		</dependency>  -->  
+		
+		<!-- <dependency>
+			<groupId>coms.zcd</groupId>
+			<artifactId>commons-auth</artifactId>
+			<version>1.1.16</version>
+		</dependency>  -->
+		
+		<!--  <dependency>
+			<groupId>coms.zcds</groupId>
+			<artifactId>commons-auth-1.1.16-sources</artifactId>
+			<version>1.1.16</version>
+		</dependency> -->
+		
+	   <dependency>
+			<groupId>coms.zcds</groupId>
+			<artifactId>cuteframework-sso-client</artifactId>
+			<version>20080808</version>
+		</dependency>  
+		
+
+		<dependency>
+			<groupId>org.apache.taglibs</groupId>
+			<artifactId>taglibs-standard-impl</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+		
+		
+		 
+		
+		
+		<dependency>
+			<groupId>org.apache.taglibs</groupId>
+			<artifactId>taglibs-standard-spec</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taglibs</groupId>
+			<artifactId>taglibs-standard-jstlel</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.taglibs</groupId>
+			<artifactId>taglibs-standard-compat</artifactId>
+			<version>1.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.10</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>12.1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>3.1.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<defaultGoal>compile</defaultGoal>
+
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes><include>**/*.xml</include></includes>
+			</resource>
+		</resources>
+
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>false</filtering>
+			</testResource>
+		</testResources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${maven.compiler.encoding}</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.plugin.version}</version>
+				<configuration>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>p12</nonFilteredFileExtension>
+						<nonFilteredFileExtension>jks</nonFilteredFileExtension>
+						<nonFilteredFileExtension>xml</nonFilteredFileExtension>
+						<nonFilteredFileExtension>properties</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven.war.plugin.version}</version>
+				<configuration>
+					<resourceEncoding>${project.build.sourceEncoding}</resourceEncoding>
+					<warSourceDirectory>${project.web.directory}</warSourceDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

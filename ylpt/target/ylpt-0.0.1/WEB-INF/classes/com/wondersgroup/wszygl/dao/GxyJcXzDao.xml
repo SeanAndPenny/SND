@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.GxyJcXzDao">
+   
+  <sql id="commonWhere2">
+    <if test="startdate != null and startdate !='' ">
+      <![CDATA[  and to_char(JKSJ,'yyyy-mm-dd')> =trim(#{startdate})]]>
+    </if>
+    <if test="enddate != null and enddate !='' ">
+      <![CDATA[ and to_char(JKSJ,'yyyy-mm-dd')<=trim(#{enddate})]]>
+    </if>
+    <if test="xxlybm != null and xxlybm !='' ">
+      <![CDATA[ and xxlybm=trim(#{xxlybm})]]>
+    </if>
+    <if test="yljgdm != null and yljgdm !='' ">
+      <![CDATA[ and yljgdm=trim(#{yljgdm})]]>
+    </if>
+  </sql> 
+  <select id="getGxyJcXzList" resultType="com.wondersgroup.wszygl.model.GxysjfxModel">
+  <![CDATA[
+         select count(1) as lyrs,
+       xxlybm, nvl(xxlymc,
+           decode(xxlybm,  '1',  '健康档案',
+                  '2', '首诊测压',
+                  '3',  '普查',
+                  '4', '门诊就诊',
+                  '5', '体检',
+                  '其他')) as xxlymc,
+                  yljgdm,
+                  b.mc as yljgmc
+  from tb_gxy_hzglk a
+  left join tb_volap_yljg b
+  on a.yljgdm=b.id
+ where 1 = 1
+    ]]>
+       <include refid="commonWhere2"></include>
+    <![CDATA[   
+     group by xxlybm, xxlymc,yljgdm,b.mc 
+     ]]>
+              
+  </select>
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.GxysjfxModel">
+    <![CDATA[
+      select  b.mc as yljgmc,
+          xm, nvl(xxlymc,
+           decode(xxlybm,  '1',  '健康档案',
+                  '2', '首诊测压',
+                  '3',  '普查',
+                  '4', '门诊就诊',
+                  '5', '体检',
+                  '其他')) as xxlymc,
+                 decode(xb,'1','男','2','女') as xb,
+                 jkysxm,
+               to_char(JKSJ,'yyyy-mm-dd') as JKSJ,
+               jzd_xng as xzmc,
+               shzlnlmc
+                  
+  from tb_gxy_hzglk a
+  left join tb_volap_yljg b
+  on a.yljgdm=b.id
+ where 1 = 1
+     
+    ]]>
+    <include refid="commonWhere2"></include>
+
+  </select>
+  
+  
+  
+  
+  
+ 
+</mapper>

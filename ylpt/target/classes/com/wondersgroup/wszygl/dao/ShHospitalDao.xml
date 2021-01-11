@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.wondersgroup.wszygl.dao.ShHopitalDao">
+	
+
+	<sql id="commonWhere">
+		 <if test="gradename != null and gradename != '' ">
+			<![CDATA[ and j.gradename like '%'||#{gradename}||'%']]>
+		</if> 
+		<if test="yljgdm != null and yljgdm != '' ">
+			<![CDATA[ and t.yljgdm=#{yljgdm}]]>
+		</if>
+	</sql>
+
+	
+
+	<select id="pageSelect" resultType="com.wondersgroup.wszygl.model.OpeHospitalModel" >
+      	<![CDATA[
+      		select t.id as id,j.gopename,j.gradename,t.yljgdm,o.jgmc as yljgmc,t.sqr,t.remark,to_char(t.requesttime, 'yyyy-mm-dd') from 
+      		tb_ope_request t,tb_ope_detail j,
+      		sys_jgdm_list o where t.detailid=j.gradeid and t.yljgdm=o.jgdm and AUDITID is null
+   		]]>
+		<include refid="commonWhere"></include>
+	</select>
+</mapper>

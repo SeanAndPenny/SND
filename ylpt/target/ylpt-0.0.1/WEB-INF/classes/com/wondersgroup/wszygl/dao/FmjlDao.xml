@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wondersgroup.wszygl.dao.FmjlDao">
+  <sql id="commonWhere">
+    <if test=" yljgdm != null and yljgdm  !='' ">
+      <![CDATA[ and yljgdm    =trim(#{yljgdm })]]>
+    </if>
+  </sql>
+<sql id="commonWhere2">
+    <if test=" yljgdm != null and yljgdm  !='' ">
+      <![CDATA[ and yljgdm    =trim(#{yljgdm })]]>
+    </if>
+    <if test=" ysgh != null and ysgh  !='' ">
+      <![CDATA[ and bgysgh    =trim(#{ysgh })]]>
+    </if>
+     <if test=" hjbz2 != null and hjbz2  !='' ">
+      <![CDATA[ and hjbz    =trim(#{hjbz2 })]]>
+    </if>
+  </sql>
+  <sql id="commonWhere3">
+    <if test=" hjbz != null and hjbz  !='' ">
+      <![CDATA[ and hjbz    =trim(#{hjbz })]]>
+    </if>
+    </sql>
+   <sql id="commonWhere4">
+    <if test=" yljgdm != null and yljgdm  !='' ">
+      <![CDATA[ and yljgdm    =trim(#{yljgdm })]]>
+    </if>
+    <if test=" hjbz2 != null and hjbz2  !='' ">
+      <![CDATA[ and hjbz   =trim(#{hjbz2 })]]>
+    </if>
+  </sql>
+  
+  
+  
+  <select id="getFmcxList" resultType="com.wondersgroup.wszygl.model.CsrsModel">
+  <![CDATA[ 
+        select sum(ts)as csrs ,bgysgh as ysgh,BGYSxm as ysxm,yljgdm ,hjbz,
+           DECODE(HJBZ,'1','户籍','0','非户籍') AS hjbzmc,b.mc as yljgmc from TB_FB_FMJL a
+           inner join tb_volap_yljg b
+        on a.yljgdm=b.id
+    ]]>
+  <include refid="commonWhere4"></include>  
+  <![CDATA[   
+    group by BGYSxm,BGYSGH  ,yljgdm ,hjbz,b.mc  
+    ]]>
+  </select>
+  
+  
+  
+  <select id="pageSelect" resultType="com.wondersgroup.wszygl.model.CsrsModel">
+    <![CDATA[
+       select fmrqsj ,fmfs,bgysgh as ysgh,BGYSxm as ysxm,ts,ycfid,b.mc as yljgmc from TB_FB_FMJL a
+inner join tb_volap_yljg b
+on a.yljgdm=b.id
+       where to_char(fmrqsj, 'yyyy') = to_char(sysdate, 'yyyy')
+    ]]>
+    <include refid="commonWhere2"></include>
+
+  </select>
+  
+  
+  <select id="getFmtj" resultType="com.wondersgroup.wszygl.model.CsrsModel">
+    <![CDATA[
+       select nvl(sum(ts),0) as csrs from tb_fb_fmjl t
+where to_char(fmrqsj,'yyyy')=to_char(sysdate,'yyyy')
+    ]]>
+    
+
+  </select>
+  
+  
+  
+  
+  <select id="getFmxzJgList" resultType="com.wondersgroup.wszygl.model.CsrsModel">
+  <![CDATA[ 
+      SELECT COUNT(1) AS csrs ,hjbz,DECODE(HJBZ,'1','户籍','0','非户籍') AS hjbzmc ,yljgdm,b.mc as yljgmc FROM   tb_fb_fmjl a
+inner join tb_volap_yljg b on a.yljgdm=b.id
+where    to_char(fmrqsj, 'yyyy') = to_char(sysdate, 'yyyy')
+    ]]>
+  <include refid="commonWhere3"></include>  
+  <![CDATA[   
+     GROUP BY HJBZ,yljgdm,b.mc  
+    ]]>
+  </select>
+ 
+</mapper>
